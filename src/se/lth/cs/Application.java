@@ -1,5 +1,6 @@
 package se.lth.cs;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 /**
@@ -7,16 +8,21 @@ import java.util.Random;
  */
 public abstract class Application {
 
-    private Random randomGenerator;
+    Random randomGenerator;
 
-    public Application(int seed, String configuration) {
+    Application(int seed, String configuration) {
         randomGenerator = new Random(seed);
     }
 
-    public abstract void runMethod();
+    protected abstract int generateIndex();
 
-    public void run() {
-        int NUM_CALLS = 100; // TODO: Read from configuration
+    /**
+     * Randomly selects a method generator and runs the resulting method.
+     */
+    public abstract void runMethod() throws InvocationTargetException, IllegalAccessException;
+
+    public void benchmark() throws InvocationTargetException, IllegalAccessException {
+        int NUM_CALLS = 10000; // TODO: Read from configuration
         for(int i = 0; i < NUM_CALLS; ++i) {
             runMethod();
         }

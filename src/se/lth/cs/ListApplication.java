@@ -1,0 +1,146 @@
+package se.lth.cs;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PrimitiveIterator;
+import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+
+public class ListApplication extends Application {
+    private List<Integer> dataStructure;
+
+    private List<Method> methodsToCall;
+
+    public ListApplication(int seed,
+                           String configuration,
+                           List<Integer> init) {
+        super(seed, configuration);
+
+        // We get the list of methods to run.
+        // TODO: Probably moveable to Application class.
+        Method[] ms = this.getClass().getMethods();
+        methodsToCall = new ArrayList<>();
+        for (Method m : ms) {
+            if (m.getName().startsWith("run") && !m.getName().equals("runMethod")) {
+                methodsToCall.add(m);
+            }
+        }
+
+        dataStructure = init;
+    }
+
+    public List<Integer> getDataStructure() { return dataStructure; }
+
+    @Override
+    protected int generateIndex() {
+        return randomGenerator.nextInt(dataStructure.size());
+    }
+
+    public void runAdd() {
+        dataStructure.add(randomGenerator.nextInt());
+    }
+
+    public void runAddAll() {
+        // TODO: Finish
+        int streamSize = randomGenerator.nextInt(100); // TODO: Read from configuration
+    }
+
+    public void runClear() {
+        dataStructure.clear();
+    }
+
+    public void runContains() {
+        dataStructure.contains(randomGenerator.nextInt());
+    }
+
+    public void runContainsAll() {
+        // TODO: Finish that
+    }
+
+    public void runEquals() {
+        dataStructure.equals(randomGenerator.ints(100)); // TODO: Read from configuration
+    }
+
+    public void runGet() {
+        if (dataStructure.isEmpty()) { return; }
+        dataStructure.get(generateIndex());
+    }
+
+    public void runHashCode() {
+        dataStructure.hashCode();
+    }
+
+    public void runIndexOf() {
+        dataStructure.indexOf(randomGenerator.nextInt());
+    }
+
+    public void runIsEmpty() {
+        dataStructure.isEmpty();
+    }
+
+    public void runIterator() {
+        dataStructure.iterator();
+    }
+
+    public void runLastIndexOf() {
+        dataStructure.lastIndexOf(randomGenerator.nextInt());
+    }
+
+    public void runListIterator() {
+        if (randomGenerator.nextBoolean()) {
+            dataStructure.listIterator();
+        } else {
+            if (dataStructure.isEmpty()) { return; }
+            dataStructure.listIterator(generateIndex());
+        }
+    }
+
+    public void runRemove() {
+        if (dataStructure.isEmpty()) { return; }
+        if (randomGenerator.nextBoolean()) {
+            dataStructure.remove(generateIndex());
+        } else {
+            dataStructure.remove((Object) randomGenerator.nextInt());
+        }
+    }
+
+    public void runRemoveAll() {
+    }
+
+    public void runSet() {
+        if (dataStructure.isEmpty()) { return; }
+        dataStructure.set(generateIndex(), randomGenerator.nextInt());
+    }
+
+    public void runSize() {
+        dataStructure.size();
+    }
+
+    public void runSubList() {
+        if (dataStructure.isEmpty()) { return; }
+        int a = generateIndex();
+        int b = generateIndex();
+        dataStructure.subList(Math.min(a, b), Math.max(a, b));
+    }
+
+    public void runToArray() {
+        if (randomGenerator.nextBoolean()) {
+            dataStructure.toArray();
+        } else {
+            Integer[] array = new Integer[3];
+            dataStructure.toArray(array);
+        }
+    }
+
+    @Override
+    public void runMethod() throws InvocationTargetException, IllegalAccessException {
+        // We select a random method to call.
+        int i = randomGenerator.nextInt(methodsToCall.size());
+        Method m = methodsToCall.get(i);
+        // And call it
+        m.invoke(this);
+    }
+}
