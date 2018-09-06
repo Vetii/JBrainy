@@ -12,7 +12,11 @@ import java.util.stream.IntStream;
 public class ListApplication extends Application {
     private List<Integer> dataStructure;
 
+    // All methods which might be called.
     private List<Method> methodsToCall;
+
+    // Data structure to use for addAll,...
+    private List argument;
 
     public ListApplication(int seed,
                            String configuration,
@@ -30,6 +34,17 @@ public class ListApplication extends Application {
         }
 
         dataStructure = init;
+
+        // Argument becomes a new data structure of same class as
+        // the data structure to test
+        try {
+            argument = dataStructure.getClass().newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        // We add random numbers to it.
+        randomGenerator.ints(100).forEach((i) -> argument.add(i));
     }
 
     public List<Integer> getDataStructure() { return dataStructure; }
@@ -44,8 +59,7 @@ public class ListApplication extends Application {
     }
 
     public void runAddAll() {
-        // TODO: Finish
-        int streamSize = randomGenerator.nextInt(100); // TODO: Read from configuration
+        dataStructure.addAll(argument);
     }
 
     public void runClear() {
@@ -57,7 +71,7 @@ public class ListApplication extends Application {
     }
 
     public void runContainsAll() {
-        // TODO: Finish that
+        dataStructure.containsAll(argument);
     }
 
     public void runEquals() {
@@ -108,6 +122,7 @@ public class ListApplication extends Application {
     }
 
     public void runRemoveAll() {
+        dataStructure.removeAll(argument);
     }
 
     public void runSet() {
