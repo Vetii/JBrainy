@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e285e5d9-9c47-4afd-b29b-e0ab2bb75298" name="Default Changelist" comment="Move generation of array of methods to call to Application class.&#10;&#10;The generation of the methodsToCall array is made in the constructor&#10;of the Application class.">
-      <change afterPath="$PROJECT_DIR$/src/se/lth/cs/SetApplication.java" afterDir="false" />
+    <list default="true" id="e285e5d9-9c47-4afd-b29b-e0ab2bb75298" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/se/lth/cs/CollectionApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/se/lth/cs/MapApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/se/lth/cs/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/se/lth/cs/Application.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/se/lth/cs/ListApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/se/lth/cs/ListApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/ListApplicationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/ApplicationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/se/lth/cs/SetApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/se/lth/cs/SetApplication.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,24 +27,26 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="10177" />
-          <entry key="txt" value="915" />
+          <entry key="java" value="11252" />
+          <entry key="txt" value="1183" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="10177" />
-          <entry key="PLAIN_TEXT" value="915" />
+          <entry key="JAVA" value="11252" />
+          <entry key="PLAIN_TEXT" value="1183" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="5" />
+          <entry key="class" value="1" />
+          <entry key="java" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="5" />
+          <entry key="CLASS" value="1" />
+          <entry key="JAVA" value="7" />
         </counts>
       </usages-collector>
     </session>
@@ -62,22 +65,42 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/se/lth/cs/Application.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="37" selection-start-line="37" selection-end-line="37" />
+            <state relative-caret-position="465">
+              <caret line="49" column="47" selection-start-line="49" selection-start-column="47" selection-end-line="49" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#968#969#0" expanded="true" />
-                <element signature="e#1036#1037#0" expanded="true" />
-                <element signature="e#1285#1286#0" expanded="true" />
-                <element signature="e#1350#1351#0" expanded="true" />
-                <element signature="e#1386#1387#0" expanded="true" />
-                <element signature="e#1437#1438#0" expanded="true" />
-                <element signature="e#1464#1465#0" expanded="true" />
-                <element signature="e#1560#1561#0" expanded="true" />
-                <element signature="e#2059#2060#0" expanded="true" />
-                <element signature="e#2108#2109#0" expanded="true" />
-                <element signature="e#2135#2136#0" expanded="true" />
-                <element signature="e#2163#2164#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/model/ReflectiveCallable.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="17" selection-start-line="17" selection-end-line="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/se/lth/cs/CollectionApplication.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="38" selection-start-line="7" selection-start-column="38" selection-end-line="7" selection-end-column="38" />
+              <folding>
+                <element signature="e#411#412#0" expanded="true" />
+                <element signature="e#479#480#0" expanded="true" />
+                <element signature="e#708#709#0" expanded="true" />
+                <element signature="e#773#774#0" expanded="true" />
+                <element signature="e#809#810#0" expanded="true" />
+                <element signature="e#860#861#0" expanded="true" />
+                <element signature="e#891#892#0" expanded="true" />
+                <element signature="e#987#988#0" expanded="true" />
+                <element signature="e#1481#1482#0" expanded="true" />
+                <element signature="e#1530#1531#0" expanded="true" />
+                <element signature="e#1561#1562#0" expanded="true" />
+                <element signature="e#1610#1611#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -86,8 +109,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/se/lth/cs/ListApplication.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+            <state relative-caret-position="90">
+              <caret line="6" column="46" selection-start-line="6" selection-start-column="46" selection-end-line="6" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1665#1666#0" expanded="true" />
@@ -102,10 +125,9 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/se/lth/cs/SetApplication.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
+            <state relative-caret-position="30">
+              <caret line="2" selection-start-line="2" selection-end-line="2" />
               <folding>
-                <element signature="imports" expanded="true" />
                 <element signature="e#237#238#0" expanded="true" />
                 <element signature="e#284#285#0" expanded="true" />
               </folding>
@@ -116,11 +138,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/ApplicationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="490">
-              <caret line="49" selection-start-line="49" selection-end-line="49" />
+            <state relative-caret-position="510">
+              <caret line="55" column="35" selection-start-line="55" selection-start-column="35" selection-end-line="55" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/se/lth/cs/MapApplication.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="63" lean-forward="true" selection-start-line="4" selection-start-column="63" selection-end-line="4" selection-end-column="63" />
             </state>
           </provider>
         </entry>
@@ -140,11 +171,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/se/lth/cs/CollectionApplication.java" />
         <option value="$PROJECT_DIR$/test/ListApplicationTest.java" />
         <option value="$PROJECT_DIR$/test/ApplicationTest.java" />
-        <option value="$PROJECT_DIR$/src/se/lth/cs/Application.java" />
+        <option value="$PROJECT_DIR$/src/se/lth/cs/MapApplication.java" />
+        <option value="$PROJECT_DIR$/src/se/lth/cs/CollectionApplication.java" />
         <option value="$PROJECT_DIR$/src/se/lth/cs/ListApplication.java" />
+        <option value="$PROJECT_DIR$/src/se/lth/cs/Application.java" />
         <option value="$PROJECT_DIR$/src/se/lth/cs/SetApplication.java" />
       </list>
     </option>
@@ -191,7 +223,7 @@
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536327478300" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536332283297" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -307,38 +339,45 @@
       <option name="project" value="LOCAL" />
       <updated>1536327637899</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Implement SetApplication for creating scenarios for sets.&#10;&#10;Moved much of the functionality to the Application class, which may&#10;use any class that extends Collection. SetApplication is just&#10;an Application containing sets.">
+      <created>1536328279394</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1536328279394</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ListApplicationTest - 2018.09.07 at 14h 50m 04s.xml">
-      <configuration name="ListApplicationTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ListApplicationTest - 2018.09.07 at 14h 50m 32s.xml">
-      <configuration name="ListApplicationTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 14h 57m 25s.xml">
+    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 15h 56m 40s.xml">
       <configuration name="ApplicationTest.TestSetApplication" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 14h 59m 03s.xml">
+    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 15h 57m 48s.xml">
       <configuration name="ApplicationTest.TestSetApplication" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 14h 59m 25s.xml">
+    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 16h 31m 13s.xml">
       <configuration name="ApplicationTest.TestSetApplication" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 15h 02m 03s.xml">
+    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 16h 42m 25s.xml">
       <configuration name="ApplicationTest.TestSetApplication" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 15h 07m 09s.xml">
+    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 16h 42m 28s.xml">
       <configuration name="ApplicationTest.TestSetApplication" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 15h 35m 07s.xml">
+    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 16h 43m 02s.xml">
       <configuration name="ApplicationTest.TestSetApplication" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 15h 35m 44s.xml">
+    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 16h 48m 52s.xml">
       <configuration name="ApplicationTest.TestSetApplication" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 15h 37m 20s.xml">
+    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 16h 50m 34s.xml">
+      <configuration name="ApplicationTest.TestSetApplication" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 16h 51m 15s.xml">
+      <configuration name="ApplicationTest.TestSetApplication" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 16h 55m 12s.xml">
       <configuration name="ApplicationTest.TestSetApplication" configurationId="JUnit" />
     </history-entry>
   </component>
@@ -354,7 +393,7 @@
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32928678" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32852808" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39908952" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -383,7 +422,8 @@
     <MESSAGE value="Add test with Vector benchmark" />
     <MESSAGE value="Move generation of array of methods to call to Application class.&#10;&#10;The generation of the methodsToCall array is made in the constructor&#10;of the Application class." />
     <MESSAGE value="Update xml files in .idea directory." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update xml files in .idea directory." />
+    <MESSAGE value="Implement SetApplication for creating scenarios for sets.&#10;&#10;Moved much of the functionality to the Application class, which may&#10;use any class that extends Collection. SetApplication is just&#10;an Application containing sets." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implement SetApplication for creating scenarios for sets.&#10;&#10;Moved much of the functionality to the Application class, which may&#10;use any class that extends Collection. SetApplication is just&#10;an Application containing sets." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -395,16 +435,22 @@
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/se/lth/cs/Application.java</url>
-          <line>111</line>
+          <url>file://$PROJECT_DIR$/test/ApplicationTest.java</url>
+          <line>55</line>
           <properties />
-          <option name="timeStamp" value="7" />
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/se/lth/cs/Application.java</url>
-          <line>41</line>
+          <line>50</line>
           <properties />
-          <option name="timeStamp" value="8" />
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/se/lth/cs/Application.java</url>
+          <line>31</line>
+          <properties />
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -426,53 +472,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/se/lth/cs/CollectionApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="41" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
-          <folding>
-            <element signature="e#95#96#0" expanded="true" />
-            <element signature="e#155#156#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/ApplicationTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="490">
-          <caret line="49" selection-start-line="49" selection-end-line="49" />
+        <state relative-caret-position="510">
+          <caret line="55" column="35" selection-start-line="55" selection-start-column="35" selection-end-line="55" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/se/lth/cs/Application.java">
+    <entry file="file://$PROJECT_DIR$/src/se/lth/cs/MapApplication.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="37" selection-start-line="37" selection-end-line="37" />
+        <state relative-caret-position="60">
+          <caret line="4" column="63" lean-forward="true" selection-start-line="4" selection-start-column="63" selection-end-line="4" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/se/lth/cs/CollectionApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="38" selection-start-line="7" selection-start-column="38" selection-end-line="7" selection-end-column="38" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#968#969#0" expanded="true" />
-            <element signature="e#1036#1037#0" expanded="true" />
-            <element signature="e#1285#1286#0" expanded="true" />
-            <element signature="e#1350#1351#0" expanded="true" />
-            <element signature="e#1386#1387#0" expanded="true" />
-            <element signature="e#1437#1438#0" expanded="true" />
-            <element signature="e#1464#1465#0" expanded="true" />
-            <element signature="e#1560#1561#0" expanded="true" />
-            <element signature="e#2059#2060#0" expanded="true" />
-            <element signature="e#2108#2109#0" expanded="true" />
-            <element signature="e#2135#2136#0" expanded="true" />
-            <element signature="e#2163#2164#0" expanded="true" />
+            <element signature="e#411#412#0" expanded="true" />
+            <element signature="e#479#480#0" expanded="true" />
+            <element signature="e#708#709#0" expanded="true" />
+            <element signature="e#773#774#0" expanded="true" />
+            <element signature="e#809#810#0" expanded="true" />
+            <element signature="e#860#861#0" expanded="true" />
+            <element signature="e#891#892#0" expanded="true" />
+            <element signature="e#987#988#0" expanded="true" />
+            <element signature="e#1481#1482#0" expanded="true" />
+            <element signature="e#1530#1531#0" expanded="true" />
+            <element signature="e#1561#1562#0" expanded="true" />
+            <element signature="e#1610#1611#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/se/lth/cs/ListApplication.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+        <state relative-caret-position="90">
+          <caret line="6" column="46" selection-start-line="6" selection-start-column="46" selection-end-line="6" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1665#1666#0" expanded="true" />
@@ -483,12 +524,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/se/lth/cs/SetApplication.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/model/ReflectiveCallable.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
+        <state relative-caret-position="210">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/se/lth/cs/Application.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="49" column="47" selection-start-line="49" selection-start-column="47" selection-end-line="49" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/se/lth/cs/SetApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+          <folding>
             <element signature="e#237#238#0" expanded="true" />
             <element signature="e#284#285#0" expanded="true" />
           </folding>

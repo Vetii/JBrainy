@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * An application, meaning "a generated application"
  */
-public abstract class Application<T extends Collection> {
+public abstract class Application<T> {
 
     Random randomGenerator;
 
@@ -43,69 +43,11 @@ public abstract class Application<T extends Collection> {
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
-
-        // We add random numbers to it.
-        randomGenerator.ints(100).forEach((i) -> argument.add(i));
-    }
-
-    protected int generateIndex() {
-        return randomGenerator.nextInt(dataStructure.size());
-    }
-
-    public void runAdd() { dataStructure.add(randomGenerator.nextInt()); }
-
-    public void runAddAll() { dataStructure.addAll(argument); }
-
-    public void runClear() { dataStructure.clear(); }
-
-    public void runContains() {
-        dataStructure.contains(randomGenerator.nextInt());
-    }
-
-    public void runContainsAll() {
-        dataStructure.containsAll(argument);
-    }
-
-    public void runEquals() {
-        dataStructure.equals(randomGenerator.ints(100)); // TODO: Read from configuration
-    }
-
-    public void runHashCode() { dataStructure.hashCode(); }
-
-    public void runIsEmpty() { dataStructure.isEmpty(); }
-
-    public void runIterator() { dataStructure.iterator(); }
-
-    public void runRemove() {
-        if (dataStructure.isEmpty()) { return; }
-        if (randomGenerator.nextBoolean()) {
-            dataStructure.remove(generateIndex());
-        } else {
-            dataStructure.remove((Object) randomGenerator.nextInt());
-        }
-    }
-
-    public void runRemoveAll() {
-        dataStructure.removeAll(argument);
-    }
-
-    public void retainAll() {
-        dataStructure.retainAll(argument);
-    }
-
-    public void runSize() { dataStructure.size(); }
-
-    public void runToArray() {
-        if (randomGenerator.nextBoolean()) {
-            dataStructure.toArray();
-        } else {
-            Integer[] array = new Integer[3];
-            dataStructure.toArray(array);
-        }
     }
 
     public void runMethod() throws InvocationTargetException, IllegalAccessException {
         // We select a random method to call.
+        if (methodsToCall.isEmpty()) { return; }
         int i = randomGenerator.nextInt(methodsToCall.size());
         Method m = methodsToCall.get(i);
         // And call it
@@ -120,4 +62,5 @@ public abstract class Application<T extends Collection> {
     }
 
     public T getDataStructure() { return dataStructure; }
+
 }

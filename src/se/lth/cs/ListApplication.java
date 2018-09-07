@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public class ListApplication extends Application<List<Integer>> {
+public class ListApplication extends CollectionApplication<List<Integer>> {
 
     public ListApplication(int seed,
                            String configuration,
