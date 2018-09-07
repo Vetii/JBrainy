@@ -2,18 +2,10 @@ package se.lth.cs;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.PrimitiveIterator;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.IntStream;
 
 public class ListApplication extends Application {
     private List<Integer> dataStructure;
-
-    // All methods which might be called.
-    private List<Method> methodsToCall;
 
     // Data structure to use for addAll,...
     private List argument;
@@ -22,16 +14,6 @@ public class ListApplication extends Application {
                            String configuration,
                            List<Integer> init) {
         super(seed, configuration);
-
-        // We get the list of methods to run.
-        // TODO: Probably moveable to Application class.
-        Method[] ms = this.getClass().getMethods();
-        methodsToCall = new ArrayList<>();
-        for (Method m : ms) {
-            if (m.getName().startsWith("run") && !m.getName().equals("runMethod")) {
-                methodsToCall.add(m);
-            }
-        }
 
         dataStructure = init;
 

@@ -1,6 +1,9 @@
 package se.lth.cs;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -10,8 +13,21 @@ public abstract class Application {
 
     Random randomGenerator;
 
+    // All methods which might be called.
+    List<Method> methodsToCall;
+
     Application(int seed, String configuration) {
         randomGenerator = new Random(seed);
+
+        // We get the list of methods to run.
+        // TODO: Probably moveable to Application class.
+        Method[] ms = this.getClass().getMethods();
+        methodsToCall = new ArrayList<>();
+        for (Method m : ms) {
+            if (m.getName().startsWith("run") && !m.getName().equals("runMethod")) {
+                methodsToCall.add(m);
+            }
+        }
     }
 
     protected abstract int generateIndex();
