@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e285e5d9-9c47-4afd-b29b-e0ab2bb75298" name="Default Changelist" comment="Move generation of array of methods to call to Application class.&#10;&#10;The generation of the methodsToCall array is made in the constructor&#10;of the Application class.">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/se/lth/cs/SetApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/se/lth/cs/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/se/lth/cs/Application.java" afterDir="false" />
@@ -27,14 +26,14 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="10143" />
-          <entry key="txt" value="878" />
+          <entry key="java" value="10177" />
+          <entry key="txt" value="915" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="10143" />
-          <entry key="PLAIN_TEXT" value="878" />
+          <entry key="JAVA" value="10177" />
+          <entry key="PLAIN_TEXT" value="915" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -60,7 +59,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/se/lth/cs/Application.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="555">
@@ -87,8 +86,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/se/lth/cs/ListApplication.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
+            <state relative-caret-position="165">
+              <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1665#1666#0" expanded="true" />
@@ -100,13 +99,15 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/se/lth/cs/SetApplication.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" selection-start-line="10" selection-end-line="10" />
+            <state relative-caret-position="120">
+              <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#237#238#0" expanded="true" />
+                <element signature="e#284#285#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -140,11 +141,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/se/lth/cs/CollectionApplication.java" />
-        <option value="$PROJECT_DIR$/src/se/lth/cs/SetApplication.java" />
         <option value="$PROJECT_DIR$/test/ListApplicationTest.java" />
         <option value="$PROJECT_DIR$/test/ApplicationTest.java" />
-        <option value="$PROJECT_DIR$/src/se/lth/cs/ListApplication.java" />
         <option value="$PROJECT_DIR$/src/se/lth/cs/Application.java" />
+        <option value="$PROJECT_DIR$/src/se/lth/cs/ListApplication.java" />
+        <option value="$PROJECT_DIR$/src/se/lth/cs/SetApplication.java" />
       </list>
     </option>
   </component>
@@ -190,7 +191,7 @@
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536327438965" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536327478300" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -299,13 +300,17 @@
       <option name="project" value="LOCAL" />
       <updated>1536321218076</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Update xml files in .idea directory.">
+      <created>1536327637899</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1536327637899</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ListApplicationTest - 2018.09.07 at 14h 48m 05s.xml">
-      <configuration name="ListApplicationTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="ListApplicationTest - 2018.09.07 at 14h 50m 04s.xml">
       <configuration name="ListApplicationTest" configurationId="JUnit" />
     </history-entry>
@@ -333,6 +338,9 @@
     <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 15h 35m 44s.xml">
       <configuration name="ApplicationTest.TestSetApplication" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="ApplicationTest_TestSetApplication - 2018.09.07 at 15h 37m 20s.xml">
+      <configuration name="ApplicationTest.TestSetApplication" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="0" width="1280" height="1440" extended-state="4" />
@@ -347,15 +355,15 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32852808" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.39908952" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32852808" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39908952" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32928678" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32852808" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -374,14 +382,15 @@
     <MESSAGE value="Implement generation of collection for methods with collection of same type&#10;&#10;AddAll, ContainsAll, RemoveAll take a collection as an argument.&#10;An argument is generated when the test is started, of the same type&#10;as the data structure to test." />
     <MESSAGE value="Add test with Vector benchmark" />
     <MESSAGE value="Move generation of array of methods to call to Application class.&#10;&#10;The generation of the methodsToCall array is made in the constructor&#10;of the Application class." />
-    <option name="LAST_COMMIT_MESSAGE" value="Move generation of array of methods to call to Application class.&#10;&#10;The generation of the methodsToCall array is made in the constructor&#10;of the Application class." />
+    <MESSAGE value="Update xml files in .idea directory." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update xml files in .idea directory." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/se/lth/cs/ListApplication.java</url>
-          <line>42</line>
+          <line>38</line>
           <properties />
           <option name="timeStamp" value="6" />
         </line-breakpoint>
@@ -428,30 +437,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/se/lth/cs/SetApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/se/lth/cs/ListApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1665#1666#0" expanded="true" />
-            <element signature="e#1729#1730#0" expanded="true" />
-            <element signature="e#1909#1910#0" expanded="true" />
-            <element signature="e#1977#1978#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/ApplicationTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="490">
@@ -480,6 +465,32 @@
             <element signature="e#2108#2109#0" expanded="true" />
             <element signature="e#2135#2136#0" expanded="true" />
             <element signature="e#2163#2164#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/se/lth/cs/ListApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1665#1666#0" expanded="true" />
+            <element signature="e#1729#1730#0" expanded="true" />
+            <element signature="e#1909#1910#0" expanded="true" />
+            <element signature="e#1977#1978#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/se/lth/cs/SetApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#237#238#0" expanded="true" />
+            <element signature="e#284#285#0" expanded="true" />
           </folding>
         </state>
       </provider>
