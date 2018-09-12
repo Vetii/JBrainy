@@ -67,16 +67,10 @@ public class ApplicationTest {
     }
 
     @Test
-    public void TestSetApplication1() {
+    public void TestSetApplication1() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner runner = new ApplicationRunner();
 
-        try {
-            runner.runBenchmarks(runner.createSetApplications(100, 1000));
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        runner.runBenchmarks(runner.createSetApplications(100, 1000));
     }
 
     @Test
@@ -104,6 +98,13 @@ public class ApplicationTest {
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void TestMapApplication1() throws InvocationTargetException, IllegalAccessException {
+        ApplicationRunner runner = new ApplicationRunner();
+
+        runner.runBenchmarks(runner.createMapApplications(100, 1000));
     }
 
     @Test
