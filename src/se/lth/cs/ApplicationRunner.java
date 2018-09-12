@@ -6,12 +6,12 @@ import java.util.stream.Collectors;
 
 public class ApplicationRunner {
 
-    public List<Application> createListApplications() {
+    public List<Application> createListApplications(int number, int size) {
         List<Application> listApplications = new ArrayList<>();
-        for (int i = 0; i < 100; ++i) {
-            listApplications.add(new ListApplication(i, 1000, new ArrayList<>()));
-            listApplications.add(new ListApplication(i, 1000, new LinkedList()));
-            listApplications.add(new ListApplication(i, 1000, new Vector<>()));
+        for (int i = 0; i < number; ++i) {
+            listApplications.add(new ListApplication(i, size, new ArrayList<>()));
+            listApplications.add(new ListApplication(i, size, new LinkedList()));
+            listApplications.add(new ListApplication(i, size, new Vector<>()));
         }
 
         return listApplications;

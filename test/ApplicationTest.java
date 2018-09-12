@@ -122,8 +122,8 @@ public class ApplicationTest {
     public void TestApplicationRunner() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner appRunner = new ApplicationRunner();
 
-        List<Application> apps = appRunner.createListApplications();
-        // We add an application with similar seed but different type :O
+        List<Application> apps = appRunner.createListApplications(100, 1000);
+        // We add an application with similar seed but different type !!
         apps.add(new MapApplication(0, 1000, new HashMap<>()));
 
         List<TrainingSetValue> trainingSet = appRunner.runBenchmarks(
