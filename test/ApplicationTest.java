@@ -67,6 +67,19 @@ public class ApplicationTest {
     }
 
     @Test
+    public void TestSetApplication1() {
+        ApplicationRunner runner = new ApplicationRunner();
+
+        try {
+            runner.runBenchmarks(runner.createSetApplications(100, 1000));
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void TestMapApplication() {
         try {
             for (int seed = 0; seed < 100; ++seed) {

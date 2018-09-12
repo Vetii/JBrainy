@@ -2,6 +2,8 @@ package se.lth.cs;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
 public class ApplicationRunner {
@@ -15,6 +17,19 @@ public class ApplicationRunner {
         }
 
         return listApplications;
+    }
+
+    public List<Application> createSetApplications(int number, int size) {
+        List<Application> setApplications = new ArrayList<>();
+        for (int i = 0; i < number; ++i) {
+            setApplications.add(new SetApplication(i, size, new HashSet<>()));
+            setApplications.add(new SetApplication(i, size, new TreeSet<>()));
+            setApplications.add(new SetApplication(i, size, new LinkedHashSet<>()));
+            setApplications.add(new SetApplication(i, size, new ConcurrentSkipListSet<>()));
+            setApplications.add(new SetApplication(i, size, new CopyOnWriteArraySet<>()));
+        }
+
+        return setApplications;
     }
 
     /**
