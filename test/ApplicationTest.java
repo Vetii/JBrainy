@@ -61,6 +61,44 @@ public class ApplicationTest {
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void TestMapApplication() {
+        try {
+            for (int seed = 0; seed < 100; ++seed) {
+                MapApplication hashMapBench = new MapApplication(seed, "", new HashMap<>());
+                MapApplication hashTableBench = new MapApplication(seed, "", new Hashtable<>());
+                MapApplication treeMapBench = new MapApplication(seed, "", new TreeMap<>());
+
+                hashMapBench.benchmark();
+                hashTableBench.benchmark();
+                treeMapBench.benchmark();
+
+                Assert.assertEquals(
+                        hashMapBench.getDataStructure(),
+                        treeMapBench.getDataStructure()
+                );
+
+                Assert.assertEquals(
+                        hashMapBench.getDataStructure(),
+                        hashTableBench.getDataStructure()
+                );
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void TestListApplicationTime() throws InvocationTargetException, IllegalAccessException {
+        // Generate 20 applications, run them, get the best (running time, data structure)
+        for (int n = 0; n < 20; ++n) {
+            List<ListApplication> applications = new ArrayList<>();
+            applications.add(new ListApplication(n, "", new ArrayList<>()));
+            applications.add(new ListApplication(n, "", new LinkedList<>()));
+
+            List<Long> runningTimes = new LinkedList<>();
 
     }
 }
