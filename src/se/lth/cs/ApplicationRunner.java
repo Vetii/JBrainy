@@ -9,9 +9,9 @@ public class ApplicationRunner {
     public List<Application> createListApplications() {
         List<Application> listApplications = new ArrayList<>();
         for (int i = 0; i < 100; ++i) {
-            listApplications.add(new ListApplication(i, "", new ArrayList<>()));
-            listApplications.add(new ListApplication(i, "", new LinkedList()));
-            listApplications.add(new ListApplication(i, "", new Vector<>()));
+            listApplications.add(new ListApplication(i, 1000, new ArrayList<>()));
+            listApplications.add(new ListApplication(i, 1000, new LinkedList()));
+            listApplications.add(new ListApplication(i, 1000, new Vector<>()));
         }
 
         return listApplications;

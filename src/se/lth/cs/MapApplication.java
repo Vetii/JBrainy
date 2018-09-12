@@ -4,8 +4,8 @@ import java.util.Map;
 
 public class MapApplication  extends Application<Map<Integer, Integer>> {
 
-    public MapApplication(int seed, String configuration, Map<Integer, Integer> structure) {
-        super(seed, configuration, structure);
+    public MapApplication(int seed, int applicationSize, Map<Integer, Integer> structure) {
+        super(seed, applicationSize, structure);
     }
 
     void runClear() { dataStructure.clear(); }

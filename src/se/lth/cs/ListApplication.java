@@ -7,9 +7,9 @@ import java.util.List;
 public class ListApplication extends CollectionApplication<List<Integer>> {
 
     public ListApplication(int seed,
-                           String configuration,
+                           int applicationSize,
                            List<Integer> init) {
-        super(seed, configuration, init);
+        super(seed, applicationSize, init);
     }
 
     public void runGet() {

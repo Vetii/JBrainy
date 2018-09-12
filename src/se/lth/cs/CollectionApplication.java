@@ -4,8 +4,8 @@ import java.util.Collection;
 
 public class CollectionApplication<T extends Collection> extends Application<T> {
 
-    CollectionApplication(int seed, String configuration, Collection structure) {
-        super(seed, configuration, (T) structure);
+    CollectionApplication(int seed, int applicationSize, Collection structure) {
+        super(seed, applicationSize, (T) structure);
 
         // We add random numbers to it.
         randomGenerator.ints(100).forEach((i) -> argument.add(i));

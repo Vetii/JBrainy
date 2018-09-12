@@ -23,12 +23,14 @@ public abstract class Application<T> {
 
     int seed;
 
-    Application(int seed, String configuration, T structure) {
+    int applicationSize;
+
+    Application(int seed, int applicationSize, T structure) {
         this.seed = seed;
+        this.applicationSize = applicationSize;
         randomGenerator = new Random(seed);
 
         // We get the list of methods to run.
-        // TODO: Probably moveable to Application class.
         Method[] ms = this.getClass().getMethods();
         methodsToCall = new ArrayList<>();
         for (Method m : ms) {
@@ -58,8 +60,7 @@ public abstract class Application<T> {
     }
 
     public void benchmark() throws InvocationTargetException, IllegalAccessException {
-        int NUM_CALLS = 10000; // TODO: Read from configuration
-        for(int i = 0; i < NUM_CALLS; ++i) {
+        for(int i = 0; i < applicationSize; ++i) {
             runMethod();
         }
     }

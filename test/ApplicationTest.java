@@ -17,16 +17,16 @@ public class ApplicationTest {
             for (int seed = 0; seed < 100; ++seed) {
                 ListApplication arrayListBench = new ListApplication(
                         seed,
-                        "",
+                        1000,
                         new ArrayList<>());
                 ListApplication linkedListBench = new ListApplication(
                         seed,
-                        "",
+                        1000,
                         new LinkedList<>()
                 );
                 ListApplication vectorBench = new ListApplication(
                         seed,
-                        "",
+                        1000,
                         new Vector<>()
                 );
                 arrayListBench.benchmark();
@@ -50,9 +50,9 @@ public class ApplicationTest {
     public void TestSetApplication() {
         try {
             for (int seed = 0; seed < 100; ++seed) {
-                SetApplication hashSetBench = new SetApplication(seed, "", new HashSet<>());
+                SetApplication hashSetBench = new SetApplication(seed, 1000, new HashSet<>());
 
-                SetApplication treeSetBench = new SetApplication(seed, "", new TreeSet<>());
+                SetApplication treeSetBench = new SetApplication(seed, 1000, new TreeSet<>());
 
                 hashSetBench.benchmark();
                 treeSetBench.benchmark();
@@ -70,9 +70,9 @@ public class ApplicationTest {
     public void TestMapApplication() {
         try {
             for (int seed = 0; seed < 100; ++seed) {
-                MapApplication hashMapBench = new MapApplication(seed, "", new HashMap<>());
-                MapApplication hashTableBench = new MapApplication(seed, "", new Hashtable<>());
-                MapApplication treeMapBench = new MapApplication(seed, "", new TreeMap<>());
+                MapApplication hashMapBench = new MapApplication(seed, 1000, new HashMap<>());
+                MapApplication hashTableBench = new MapApplication(seed, 1000, new Hashtable<>());
+                MapApplication treeMapBench = new MapApplication(seed, 1000, new TreeMap<>());
 
                 hashMapBench.benchmark();
                 hashTableBench.benchmark();
@@ -98,8 +98,8 @@ public class ApplicationTest {
         // Generate 20 applications, run them, get the best (running time, data structure)
         for (int n = 0; n < 20; ++n) {
             List<ListApplication> applications = new ArrayList<>();
-            applications.add(new ListApplication(n, "", new ArrayList<>()));
-            applications.add(new ListApplication(n, "", new LinkedList<>()));
+            applications.add(new ListApplication(n, 1000, new ArrayList<>()));
+            applications.add(new ListApplication(n, 1000, new LinkedList<>()));
 
             List<Long> runningTimes = new LinkedList<>();
 
@@ -124,7 +124,7 @@ public class ApplicationTest {
 
         List<Application> apps = appRunner.createListApplications();
         // We add an application with similar seed but different type :O
-        apps.add(new MapApplication(0, "", new HashMap<>()));
+        apps.add(new MapApplication(0, 1000, new HashMap<>()));
 
         List<TrainingSetValue> trainingSet = appRunner.runBenchmarks(
                 apps
