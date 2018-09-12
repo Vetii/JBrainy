@@ -21,7 +21,10 @@ public abstract class Application<T> {
     // All methods which might be called.
     List<Method> methodsToCall;
 
+    int seed;
+
     Application(int seed, String configuration, T structure) {
+        this.seed = seed;
         randomGenerator = new Random(seed);
 
         // We get the list of methods to run.
@@ -63,4 +66,5 @@ public abstract class Application<T> {
 
     public T getDataStructure() { return dataStructure; }
 
+    public int getSeed() { return seed; }
 }

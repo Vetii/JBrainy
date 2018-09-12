@@ -1,10 +1,13 @@
+import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
-import se.lth.cs.ListApplication;
-import se.lth.cs.SetApplication;
+import org.junit.rules.Stopwatch;
+import se.lth.cs.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ApplicationTest {
 
@@ -100,5 +103,31 @@ public class ApplicationTest {
 
             List<Long> runningTimes = new LinkedList<>();
 
+            // Running the benchmark and measuring time
+            for (ListApplication app : applications) {
+                long startTime = System.nanoTime();
+                app.benchmark();
+                long endTime = System.nanoTime();
+                long duration = (endTime - startTime);
+                runningTimes.add(duration);
+            }
+
+            for (long t : runningTimes) {
+                Assert.assertTrue(t > 0);
+            }
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void TestApplicationRunner() throws InvocationTargetException, IllegalAccessException {
+        ApplicationRunner appRunner = new ApplicationRunner();
+
+        List<Application> apps = appRunner.createListApplications();
+        // We add an application with similar seed but different type :O
+        apps.add(new MapApplication(0, "", new HashMap<>()));
+
+        List<TrainingSetValue> trainingSet = appRunner.runBenchmarks(
+                apps
+        );
     }
 }
