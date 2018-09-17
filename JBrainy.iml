@@ -1,22 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
+<module relativePaths="true" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
+    <exclude-output/>
+    <orderEntry type="inheritedJdk"/>
+    <content url="file://$MODULE_DIR$/">
+      <excludeFolder url="file://$MODULE_DIR$/build"/>
+      <excludeFolder url="file://$MODULE_DIR$/.gradle"/>
     </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" scope="TEST">
-      <library name="JUnit4">
+    <orderEntry type="sourceFolder" forTests="false"/>
+    <orderEntry type="module-library">
+      <library>
         <CLASSES>
-          <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar!/" />
+          <root url="jar:///home/noricc/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.13/7fcf30c25b8f4a9379b9dad0d3f487b25272c026/slf4j-api-1.7.13.jar!/"/>
         </CLASSES>
-        <JAVADOC />
-        <SOURCES />
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar:///home/noricc/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.13/96e785df399a4e1a6c030877097807b7e18520cc/slf4j-api-1.7.13-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/noricc/.gradle/caches/modules-2/files-2.1/junit/junit/3.8.2/7e4cde26b53a9a0e3fe5b00d1dbbc7cc1d46060/junit-3.8.2.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar:///home/noricc/.gradle/caches/modules-2/files-2.1/junit/junit/3.8.2/aaa058540bf14ad600dd784de979c46c721ccbbe/junit-3.8.2-sources.jar!/"/>
+        </SOURCES>
       </library>
     </orderEntry>
   </component>
+  <component name="ModuleRootManager"/>
 </module>
