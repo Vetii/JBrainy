@@ -1,13 +1,9 @@
-import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.rules.Stopwatch;
 import se.lth.cs.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ApplicationTest {
 
