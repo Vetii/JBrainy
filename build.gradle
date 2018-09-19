@@ -18,7 +18,21 @@ plugins {
 }
 
 jmh {
-    profilers = ['perf']
+     // 'perf' uses perf over the whole iteration
+     // 'perfnorm' normalizes over each operation (call to benchmark)
+     profilers = ['perf:delay=0']
+     // avg mode: Loops through the benchmark during timeOnIteration 
+     // and averages the running time.
+     // We take single shot time (just run the benchmark once)
+     benchmarkMode = ['ss']
+     warmupIterations = 3
+     warmup = '1s'
+     fork = 1
+     iterations = 5
+     // Minimum time to spend at each measurement iteration
+     timeOnIteration = '1s'
+     benchmarkParameters = [seed: ['0', '1']]
+     // humanOutputFile = project.file("output-perf.txt")
 }
 
 // In this section you declare where to find the dependencies of your project
