@@ -1,9 +1,6 @@
 package se.lth.cs;
 
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.Param;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
@@ -15,19 +12,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@State(Scope.Benchmark)
 public class ApplicationBenchmark {
 
-    @Param({"0"})
-    public int seed;
+    @State(Scope.Thread)
+    public static class BenchmarkState {
+        @Param({"0"})
+        public int seed;
 
-    @Param({"1000"})
-    public int applicationSize;
+        @Param({"1000"})
+        public int applicationSize;
+
+        public Application application;
+
+        @Setup(Level.Trial)
+        public void doSetup() {
+            application = new ListApplication(seed, applicationSize, new ArrayList<>());
+        }
+    }
 
     @Benchmark
-    public void ListApplicationBenchmark() throws InvocationTargetException, IllegalAccessException {
-        Application app = new ListApplication(seed, applicationSize, new ArrayList<>());
-        app.benchmark();
+    public void ListApplicationBenchmark(BenchmarkState state) throws InvocationTargetException, IllegalAccessException {
+        state.application.benchmark();
     }
 
     // public static void main(String[] args) throws RunnerException, IOException {
