@@ -22,11 +22,27 @@ public class ApplicationBenchmark {
         @Param({"1000"})
         public int applicationSize;
 
+        private List<Application> applications;
+        {
+            ApplicationRunner runner = new ApplicationRunner();
+            try {
+                List<TrainingSetValue> phase1Set = runner.runBenchmarks(
+                        runner.createListApplications(2, 10000)
+                );
+                applications = phase1Set.stream().map(TrainingSetValue::getApplication).collect(Collectors.toList());
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
         public Application application;
 
         @Setup(Level.Trial)
         public void doSetup() {
-            application = new ListApplication(seed, applicationSize, new ArrayList<>());
+            application = applications.get(seed);
+            // application = new ListApplication(seed, applicationSize, new ArrayList<>());
         }
     }
 
