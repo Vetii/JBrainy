@@ -4,6 +4,9 @@ import se.lth.cs.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import papi.*;
+
+import static junit.framework.TestCase.assertEquals;
 
 public class ApplicationTest {
 
@@ -139,5 +142,36 @@ public class ApplicationTest {
         List<TrainingSetValue> trainingSet = appRunner.runBenchmarks(
                 apps
         );
+    }
+
+    @Test
+    public void TestPapi() throws PapiException {
+        Papi.init();
+
+        // Throws exception
+        EventSet evset = EventSet.create(Constants.PAPI_TOT_CYC, Constants.PAPI_L1_DCM);
+
+        int[] results = new int[10];
+
+        // 9 warmup runs before measuring
+        for (int warmup = 10; warmup >= 0; --warmup) {
+            for (int i = 0; i < 10; i++) {
+                evset.start();
+
+                // some weird code to measure
+                for (int k = 0; k <= i*10; k++) {
+                    results[i] += k*k;
+                }
+                // done with the code
+
+                evset.stop();
+                long[] data = evset.getCounters();
+
+                // only print the 10th run
+                if (warmup == 0) {
+                    System.out.println("#" + i + ":\t" + data[0] + "\t" + data[1]);
+                }
+            }
+        }
     }
 }
