@@ -4,6 +4,11 @@ import se.lth.cs.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.IntPredicate;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 import papi.*;
 
 import static junit.framework.TestCase.assertEquals;
@@ -173,5 +178,46 @@ public class ApplicationTest {
                 }
             }
         }
+    }
+
+    /**
+     * Tests that all performance counters can be put in an eventSet
+     * (not at the same time!)
+     * @throws PapiException
+     */
+    @Test
+    public void TestPapiEventSet() throws PapiException {
+        Papi.init();
+
+        int [] constants = se.lth.cs.PapiRunnerKt.getCounters();
+
+        IntPredicate throwsExp =
+                (integer -> {
+                    try {
+                        System.out.println(integer);
+                        EventSet evset = EventSet.create(constants[integer],
+                                constants[Math.min(integer + 1, 58)]);
+                        return false;
+                    } catch (PapiException e) {
+                        return true;
+                    }
+                });
+
+
+        IntStream range = IntStream.range(0, constants.length);
+        // IntStream vals = range.filter(throwsExp);
+        Assert.assertTrue(range.noneMatch(throwsExp));
+    }
+
+    @Test
+    public void TestBenchmark() throws PapiException {
+        PapiRunner r = new PapiRunner();
+        r.benchmark();
+    }
+
+    @Test
+    public void TestEmptyBenchmark() throws PapiException {
+        PapiRunner r = new PapiRunner();
+        r.emptyBenchmark();
     }
 }
