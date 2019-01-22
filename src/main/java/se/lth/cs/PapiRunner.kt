@@ -249,9 +249,9 @@ fun test2(): LinkedList<Int> {
 }
 
 fun test3(): HashMap<Int, MutableList<Int>> {
-    var a = HashMap<Int, MutableList<Int>>()
+    val a = HashMap<Int, MutableList<Int>>()
     for (i in 0 .. 1000) {
-        for (j in 1 until 9) {
+        for (j in 2 .. 9) {
             if (i % j == 0) {
                 if (a.containsKey(j)) {
                     a[j]?.add(i)
