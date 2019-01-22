@@ -273,10 +273,12 @@ fun main(args : Array<String>) {
 
     val data = r.runWithoutInterleaving(1000, functions)
     val gson = Gson()
-    val file = File("benchmarkoutput-warmup.json")
+    val suffix = data.hashCode()
+    val file = File("benchmarkoutput-warmup-$suffix.json")
     file.writeText(gson.toJson(data))
 
     val data1 = r.runWithInterleaving(1000, functions)
-    val file1 = File("benchmarkoutput-interleaved-warmup.json")
+    val suffix1 = data1.hashCode()
+    val file1 = File("benchmarkoutput-interleaved-warmup-$suffix1.json")
     file1.writeText(gson.toJson(data1))
 }
