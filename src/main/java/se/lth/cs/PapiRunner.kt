@@ -186,7 +186,7 @@ class PapiRunner() {
 
     data class BenchmarkId(val counter : String, val program : String)
 
-    fun runWithInterleaving(numRuns : Int, functions : List<Pair<String, () -> Any>>):
+    inline fun runWithInterleaving(numRuns : Int, functions : List<Pair<String, () -> Any>>):
             Map<String, List<Long>> {
         Papi.init()
 
