@@ -74,8 +74,6 @@ val counterSpec =
     val counters = counterSpec.values.toIntArray()
 
 class PapiRunner() {
-    // All supported constants on the current proc in PAPI
-
     /**
      * Empty benchmark:
      * Test to see if the results are stable.
