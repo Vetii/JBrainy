@@ -157,6 +157,7 @@ class PapiRunner() {
 
         // For each counter that is available
         for (kvp in counterSpec) {
+            println("Streamlined mode: " + "'" + kvp.key + "'")
             // We record only one counter
             val evset = EventSet.create(kvp.value)
             // For each program...
@@ -194,6 +195,7 @@ class PapiRunner() {
         for (kvp in counterSpec) {
             val evset = EventSet.create(kvp.value)
 
+            println("Interleaved mode: " + "'" + kvp.key + "'")
             // For each run-number
             for (run in 0..numRuns) {
                 // We run each program
