@@ -271,8 +271,12 @@ fun main(args : Array<String>) {
             Pair("2", { test2() }),
             Pair("3", { test3() }))
 
-    var data = r.runWithoutInterleaving(1000, functions)
+    val data = r.runWithoutInterleaving(1000, functions)
     val gson = Gson()
     val file = File("benchmarkoutput-warmup.json")
     file.writeText(gson.toJson(data))
+
+    val data1 = r.runWithInterleaving(1000, functions)
+    val file1 = File("benchmarkoutput-interleaved-warmup.json")
+    file1.writeText(gson.toJson(data1))
 }
