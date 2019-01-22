@@ -183,7 +183,42 @@ class PapiRunner() {
         return data
     }
 
+    data class BenchmarkId(val counter : String, val program : String)
 
+    fun runWithInterleaving(numRuns : Int, functions : List<Pair<String, () -> Any>>):
+            Map<String, List<Long>> {
+        Papi.init()
+
+        var data : MutableMap<BenchmarkId, MutableList<Long>> = mutableMapOf()
+
+        for (kvp in counterSpec) {
+            val evset = EventSet.create(kvp.value)
+
+            // For each run-number
+            for (run in 0..numRuns) {
+                // We run each program
+                for (function in functions) {
+                    val current = BenchmarkId(kvp.key, function.first)
+                    if (!data.containsKey(current)) {
+                        data[current] = mutableListOf()
+                    }
+                    // We do the measurements
+                    evset.start()
+                    val result = function.second()
+                    evset.stop()
+
+                    //println(result)
+                    // We record the data
+                    val counterdata = evset.counters
+                    data[current]?.addAll(counterdata.toList())
+                }
+            }
+        }
+
+        return data.mapKeys { current ->
+            current.key.counter + "_" + current.key.program }
+                .mapValues { l -> l.value.toList() }
+    }
 }
 
 fun test1(): IntArray {
