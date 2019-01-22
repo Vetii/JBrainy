@@ -1,17 +1,15 @@
 import org.junit.Assert;
 import org.junit.Test;
+import papi.Constants;
+import papi.EventSet;
+import papi.Papi;
+import papi.PapiException;
 import se.lth.cs.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-import papi.*;
-
-import static junit.framework.TestCase.assertEquals;
 
 public class ApplicationTest {
 
@@ -51,6 +49,12 @@ public class ApplicationTest {
     }
 
     @Test
+    public void TestListApplication1() throws InvocationTargetException, IllegalAccessException {
+        ApplicationRunner runner = new ApplicationRunner();
+        runner.runBenchmarks(runner.createListApplications(100, 1000));
+    }
+
+    @Test
     public void TestSetApplication() {
         try {
             for (int seed = 0; seed < 100; ++seed) {
@@ -73,7 +77,6 @@ public class ApplicationTest {
     @Test
     public void TestSetApplication1() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner runner = new ApplicationRunner();
-
         runner.runBenchmarks(runner.createSetApplications(100, 1000));
     }
 
@@ -107,7 +110,6 @@ public class ApplicationTest {
     @Test
     public void TestMapApplication1() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner runner = new ApplicationRunner();
-
         runner.runBenchmarks(runner.createMapApplications(100, 1000));
     }
 
@@ -143,7 +145,7 @@ public class ApplicationTest {
         List<Application> apps = appRunner.createListApplications(100, 1000);
         // We add an application with similar seed but different type !!
         apps.add(new MapApplication(0, 1000, new HashMap<>()));
-
+        // Should throw an exception
         List<TrainingSetValue> trainingSet = appRunner.runBenchmarks(
                 apps
         );
@@ -153,7 +155,6 @@ public class ApplicationTest {
     public void TestPapi() throws PapiException {
         Papi.init();
 
-        // Throws exception
         EventSet evset = EventSet.create(Constants.PAPI_TOT_CYC, Constants.PAPI_L1_DCM);
 
         int[] results = new int[10];
@@ -206,10 +207,10 @@ public class ApplicationTest {
 
         IntStream range = IntStream.range(0, constants.length);
         // IntStream vals = range.filter(throwsExp);
-        Assert.assertTrue(range.noneMatch(throwsExp));
+        Assert.assertTrue(range.anyMatch(throwsExp));
     }
 
-    @Test
+    @Test(expected = PapiException.class)
     public void TestBenchmark() throws PapiException {
         PapiRunner r = new PapiRunner();
         r.benchmark();
