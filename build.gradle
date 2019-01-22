@@ -22,11 +22,16 @@ buildscript {
 plugins {
     id 'java'
     id 'idea'
+    id 'application' // For running as an app.
     // If this doesn't work, update gradle using // $ ./gradlew wrapper
     // $ ./gradlew wrapper --gradle-version <version>
     id "me.champeau.gradle.jmh" version "0.4.7"
 }
+
 apply plugin: 'kotlin'
+
+mainClassName = 'se.lth.cs.PapiRunnerKt'
+applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./lib/native"]
 
 jmh {
      // 'perf' uses perf over the whole iteration
