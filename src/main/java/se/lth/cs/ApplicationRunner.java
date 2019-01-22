@@ -8,6 +8,13 @@ import java.util.stream.Collectors;
 
 public class ApplicationRunner {
 
+    /**
+     * Creates a list of list applications
+     * For each type of list, we create an application
+     * @param number
+     * @param size
+     * @return
+     */
     public List<Application> createListApplications(int number, int size) {
         List<Application> listApplications = new ArrayList<>();
         for (int i = 0; i < number; ++i) {
@@ -49,7 +56,7 @@ public class ApplicationRunner {
     /**
      * Runs a list of applications
      * @param applications
-     * @return
+     * @return The list of fastest applications
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
@@ -64,8 +71,6 @@ public class ApplicationRunner {
                 applications.stream().collect(
                         Collectors.groupingBy(Application::getSeed)
                 );
-
-
 
         for (Integer seed : appsBySeed.keySet()) {
             // We get the list of applications to compare
@@ -109,7 +114,6 @@ public class ApplicationRunner {
             }
         }
     }
-
 
     TrainingSetValue runApplication(Application app)
             throws InvocationTargetException, IllegalAccessException {
