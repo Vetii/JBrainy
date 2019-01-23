@@ -182,6 +182,18 @@ class PapiRunner() {
         return data
     }
 
+    /**
+     * Runs a list of generated applications without interleaving
+     * @Returns A map from couple (counter, program-name) -> values over all runs
+     */
+    fun runListApplications(numRuns: Int, applications : List<Application<*>>): Map<String, List<Long>> {
+        val apps = applications.map {
+            Pair("App${it.seed}:${it.dataStructure.javaClass.canonicalName}", { it.benchmark() })
+        }
+
+        return runWithoutInterleaving(numRuns, apps).toMap()
+    }
+
     data class BenchmarkId(val counter : String, val program : String)
 
     inline fun runWithInterleaving(numRuns : Int, functions : List<Pair<String, () -> Any>>):
