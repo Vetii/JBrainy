@@ -208,4 +208,15 @@ public class ApplicationTest {
         PapiRunner r = new PapiRunner();
         r.emptyBenchmark();
     }
+
+    @Test
+    public void TestPapiRunGenerated() throws PapiException {
+        List<ListApplication> applications = new ApplicationRunner().createListApplications(
+                3,
+                100
+        );
+        PapiRunner papiRunner = new PapiRunner();
+        Map<String, List<Long>> data = papiRunner.runListApplications(100, applications);
+        Assert.assertFalse(data.isEmpty());
+    }
 }
