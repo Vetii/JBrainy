@@ -15,8 +15,8 @@ public class ApplicationRunner {
      * @param size
      * @return
      */
-    public List<Application> createListApplications(int number, int size) {
-        List<Application> listApplications = new ArrayList<>();
+    public List<ListApplication> createListApplications(int number, int size) {
+        List<ListApplication> listApplications = new ArrayList<>();
         for (int i = 0; i < number; ++i) {
             listApplications.add(new ListApplication(i, size, new ArrayList<>()));
             listApplications.add(new ListApplication(i, size, new LinkedList()));
@@ -26,8 +26,8 @@ public class ApplicationRunner {
         return listApplications;
     }
 
-    public List<Application> createSetApplications(int number, int size) {
-        List<Application> setApplications = new ArrayList<>();
+    public List<SetApplication> createSetApplications(int number, int size) {
+        List<SetApplication> setApplications = new ArrayList<>();
         for (int i = 0; i < number; ++i) {
             setApplications.add(new SetApplication(i, size, new HashSet<>()));
             setApplications.add(new SetApplication(i, size, new TreeSet<>()));
@@ -39,8 +39,8 @@ public class ApplicationRunner {
         return setApplications;
     }
 
-    public List<Application> createMapApplications(int number, int size) {
-        List<Application> mapApplications = new ArrayList<>();
+    public List<MapApplication> createMapApplications(int number, int size) {
+        List<MapApplication> mapApplications = new ArrayList<>();
 
         for (int i = 0; i < number; ++i) {
             mapApplications.add(new MapApplication(i, size, new HashMap<>()));
@@ -60,7 +60,7 @@ public class ApplicationRunner {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    public List<TrainingSetValue> runBenchmarks(List<Application> applications)
+    public List<TrainingSetValue> runBenchmarks(List<? extends Application> applications)
            throws InvocationTargetException, IllegalAccessException {
 
         List<TrainingSetValue> trainingSet = new ArrayList<>();
