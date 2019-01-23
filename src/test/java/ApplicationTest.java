@@ -138,19 +138,6 @@ public class ApplicationTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void TestApplicationRunner() throws InvocationTargetException, IllegalAccessException {
-        ApplicationRunner appRunner = new ApplicationRunner();
-
-        List<Application> apps = appRunner.createListApplications(100, 1000);
-        // We add an application with similar seed but different type !!
-        apps.add(new MapApplication(0, 1000, new HashMap<>()));
-        // Should throw an exception
-        List<TrainingSetValue> trainingSet = appRunner.runBenchmarks(
-                apps
-        );
-    }
-
     @Test
     public void TestPapi() throws PapiException {
         Papi.init();
