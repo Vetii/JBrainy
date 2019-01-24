@@ -203,6 +203,22 @@ class PapiRunner() {
         return runWithoutInterleaving(numRuns, apps).toMap()
     }
 
+    fun getFeatures(numRuns: Int, applications : List<Application<*>>, runner : ApplicationRunner):
+            Map<String, Map<String, Float>> {
+        val trainingSet = runner.runBenchmarks(applications)
+        // We want to get a map app -> (map counter -> values)
+        val seedsToCountersAndVals =
+                trainingSet.groupBy { it.dataStructure } // We group them by dataStructure
+                        .mapValues { it.value.map { it.application } } // We just get the application
+                        .mapValues { runListApplications(numRuns, it.value)}
+
+        val seedsToFeatures = seedsToCountersAndVals.mapValues {
+            it.value.mapValues { medianLong(it.value) }
+        }
+
+        return seedsToFeatures
+    }
+
     data class BenchmarkId(val counter : String, val program : String)
 
     inline fun runWithInterleaving(numRuns : Int, functions : List<Pair<String, () -> Any>>):
@@ -285,15 +301,39 @@ fun test3(): HashMap<Int, MutableList<Int>> {
     return a
 }
 
+fun median(l : List<Float>) : Float {
+    return l.sorted().let { (it[it.size / 2] + it[(it.size - 1) / 2]) / 2 }
+}
+
+fun medianLong(l : List<Long>) : Float {
+    return median(l.map{ it.toFloat() })
+}
+
 fun main(args : Array<String>) {
     val r = PapiRunner()
+    val gson = Gson()
+    val apps = ApplicationRunner().createListApplications(4, 100)
+    val data = r.runListApplications(1000, apps)
+    val splitted = data.toList().groupBy {
+        it.first.split(":")[1] // Name of data structure
+    }.mapValues { it.value.toMap() }
+    for (kvp in splitted) {
+        val data = kvp.value.mapKeys {
+            it.key.split(":")[0] // We only save before the separator
+        }
+        // val suffix = kvp.value.hashCode()
+        val file = File("benchmarkoutput-${kvp.key}.json")
+        file.writeText(gson.toJson(data))
+    }
+
+    /*
     val functions = listOf(
             Pair("1", { test1() }),
             Pair("2", { test2() }),
             Pair("3", { test3() }))
 
     val data = r.runWithoutInterleaving(1000, functions)
-    val gson = Gson()
+
     val suffix = data.hashCode()
     val file = File("benchmarkoutput-warmup-$suffix.json")
     file.writeText(gson.toJson(data))
@@ -302,4 +342,5 @@ fun main(args : Array<String>) {
     val suffix1 = data1.hashCode()
     val file1 = File("benchmarkoutput-interleaved-warmup-$suffix1.json")
     file1.writeText(gson.toJson(data1))
+    */
 }
