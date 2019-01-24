@@ -6,9 +6,12 @@ public class TrainingSetValue {
 
     private final Application application;
 
-    public TrainingSetValue(long runningTime, Application dataStructure) {
+    private final String dataStructure;
+
+    public TrainingSetValue(long runningTime, Application application) {
         this.runningTime = runningTime;
-        this.application = dataStructure;
+        this.application = application;
+        this.dataStructure = application.dataStructure.getClass().getName();
     }
 
     public long getRunningTime() {
@@ -18,4 +21,6 @@ public class TrainingSetValue {
     public Application getApplication() {
         return application;
     }
+
+    public String getDataStructure() { return dataStructure; }
 }
