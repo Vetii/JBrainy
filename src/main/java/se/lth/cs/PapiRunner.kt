@@ -147,38 +147,47 @@ class PapiRunner() {
      * (Performance should get better if there is JIT compilation)
      * @Returns A map from couples (counter, program-name) -> values over all runs
      */
-    inline fun runWithoutInterleaving(numRuns : Int, functions : List<Pair<String,() -> Any>>):
+    fun runWithoutInterleaving(numRuns : Int, functions : List<Pair<String,() -> Any>>):
             MutableMap<String, List<Long>> {
         Papi.init()
 
         var data : MutableMap<String, List<Long>> = mutableMapOf()
-
-        // For each counter that is available
-        for (kvp in counterSpec) {
-            println("Streamlined mode: " + "'" + kvp.key + "'")
-            // We record only one counter
-            val evset = EventSet.create(kvp.value)
-            // For each program...
-            for (function in functions) {
-                val current = Pair(kvp.key, function.first)
-                // We run it n times
-                var values = mutableListOf<Long>()
-                for (run in 0..numRuns) {
-                    // We do the measurements
-                    evset.start()
-                    val result = function.second()
-                    evset.stop()
-
-                    //println(result)
-                    // We record the data
-                    val data = evset.counters
-                    values.addAll(data.toList())
-                }
-                val label = current.first + "_" + current.second
-                data[label] = values
+        for (labelAndFunction in functions) {
+            val function = labelAndFunction.second
+            val label = labelAndFunction.first
+            val values = runFunction(numRuns, function)
+            for (counterAndValues in values) {
+                data.put(counterAndValues.key + "_" + label,
+                        counterAndValues.value)
             }
         }
+        return data
+    }
 
+    /**
+     * Runs a function several times
+     * @return A map from PAPI counter names to list of values
+     */
+    inline fun runFunction(numRuns : Int, function : () -> Any): MutableMap<String, List<Long>> {
+        var data : MutableMap<String, List<Long>> = mutableMapOf()
+
+        for (kvp in counterSpec) {
+            // We record only one counter
+            val evset = EventSet.create(kvp.value)
+            // We run the function n times
+            var values = mutableListOf<Long>()
+            for (run in 0..numRuns) {
+                // We do the measurements
+                evset.start()
+                val result = function()
+                evset.stop()
+
+                // We record the data
+                val data = evset.counters
+                values.addAll(data.toList())
+            }
+            data[kvp.key] = values
+        }
         return data
     }
 
