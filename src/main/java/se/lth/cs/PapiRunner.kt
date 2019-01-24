@@ -5,8 +5,6 @@ import papi.Constants
 import papi.EventSet
 import papi.Papi
 import java.io.File
-import java.util.*
-import kotlin.collections.HashMap
 
 val counterSpec =
             hashMapOf(
@@ -145,7 +143,7 @@ class PapiRunner() {
 
     /** Runs a set of programs (functions) without interleaving
      * (Performance should get better if there is JIT compilation)
-     * @Returns A map from couples (counter, program-name) -> values over all runs
+     * @Returns A map from couples counter_program-name -> List<Long> over all runs
      */
     fun runWithoutInterleaving(numRuns : Int, functions : List<Pair<String,() -> Any>>):
             MutableMap<String, List<Long>> {
@@ -192,8 +190,22 @@ class PapiRunner() {
     }
 
     /**
+     * Runs a function several times, gather the performance counters
+     * and returns their median
+     * @param numRuns Number of times the function should be ran
+     * @param function The function to benchmark
+     * @return A map from PAPI counter names to the median of their values over numRuns
+     */
+    fun runFunctionMedian(numRuns : Int, function : () -> Any) : Map<String, Float> {
+        val data = runFunction(numRuns, function)
+        return data.mapValues {
+            median(it.value.map { it.toFloat() })
+        }
+    }
+
+    /**
      * Runs a list of generated applications without interleaving
-     * @Returns A map from couple (counter, program-name) -> values over all runs
+     * @Returns A map from couple counter_program-name -> values over all runs
      */
     fun runListApplications(numRuns: Int, applications : List<Application<*>>): Map<String, List<Long>> {
         val apps = applications.map {
@@ -203,20 +215,26 @@ class PapiRunner() {
         return runWithoutInterleaving(numRuns, apps).toMap()
     }
 
+    /**
+     * A class for feature vectors with the label of the app (seed), the fastest datastructure for that app,
+     * and the performance counters for that app
+     */
+    data class FeatureVector(val appLabel : String, val dataStructure : String, val counters : Map<String, Float>)
+
+    /**
+     * Runs a couple of generated applications and returns their feature vectors
+     */
     fun getFeatures(numRuns: Int, applications : List<Application<*>>, runner : ApplicationRunner):
-            Map<String, Map<String, Float>> {
+            List<FeatureVector> {
         val trainingSet = runner.runBenchmarks(applications)
-        // We want to get a map app -> (map counter -> values)
-        val seedsToCountersAndVals =
-                trainingSet.groupBy { it.dataStructure } // We group them by dataStructure
-                        .mapValues { it.value.map { it.application } } // We just get the application
-                        .mapValues { runListApplications(numRuns, it.value)}
 
-        val seedsToFeatures = seedsToCountersAndVals.mapValues {
-            it.value.mapValues { medianLong(it.value) }
+        return trainingSet.map {
+            FeatureVector(
+                    it.application.seed.toString(),
+                    it.dataStructure,
+                    runFunctionMedian(numRuns) { it.application.benchmark() }
+            )
         }
-
-        return seedsToFeatures
     }
 
     data class BenchmarkId(val counter : String, val program : String)
@@ -256,57 +274,6 @@ class PapiRunner() {
             current.key.counter + "_" + current.key.program }
                 .mapValues { l -> l.value.toList() }
     }
-}
-
-fun test1(): IntArray {
-    val a = (0..1000).toList().toTypedArray()
-    val b = IntArray(1000)
-
-    // Synthetic piece of code to see if counters run as expected
-    var acc = 0
-    for (i in 0 until 1000) {
-        acc += a[i]
-        if(acc % 2 == 1) {
-            b[i] = acc
-        }
-    }
-    return b
-}
-
-fun test2(): LinkedList<Int> {
-    var a = LinkedList<Int>()
-    a.add(0)
-    a.add(1)
-    for (i in 0 .. 1000) {
-        a.add(
-                a.last + a.get(a.size - 2)
-        )
-    }
-    return a
-}
-
-fun test3(): HashMap<Int, MutableList<Int>> {
-    val a = HashMap<Int, MutableList<Int>>()
-    for (i in 0 .. 1000) {
-        for (j in 2 .. 9) {
-            if (i % j == 0) {
-                if (a.containsKey(j)) {
-                    a[j]?.add(i)
-                } else {
-                    a[j] = mutableListOf()
-                }
-            }
-        }
-    }
-    return a
-}
-
-fun median(l : List<Float>) : Float {
-    return l.sorted().let { (it[it.size / 2] + it[(it.size - 1) / 2]) / 2 }
-}
-
-fun medianLong(l : List<Long>) : Float {
-    return median(l.map{ it.toFloat() })
 }
 
 fun main(args : Array<String>) {
