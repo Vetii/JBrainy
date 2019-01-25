@@ -40,14 +40,23 @@ public class ApplicationRunner {
             // in the list.
             List<TrainingSetValue> runningTimes = new ArrayList<>();
             for (Application app : toCompare) {
-                runningTimes.add(runApplication(app));
+                // We run it first
+                TrainingSetValue v = runApplication(app);
+
+                // We get the average running time
+                ArrayList times = new ArrayList();
+                for (int i = 0; i < 100; ++i) {
+                    times.add(runApplication(app).getRunningTime());
+                }
+                v.setRunningTime(UtilsKt.average(times));
+                runningTimes.add(v);
             }
 
             // We fetch the data corresponding to the fastest
             // application in the list.
             Optional<TrainingSetValue> minimum =
                     runningTimes.stream().min(
-                            (x, y) -> Long.compare(x.getRunningTime(), y.getRunningTime())
+                            Comparator.comparingDouble(TrainingSetValue::getRunningTime)
                     );
 
             if (minimum.isPresent()) {

@@ -55,3 +55,6 @@ fun medianLong(l : List<Long>) : Float {
     return median(l.map{ it.toFloat() })
 }
 
+fun average(l : List<Float>) : Double {
+   return l.average()
+}
