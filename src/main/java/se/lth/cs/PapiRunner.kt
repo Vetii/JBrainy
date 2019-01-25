@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import papi.Constants
 import papi.EventSet
 import papi.Papi
+import papi.PapiException
 import java.io.File
 import java.util.*
 
@@ -211,7 +212,13 @@ class PapiRunner() {
 
         for (kvp in counterSpec) {
             // We record only one counter
-            val evset = EventSet.create(kvp.value)
+            var evset = EventSet.create()
+            try {
+                evset = EventSet.create(kvp.value)
+            } catch (e : PapiException) {
+                error("Failed to sample counter: ${kvp.key}")
+            }
+
             // We run the function n times
             var values = mutableListOf<Long>()
             for (run in 0..numRuns) {
