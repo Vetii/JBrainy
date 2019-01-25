@@ -1,6 +1,5 @@
 package se.lth.cs
 
-import com.google.gson.Gson
 import papi.Constants
 import papi.EventSet
 import papi.Papi
@@ -373,8 +372,13 @@ class PapiRunner() {
 
 fun main(args : Array<String>) {
     val r = PapiRunner()
+    val apps = ApplicationGenerator.createListApplications(200, 100)
+    val data = r.getFeatures(200, apps)
+    val file = File("benchmarkoutput.csv")
+    file.writeText(r.featuresToCSV(data));
+
+    /* FOR GENERATING FILES TO COMPARE DATA STRUCTURES
     val gson = Gson()
-    val apps = ApplicationGenerator.createMapApplications(4, 1000)
     val data = r.runListApplications(1000, apps)
     val splitted = data.toList().groupBy {
         it.first.split(":")[1] // Name of data structure
@@ -387,8 +391,9 @@ fun main(args : Array<String>) {
         val file = File("benchmarkoutput-${kvp.key}.json")
         file.writeText(gson.toJson(data))
     }
+    */
 
-    /*
+    /* GENERATING A BENCHMARK
     val functions = listOf(
             Pair("1", { test1() }),
             Pair("2", { test2() }),
