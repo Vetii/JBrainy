@@ -27,7 +27,7 @@ public class ApplicationBenchmark {
             ApplicationRunner runner = new ApplicationRunner();
             try {
                 List<TrainingSetValue> phase1Set = runner.runBenchmarks(
-                        runner.createListApplications(2, 10000)
+                        ApplicationGenerator.createListApplications(2, 10000)
                 );
                 applications = phase1Set.stream().map(TrainingSetValue::getApplication).collect(Collectors.toList());
             } catch (InvocationTargetException e) {
