@@ -256,10 +256,10 @@ class PapiRunner() {
      */
     fun runListApplications(numRuns: Int, applications : List<Application<*>>): Map<String, List<Long>> {
         val apps = applications.map {
-            Pair("App${it.seed}:${it.dataStructure.javaClass.canonicalName}", { it.benchmark() })
+            Pair("${it.seed}:${it.dataStructure.javaClass.canonicalName}", { it.benchmark() })
         }
 
-        return runWithoutInterleaving(numRuns, apps).toMap()
+        return runWithoutInterleaving2(numRuns, apps).toMap()
     }
 
     /**
@@ -273,16 +273,33 @@ class PapiRunner() {
      */
     fun getFeatures(numRuns: Int, applications : List<Application<*>>):
             List<FeatureVector> {
-
         val trainingSet = ApplicationRunner().runBenchmarks(applications)
 
-        return trainingSet.map {
-            FeatureVector(
-                    it.application.seed.toString(),
-                    it.dataStructure,
-                    runFunctionMedian(numRuns) { it.application.benchmark() }
+        val applications = trainingSet.map { it.application }
+        val results: Map<String, SortedMap<String, Float>> = runListApplications(numRuns, applications)
+                .toList()
+                .groupBy { it.first.split(":")[1] } // Group by application name
+                .mapValues {
+                    it.value.map {
+                        Pair(
+                                it.first.split(":")[0] // Counter name
+                                ,medianLong(it.second) // Value
+
+                        )
+                    }.toMap().toSortedMap()
+                }
+
+        var l = mutableListOf<FeatureVector>()
+        for (trainingElement in trainingSet) {
+            l.add(
+                    FeatureVector(
+                            trainingElement.application.seed.toString(),
+                            trainingElement.dataStructure,
+                            results[trainingElement.application.seed.toString()] ?: sortedMapOf()
+                    )
             )
         }
+        return l
     }
 
     fun featuresToCSV(vectors : List<FeatureVector>) : String {
