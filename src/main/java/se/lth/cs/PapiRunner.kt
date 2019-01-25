@@ -5,6 +5,7 @@ import papi.Constants
 import papi.EventSet
 import papi.Papi
 import java.io.File
+import java.util.*
 
 val counterSpec =
             hashMapOf(
@@ -166,7 +167,7 @@ class PapiRunner() {
      * Runs a function several times
      * @return A map from PAPI counter names to list of values
      */
-    inline fun runFunction(numRuns : Int, function : () -> Any): MutableMap<String, List<Long>> {
+    inline fun runFunction(numRuns : Int, function : () -> Any): SortedMap<String, List<Long>> {
         var data : MutableMap<String, List<Long>> = mutableMapOf()
 
         for (kvp in counterSpec) {
@@ -186,7 +187,7 @@ class PapiRunner() {
             }
             data[kvp.key] = values
         }
-        return data
+        return data.toSortedMap()
     }
 
     /**
@@ -196,11 +197,11 @@ class PapiRunner() {
      * @param function The function to benchmark
      * @return A map from PAPI counter names to the median of their values over numRuns
      */
-    fun runFunctionMedian(numRuns : Int, function : () -> Any) : Map<String, Float> {
+    fun runFunctionMedian(numRuns : Int, function : () -> Any) : SortedMap<String, Float> {
         val data = runFunction(numRuns, function)
         return data.mapValues {
             median(it.value.map { it.toFloat() })
-        }
+        }.toSortedMap()
     }
 
     /**
@@ -219,14 +220,15 @@ class PapiRunner() {
      * A class for feature vectors with the label of the app (seed), the fastest datastructure for that app,
      * and the performance counters for that app
      */
-    data class FeatureVector(val appLabel : String, val dataStructure : String, val counters : Map<String, Float>)
+    data class FeatureVector(val appLabel : String, val dataStructure : String, val counters : SortedMap<String, Float>)
 
     /**
      * Runs a couple of generated applications and returns their feature vectors
      */
-    fun getFeatures(numRuns: Int, applications : List<Application<*>>, runner : ApplicationRunner):
+    fun getFeatures(numRuns: Int, applications : List<Application<*>>):
             List<FeatureVector> {
-        val trainingSet = runner.runBenchmarks(applications)
+
+        val trainingSet = ApplicationRunner().runBenchmarks(applications)
 
         return trainingSet.map {
             FeatureVector(
@@ -235,6 +237,38 @@ class PapiRunner() {
                     runFunctionMedian(numRuns) { it.application.benchmark() }
             )
         }
+    }
+
+    fun featuresToCSV(vectors : List<FeatureVector>) : String {
+        if (vectors.isEmpty()) return ""
+
+        var header = mutableListOf(
+                "application",
+                "data_structure")
+
+        val counters = vectors.map { it.counters.keys }
+                .fold(setOf()) { s : Set<String>, v -> s.union(v)}
+
+        header.addAll(counters)
+        val headerText = header.joinToString(",")
+
+        var values = mutableListOf<List<String>>()
+        for (v in vectors) {
+            var l = mutableListOf<String>()
+            l.add(v.appLabel)
+            l.add(v.dataStructure)
+            for (c in counters) {
+                l.add(v.counters[c]?.toString() ?: "None")
+            }
+            values.add(l)
+        }
+
+        val valuesTexts = values.map {
+            it.joinToString(",")
+        }
+
+        val valuesText = valuesTexts.joinToString("\n")
+        return "$headerText\n$valuesText"
     }
 
     data class BenchmarkId(val counter : String, val program : String)

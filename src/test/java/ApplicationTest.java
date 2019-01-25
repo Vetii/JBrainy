@@ -250,4 +250,24 @@ public class ApplicationTest {
         values1.add(3.0f);
         Assert.assertEquals(3.5, median(values1), 0.0001);
     }
+
+    @Test
+    public void TestCSVExport() {
+        PapiRunner r = new PapiRunner();
+        Assert.assertEquals("", r.featuresToCSV(new ArrayList<>()));
+
+        List<PapiRunner.FeatureVector> data = new ArrayList();
+        data.add(new PapiRunner.FeatureVector("app1", "java.util.ArrayList",
+                new TreeMap<String, Float>() {{ put("COUNTER_1", 123.4f); put("COUNTER_2", 123.4f); }}
+                ));
+        data.add(new PapiRunner.FeatureVector("app2", "java.util.Vector",
+                new TreeMap<String, Float>() {{ put("COUNTER_1", 1234.5f); put("COUNTER_3", 12345f); }}
+                ));
+        String expectedHeader = "application,data_structure,COUNTER_1,COUNTER_2,COUNTER_3";
+        String expectedData1 = "app1,java.util.ArrayList,123.4,123.4,None";
+        String expectedData2 = "app2,java.util.Vector,1234.5,None,12345.0";
+        Assert.assertEquals(
+                expectedHeader + "\n" + expectedData1 + "\n" + expectedData2,
+                r.featuresToCSV(data));
+    }
 }
