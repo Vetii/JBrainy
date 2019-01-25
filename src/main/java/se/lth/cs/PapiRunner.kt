@@ -279,7 +279,7 @@ class PapiRunner() {
 fun main(args : Array<String>) {
     val r = PapiRunner()
     val gson = Gson()
-    val apps = ApplicationRunner().createListApplications(4, 100)
+    val apps = ApplicationGenerator.createMapApplications(4, 1000)
     val data = r.runListApplications(1000, apps)
     val splitted = data.toList().groupBy {
         it.first.split(":")[1] // Name of data structure

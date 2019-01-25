@@ -53,7 +53,7 @@ public class ApplicationTest {
     @Test
     public void TestListApplication1() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner runner = new ApplicationRunner();
-        runner.runBenchmarks(runner.createListApplications(100, 1000));
+        runner.runBenchmarks(ApplicationGenerator.createListApplications(100, 1000));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class ApplicationTest {
     @Test
     public void TestSetApplication1() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner runner = new ApplicationRunner();
-        runner.runBenchmarks(runner.createSetApplications(100, 1000));
+        runner.runBenchmarks(ApplicationGenerator.createSetApplications(100, 1000));
     }
 
     @Test
@@ -112,7 +112,7 @@ public class ApplicationTest {
     @Test
     public void TestMapApplication1() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner runner = new ApplicationRunner();
-        runner.runBenchmarks(runner.createMapApplications(100, 1000));
+        runner.runBenchmarks(ApplicationGenerator.createMapApplications(100, 1000));
     }
 
     @Test
@@ -213,7 +213,7 @@ public class ApplicationTest {
 
     @Test
     public void TestPapiRunGenerated() throws PapiException {
-        List<ListApplication> applications = new ApplicationRunner().createListApplications(
+        List<ListApplication> applications = ApplicationGenerator.createListApplications(
                 3,
                 100
         );
@@ -224,14 +224,13 @@ public class ApplicationTest {
 
     @Test
     public void TestPapiFeatureGathering() throws PapiException, InvocationTargetException, IllegalAccessException {
-        ApplicationRunner runner = new ApplicationRunner();
-        List<ListApplication> applications = runner.createListApplications(
+        List<ListApplication> applications = ApplicationGenerator.createListApplications(
                 3,
                 100
         );
 
         PapiRunner papiRunner = new PapiRunner();
-        List<PapiRunner.FeatureVector> data = papiRunner.getFeatures(10, applications, runner);
+        List<PapiRunner.FeatureVector> data = papiRunner.getFeatures(10, applications);
         System.out.println(data);
     }
 
