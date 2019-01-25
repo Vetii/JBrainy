@@ -73,13 +73,14 @@ val counterSpec =
     val counters = counterSpec.values.toIntArray()
 
 class PapiRunner() {
+    init {
+        Papi.init()
+    }
     /**
      * Empty benchmark:
      * Test to see if the results are stable.
      */
     fun emptyBenchmark(): MutableMap<String, List<Long>> {
-        Papi.init()
-
         // For each counter,
         // we store the values for each run (10 runs)
         var data : MutableMap<String, List<Long>> = mutableMapOf()
@@ -113,8 +114,6 @@ class PapiRunner() {
     }
 
     fun benchmark() {
-        Papi.init()
-
         // Throws exception
         val evset = EventSet.create(*counters)
 
@@ -144,12 +143,11 @@ class PapiRunner() {
 
     /** Runs a set of programs (functions) without interleaving
      * (Performance should get better if there is JIT compilation)
+     * Known bug: Crashes if there are too many functions (creates even sets too many times)
      * @Returns A map from couples counter_program-name -> List<Long> over all runs
      */
     fun runWithoutInterleaving(numRuns : Int, functions : List<Pair<String,() -> Any>>):
             MutableMap<String, List<Long>> {
-        Papi.init()
-
         var data : MutableMap<String, List<Long>> = mutableMapOf()
         for (labelAndFunction in functions) {
             val function = labelAndFunction.second
@@ -275,8 +273,6 @@ class PapiRunner() {
 
     inline fun runWithInterleaving(numRuns : Int, functions : List<Pair<String, () -> Any>>):
             Map<String, List<Long>> {
-        Papi.init()
-
         var data : MutableMap<BenchmarkId, MutableList<Long>> = mutableMapOf()
 
         for (kvp in counterSpec) {
