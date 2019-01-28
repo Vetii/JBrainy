@@ -242,10 +242,10 @@ class PapiRunner() {
      * @param function The function to benchmark
      * @return A map from PAPI counter names to the median of their values over numRuns
      */
-    fun runFunctionMedian(numRuns : Int, function : () -> Any) : SortedMap<String, Float> {
+    fun runFunctionMedian(numRuns : Int, function : () -> Any) : SortedMap<String, Double> {
         val data = runFunction(numRuns, function)
         return data.mapValues {
-            median(it.value.map { it.toFloat() })
+            median(it.value.map { it.toDouble() })
         }.toSortedMap()
     }
 

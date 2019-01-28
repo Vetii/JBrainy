@@ -236,18 +236,18 @@ public class ApplicationTest {
 
     @Test
     public void TestMedian() {
-        List<Float> values = new ArrayList<>();
+        List<Double> values = new ArrayList<>();
         for (Integer i = 0; i < 10; ++i) {
-            values.add(i.floatValue());
+            values.add(i.doubleValue());
         }
 
         Assert.assertEquals(4.5, median(values), 0.001);
 
-        List<Float> values1 = new ArrayList<>();
-        values1.add(1.0f);
-        values1.add(4.0f);
-        values1.add(5.0f);
-        values1.add(3.0f);
+        List<Double> values1 = new ArrayList<>();
+        values1.add(1.0);
+        values1.add(4.0);
+        values1.add(5.0);
+        values1.add(3.0);
         Assert.assertEquals(3.5, median(values1), 0.0001);
     }
 
@@ -258,10 +258,10 @@ public class ApplicationTest {
 
         List<PapiRunner.FeatureVector> data = new ArrayList();
         data.add(new PapiRunner.FeatureVector("app1", "java.util.ArrayList",
-                new TreeMap<String, Float>() {{ put("COUNTER_1", 123.4f); put("COUNTER_2", 123.4f); }}
+                new TreeMap<String, Double>() {{ put("COUNTER_1", 123.4); put("COUNTER_2", 123.4); }}
                 ));
         data.add(new PapiRunner.FeatureVector("app2", "java.util.Vector",
-                new TreeMap<String, Float>() {{ put("COUNTER_1", 1234.5f); put("COUNTER_3", 12345f); }}
+                new TreeMap<String, Double>() {{ put("COUNTER_1", 1234.5); put("COUNTER_3", 12345.0); }}
                 ));
         String expectedHeader = "application,data_structure,COUNTER_1,COUNTER_2,COUNTER_3";
         String expectedData1 = "app1,java.util.ArrayList,123.4,123.4,None";

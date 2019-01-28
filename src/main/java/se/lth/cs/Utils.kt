@@ -47,14 +47,14 @@ fun test3(): HashMap<Int, MutableList<Int>> {
 }
 
 // Some utility functions for stats
-fun median(l : List<Float>) : Float {
+fun median(l : List<Double>) : Double {
     return l.sorted().let { (it[it.size / 2] + it[(it.size - 1) / 2]) / 2 }
 }
 
-fun medianLong(l : List<Long>) : Float {
-    return median(l.map{ it.toFloat() })
+fun medianLong(l : List<Long>) : Double {
+    return median(l.map{ it.toDouble() })
 }
 
-fun average(l : List<Float>) : Double {
+fun average(l : List<Double>) : Double {
    return l.average()
 }
