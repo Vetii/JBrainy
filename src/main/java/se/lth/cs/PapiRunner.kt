@@ -141,20 +141,28 @@ class PapiRunner() {
         }
     }
 
+
+    class CounterAndProgram(val counter : String, val programName : String) : Comparable<CounterAndProgram> {
+        override fun toString(): String { return "${counter}_$programName"}
+        override fun compareTo(other: CounterAndProgram): Int {
+            return toString().compareTo(other.toString())
+        }
+    }
+
     /** Runs a set of programs (functions) without interleaving
      * (Performance should get better if there is JIT compilation)
      * Known bug: Crashes if there are too many functions (creates even sets too many times)
      * @Returns A map from couples counter_program-name -> List<Long> over all runs
      */
     fun runWithoutInterleaving(numRuns : Int, functions : List<Pair<String,() -> Any>>):
-            MutableMap<String, List<Long>> {
-        var data : MutableMap<String, List<Long>> = mutableMapOf()
+            MutableMap<CounterAndProgram, List<Long>> {
+        var data : MutableMap<CounterAndProgram, List<Long>> = mutableMapOf()
         for (labelAndFunction in functions) {
             val function = labelAndFunction.second
             val label = labelAndFunction.first
             val values = runFunction(numRuns, function)
             for (counterAndValues in values) {
-                data.put(counterAndValues.key + "_" + label,
+                data.put(CounterAndProgram(counterAndValues.key, label),
                         counterAndValues.value)
             }
         }
@@ -167,10 +175,9 @@ class PapiRunner() {
      * @Returns A map from couples (counter, program-name) -> values over all runs
      */
     inline fun runWithoutInterleaving2(numRuns : Int, functions : List<Pair<String,() -> Any>>):
-            SortedMap<String, List<Long>> {
-        Papi.init()
+            SortedMap<CounterAndProgram, List<Long>> {
 
-        var data : SortedMap<String, List<Long>> = sortedMapOf()
+        var data = TreeMap<CounterAndProgram, List<Long>>()
 
         // For each counter that is available
         for (kvp in counterSpec) {
@@ -182,7 +189,7 @@ class PapiRunner() {
                 val current = Pair(kvp.key, function.first)
                 // We run it n times
                 var values = mutableListOf<Long>()
-                for (run in 0..numRuns) {
+                for (run in 0 until numRuns) {
                     // We do the measurements
                     evset.start()
                     val result = function.second()
@@ -193,8 +200,8 @@ class PapiRunner() {
                     val data = evset.counters
                     values.addAll(data.toList())
                 }
-                val label = current.first + ":" + current.second
-                data[label] = values
+                val key = CounterAndProgram(current.first, current.second)
+                data[key] = values
             }
         }
 
@@ -253,7 +260,7 @@ class PapiRunner() {
      * Runs a list of generated applications without interleaving
      * @Returns A map from couple counter_program-name -> values over all runs
      */
-    fun runListApplications(numRuns: Int, applications : List<Application<*>>): Map<String, List<Long>> {
+    fun runListApplications(numRuns: Int, applications : List<Application<*>>): Map<CounterAndProgram, List<Long>> {
         val apps = applications.map {
             Pair("${it.seed}:${it.dataStructure.javaClass.canonicalName}", { it.benchmark() })
         }
@@ -265,37 +272,40 @@ class PapiRunner() {
      * A class for feature vectors with the label of the app (seed), the fastest datastructure for that app,
      * and the performance counters for that app
      */
-    data class FeatureVector(val appLabel : String, val dataStructure : String, val counters : SortedMap<String, Float>)
+    data class FeatureVector(val appLabel : String, val dataStructure : String, val counters : SortedMap<String, Double>)
 
     /**
      * Runs a couple of generated applications and returns their feature vectors
      */
     fun getFeatures(numRuns: Int, applications : List<Application<*>>):
             List<FeatureVector> {
-        val trainingSet = ApplicationRunner().runBenchmarks(applications)
+        val trainingSet =
+                ApplicationRunner().runBenchmarks(applications)
 
-        val applications = trainingSet.map { it.application }
-        val results: Map<String, SortedMap<String, Float>> = runListApplications(numRuns, applications)
-                .toList()
-                .groupBy { it.first.split(":")[1] } // Group by application name
-                .mapValues {
-                    it.value.map {
-                        Pair(
-                                it.first.split(":")[0] // Counter name
-                                ,medianLong(it.second) // Value
+        val distribution = trainingSet.groupBy { it.dataStructure }.mapValues { it.value.size }
+        println("Benchmark distribution : $distribution")
 
-                        )
-                    }.toMap().toSortedMap()
-                }
+        val apps = trainingSet.map { it.application }
+        val counters = runListApplications(numRuns, apps)
 
-        var l = mutableListOf<FeatureVector>()
-        for (trainingElement in trainingSet) {
-            l.add(
-                    FeatureVector(
-                            trainingElement.application.seed.toString(),
-                            trainingElement.dataStructure,
-                            results[trainingElement.application.seed.toString()] ?: sortedMapOf()
-                    )
+
+        // Map program_name -> { counters -> values }
+        var results : MutableMap<String, SortedMap<String, Double>> = mutableMapOf()
+        for (kvp in counters) {
+            val progName = kvp.key.programName
+            if (results.containsKey(progName)) {
+                results[progName]!![kvp.key.counter] = medianLong(kvp.value)
+            } else {
+                results[progName] = sortedMapOf()
+                results[progName]!![kvp.key.counter] = medianLong(kvp.value)
+            }
+        }
+
+        val l = results.map {
+            FeatureVector(
+                    it.key,
+                    it.key.split(":")[1], // Data structure
+                    it.value
             )
         }
         return l
@@ -372,20 +382,21 @@ class PapiRunner() {
 
 fun main(args : Array<String>) {
     val r = PapiRunner()
-    val apps = ApplicationGenerator.createListApplications(200, 100)
+    val apps = ApplicationGenerator.createMapApplications(200, 100)
     val data = r.getFeatures(200, apps)
     val file = File("benchmarkoutput.csv")
-    file.writeText(r.featuresToCSV(data));
+    file.writeText(r.featuresToCSV(data))
 
-    /* FOR GENERATING FILES TO COMPARE DATA STRUCTURES
+    /*
     val gson = Gson()
-    val data = r.runListApplications(1000, apps)
-    val splitted = data.toList().groupBy {
-        it.first.split(":")[1] // Name of data structure
+    val data1 = r.runListApplications(100, apps)
+    val splitted = data1.toList().groupBy {
+        it.first.programName.split(":")[1] // Name of data structure
     }.mapValues { it.value.toMap() }
+
     for (kvp in splitted) {
         val data = kvp.value.mapKeys {
-            it.key.split(":")[0] // We only save before the separator
+            it.key.toString().split(":")[0] // We only save before the separator
         }
         // val suffix = kvp.value.hashCode()
         val file = File("benchmarkoutput-${kvp.key}.json")

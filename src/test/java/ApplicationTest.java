@@ -218,8 +218,11 @@ public class ApplicationTest {
                 100
         );
         PapiRunner papiRunner = new PapiRunner();
-        Map<String, List<Long>> data = papiRunner.runListApplications(100, applications);
+        Map<PapiRunner.CounterAndProgram, List<Long>> data = papiRunner.runListApplications(10, applications);
         Assert.assertFalse(data.isEmpty());
+        for (PapiRunner.CounterAndProgram key : data.keySet()) {
+            Assert.assertFalse(data.get(key).isEmpty());
+        }
     }
 
     @Test
@@ -231,7 +234,10 @@ public class ApplicationTest {
 
         PapiRunner papiRunner = new PapiRunner();
         List<PapiRunner.FeatureVector> data = papiRunner.getFeatures(10, applications);
-        System.out.println(data);
+        Assert.assertFalse(data.isEmpty());
+        for (PapiRunner.FeatureVector v : data) {
+            Assert.assertFalse(v.getCounters().isEmpty());
+        }
     }
 
     @Test
