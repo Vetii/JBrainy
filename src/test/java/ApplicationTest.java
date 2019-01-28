@@ -21,16 +21,16 @@ public class ApplicationTest {
             for (int seed = 0; seed < 100; ++seed) {
                 ListApplication arrayListBench = new ListApplication(
                         seed,
-                        1000,
+                        100,
                         new ArrayList<>());
                 ListApplication linkedListBench = new ListApplication(
                         seed,
-                        1000,
+                        100,
                         new LinkedList<>()
                 );
                 ListApplication vectorBench = new ListApplication(
                         seed,
-                        1000,
+                        100,
                         new Vector<>()
                 );
                 arrayListBench.benchmark();
@@ -53,16 +53,17 @@ public class ApplicationTest {
     @Test
     public void TestListApplication1() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner runner = new ApplicationRunner();
-        runner.runBenchmarks(ApplicationGenerator.createListApplications(100, 1000));
+        List<TrainingSetValue> v = runner.runBenchmarks(ApplicationGenerator.createListApplications(100, 10));
+        return;
     }
 
     @Test
     public void TestSetApplication() {
         try {
             for (int seed = 0; seed < 100; ++seed) {
-                SetApplication hashSetBench = new SetApplication(seed, 1000, new HashSet<>());
+                SetApplication hashSetBench = new SetApplication(seed, 10, new HashSet<>());
 
-                SetApplication treeSetBench = new SetApplication(seed, 1000, new TreeSet<>());
+                SetApplication treeSetBench = new SetApplication(seed, 10, new TreeSet<>());
 
                 hashSetBench.benchmark();
                 treeSetBench.benchmark();
@@ -79,16 +80,16 @@ public class ApplicationTest {
     @Test
     public void TestSetApplication1() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner runner = new ApplicationRunner();
-        runner.runBenchmarks(ApplicationGenerator.createSetApplications(100, 1000));
+        runner.runBenchmarks(ApplicationGenerator.createSetApplications(100, 10));
     }
 
     @Test
     public void TestMapApplication() {
         try {
             for (int seed = 0; seed < 100; ++seed) {
-                MapApplication hashMapBench = new MapApplication(seed, 1000, new HashMap<>());
-                MapApplication hashTableBench = new MapApplication(seed, 1000, new Hashtable<>());
-                MapApplication treeMapBench = new MapApplication(seed, 1000, new TreeMap<>());
+                MapApplication hashMapBench = new MapApplication(seed, 10, new HashMap<>());
+                MapApplication hashTableBench = new MapApplication(seed, 10, new Hashtable<>());
+                MapApplication treeMapBench = new MapApplication(seed, 10, new TreeMap<>());
 
                 hashMapBench.benchmark();
                 hashTableBench.benchmark();
@@ -112,7 +113,8 @@ public class ApplicationTest {
     @Test
     public void TestMapApplication1() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner runner = new ApplicationRunner();
-        runner.runBenchmarks(ApplicationGenerator.createMapApplications(100, 1000));
+        List<TrainingSetValue> v = runner.runBenchmarks(ApplicationGenerator.createMapApplications(100, 10));
+        return;
     }
 
     @Test
