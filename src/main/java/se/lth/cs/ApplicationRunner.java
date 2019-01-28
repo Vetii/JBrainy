@@ -1,9 +1,9 @@
 package se.lth.cs;
 
+import se.lth.cs.ApplicationGeneration.ApplicationGenerator;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
 public class ApplicationRunner {
@@ -82,5 +82,41 @@ public class ApplicationRunner {
         }
 
         return new TrainingSetValue(UtilsKt.median(durations), app);
+    }
+
+    public List<TrainingSetValue> createListApplicationsSpread(
+            Long threshold, int size,
+            ApplicationGenerator g) throws InvocationTargetException, IllegalAccessException {
+
+        List<TrainingSetValue> result = new ArrayList<>();
+        int seed = 0;
+
+        // We start by creating one application
+        List<Application<?>> apps = g.createApplications(0, 1, size);
+        List<TrainingSetValue> values = runBenchmarks(apps);
+        seed += apps.size();
+
+        Map<String, Long> histogram = values.stream().collect(
+                Collectors.groupingBy(TrainingSetValue::getDataStructure, Collectors.counting())
+        );
+
+        // While we do not have at least THRESHOLD "worst" applications...
+        while (histogram.values().stream().min(Long::compare).orElse(0l) < threshold) {
+            // Generate new applications
+            apps = g.createApplications(seed, 100, size);
+            seed += apps.size();
+            values = runBenchmarks(apps);
+
+            for (TrainingSetValue v : values) {
+                String dataStructure = v.getDataStructure();
+                Long numberApps = histogram.get(dataStructure);
+                if (numberApps < threshold * 2) {
+                    histogram.put(dataStructure, histogram.get(dataStructure) + 1);
+                    result.add(v);
+                }
+            }
+        }
+
+        return result;
     }
 }

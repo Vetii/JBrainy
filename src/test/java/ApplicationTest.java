@@ -5,6 +5,10 @@ import papi.EventSet;
 import papi.Papi;
 import papi.PapiException;
 import se.lth.cs.*;
+import se.lth.cs.ApplicationGeneration.ApplicationGenerator;
+import se.lth.cs.ApplicationGeneration.ListApplicationGenerator;
+import se.lth.cs.ApplicationGeneration.MapApplicationGenerator;
+import se.lth.cs.ApplicationGeneration.SetApplicationGenerator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -53,7 +57,7 @@ public class ApplicationTest {
     @Test
     public void TestListApplication1() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner runner = new ApplicationRunner();
-        List<TrainingSetValue> v = runner.runBenchmarks(ApplicationGenerator.createListApplications(100, 10));
+        List<TrainingSetValue> v = runner.runBenchmarks(new ListApplicationGenerator().createApplications(0, 100, 10));
         return;
     }
 
@@ -80,7 +84,7 @@ public class ApplicationTest {
     @Test
     public void TestSetApplication1() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner runner = new ApplicationRunner();
-        runner.runBenchmarks(ApplicationGenerator.createSetApplications(100, 10));
+        runner.runBenchmarks(new SetApplicationGenerator().createApplications(0, 100, 10));
     }
 
     @Test
@@ -113,7 +117,8 @@ public class ApplicationTest {
     @Test
     public void TestMapApplication1() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner runner = new ApplicationRunner();
-        List<TrainingSetValue> v = runner.runBenchmarks(ApplicationGenerator.createMapApplications(100, 10));
+        List<TrainingSetValue> v = runner.runBenchmarks(
+                new MapApplicationGenerator().createApplications(0, 100, 10));
         return;
     }
 
@@ -215,7 +220,8 @@ public class ApplicationTest {
 
     @Test
     public void TestPapiRunGenerated() throws PapiException {
-        List<ListApplication> applications = ApplicationGenerator.createListApplications(
+        List<Application<?>> applications = new ListApplicationGenerator().createApplications(
+                0,
                 3,
                 100
         );
@@ -229,7 +235,8 @@ public class ApplicationTest {
 
     @Test
     public void TestPapiFeatureGathering() throws PapiException, InvocationTargetException, IllegalAccessException {
-        List<ListApplication> applications = ApplicationGenerator.createListApplications(
+        List<Application<?>> applications = new ListApplicationGenerator().createApplications(
+                0,
                 3,
                 100
         );

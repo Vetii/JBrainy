@@ -1,14 +1,10 @@
 package se.lth.cs;
 
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
+import se.lth.cs.ApplicationGeneration.ApplicationGenerator;
+import se.lth.cs.ApplicationGeneration.ListApplicationGenerator;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +23,7 @@ public class ApplicationBenchmark {
             ApplicationRunner runner = new ApplicationRunner();
             try {
                 List<TrainingSetValue> phase1Set = runner.runBenchmarks(
-                        ApplicationGenerator.createListApplications(2, 10000)
+                        new ListApplicationGenerator().createApplications(0, 2, 10000)
                 );
                 applications = phase1Set.stream().map(TrainingSetValue::getApplication).collect(Collectors.toList());
             } catch (InvocationTargetException e) {

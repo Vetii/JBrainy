@@ -4,6 +4,7 @@ import papi.Constants
 import papi.EventSet
 import papi.Papi
 import papi.PapiException
+import se.lth.cs.ApplicationGeneration.MapApplicationGenerator
 import java.io.File
 import java.util.*
 
@@ -260,7 +261,8 @@ class PapiRunner() {
      * Runs a list of generated applications without interleaving
      * @Returns A map from couple counter_program-name -> values over all runs
      */
-    fun runListApplications(numRuns: Int, applications : List<Application<*>>): Map<CounterAndProgram, List<Long>> {
+    fun runListApplications(numRuns: Int, applications: List<Application<*>>):
+            Map<CounterAndProgram, List<Long>> {
         val apps = applications.map {
             Pair("${it.seed}:${it.dataStructure.javaClass.canonicalName}", { it.benchmark() })
         }
@@ -382,7 +384,7 @@ class PapiRunner() {
 
 fun main(args : Array<String>) {
     val r = PapiRunner()
-    val apps = ApplicationGenerator.createMapApplications(200, 100)
+    val apps = MapApplicationGenerator().createApplications(200, 100, 100)
     val data = r.getFeatures(200, apps)
     val file = File("benchmarkoutput.csv")
     file.writeText(r.featuresToCSV(data))
