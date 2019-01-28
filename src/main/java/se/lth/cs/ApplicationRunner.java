@@ -40,16 +40,7 @@ public class ApplicationRunner {
             // in the list.
             List<TrainingSetValue> runningTimes = new ArrayList<>();
             for (Application app : toCompare) {
-                // We run it first
-                TrainingSetValue v = runApplication(app);
-
-                // We get the average running time
-                ArrayList times = new ArrayList();
-                for (int i = 0; i < 100; ++i) {
-                    times.add(runApplication(app).getRunningTime());
-                }
-                v.setRunningTime(UtilsKt.average(times));
-                runningTimes.add(v);
+                runningTimes.add(runApplication(app));
             }
 
             // We fetch the data corresponding to the fastest
@@ -79,12 +70,17 @@ public class ApplicationRunner {
         }
     }
 
-    TrainingSetValue runApplication(Application app)
+    public TrainingSetValue runApplication(Application app)
             throws InvocationTargetException, IllegalAccessException {
-        long startTime = System.nanoTime();
-        app.benchmark();
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-        return new TrainingSetValue(duration, app);
+        ArrayList<Double> durations = new ArrayList();
+        for (int i = 0; i < 100; ++i) {
+            long startTime = System.nanoTime();
+            app.benchmark();
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            durations.add((double) duration);
+        }
+
+        return new TrainingSetValue(UtilsKt.median(durations), app);
     }
 }
