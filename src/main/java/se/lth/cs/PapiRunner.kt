@@ -170,6 +170,39 @@ class PapiRunner() {
         return data
     }
 
+    /**
+     * Runs a function several times
+     * @return A map from PAPI counter names to list of values
+     */
+    inline fun runFunction(numRuns : Int, function : () -> Any): SortedMap<String, List<Long>> {
+        var data : MutableMap<String, List<Long>> = mutableMapOf()
+
+        for (kvp in counterSpec) {
+            // We record only one counter
+            var evset = EventSet.create()
+            try {
+                evset = EventSet.create(kvp.value)
+            } catch (e : PapiException) {
+                error("Failed to sample counter: ${kvp.key}")
+            }
+
+            // We run the function n times
+            var values = mutableListOf<Long>()
+            for (run in 0..numRuns) {
+                // We do the measurements
+                evset.start()
+                val result = function()
+                evset.stop()
+
+                // We record the data
+                val data = evset.counters
+                values.addAll(data.toList())
+            }
+            data[kvp.key] = values
+        }
+        return data.toSortedMap()
+    }
+
 
     /** Runs a set of programs (functions) without interleaving
      * (Performance should get better if there is JIT compilation)
@@ -207,40 +240,6 @@ class PapiRunner() {
         }
 
         return data
-    }
-
-
-    /**
-     * Runs a function several times
-     * @return A map from PAPI counter names to list of values
-     */
-    inline fun runFunction(numRuns : Int, function : () -> Any): SortedMap<String, List<Long>> {
-        var data : MutableMap<String, List<Long>> = mutableMapOf()
-
-        for (kvp in counterSpec) {
-            // We record only one counter
-            var evset = EventSet.create()
-            try {
-                evset = EventSet.create(kvp.value)
-            } catch (e : PapiException) {
-                error("Failed to sample counter: ${kvp.key}")
-            }
-
-            // We run the function n times
-            var values = mutableListOf<Long>()
-            for (run in 0..numRuns) {
-                // We do the measurements
-                evset.start()
-                val result = function()
-                evset.stop()
-
-                // We record the data
-                val data = evset.counters
-                values.addAll(data.toList())
-            }
-            data[kvp.key] = values
-        }
-        return data.toSortedMap()
     }
 
     /**
