@@ -70,18 +70,21 @@ public class ApplicationRunner {
         }
     }
 
-    public TrainingSetValue runApplication(Application app)
-            throws InvocationTargetException, IllegalAccessException {
+    public TrainingSetValue runApplication(Application app) {
         ArrayList<Double> durations = new ArrayList();
-        for (int i = 0; i < 100; ++i) {
-            long startTime = System.nanoTime();
-            app.benchmark();
-            long endTime = System.nanoTime();
-            long duration = (endTime - startTime);
-            durations.add((double) duration);
+        try {
+            for (int i = 0; i < 20; ++i) {
+                long startTime = System.nanoTime();
+                app.benchmark();
+                long endTime = System.nanoTime();
+                long duration = (endTime - startTime);
+                durations.add((double) duration);
+            }
+        } catch (Exception ignored) {
+           System.out.println("running Application failed");
         }
 
-        return new TrainingSetValue(UtilsKt.median(durations), app);
+        return new TrainingSetValue(UtilsKt.average(durations), app);
     }
 
     public List<TrainingSetValue> createListApplicationsSpread(
