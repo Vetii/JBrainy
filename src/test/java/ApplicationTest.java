@@ -13,6 +13,7 @@ import se.lth.cs.ApplicationGeneration.SetApplicationGenerator;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.IntPredicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static se.lth.cs.UtilsKt.median;
@@ -108,6 +109,7 @@ public class ApplicationTest {
                         hashMapBench.getDataStructure(),
                         hashTableBench.getDataStructure()
                 );
+
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
@@ -284,5 +286,20 @@ public class ApplicationTest {
         Assert.assertEquals(
                 expectedHeader + "\n" + expectedData1 + "\n" + expectedData2,
                 r.featuresToCSV(data));
+    }
+
+    @Test
+    public void TestApplicationGeneratorSpread() throws InvocationTargetException, IllegalAccessException {
+        ApplicationRunner r = new ApplicationRunner();
+
+        Long threshold = 10l;
+        List<TrainingSetValue> values =
+                r.createListApplicationsSpread(threshold, 100, new MapApplicationGenerator());
+
+        Assert.assertTrue(
+                // Number of applications generated for the least generated datastructure
+                values.stream().collect(
+                        Collectors.groupingBy(TrainingSetValue::getDataStructure, Collectors.counting())
+                ).values().stream().min(Long::compareTo).orElse(0l) >= threshold);
     }
 }

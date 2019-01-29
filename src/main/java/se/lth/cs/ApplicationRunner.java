@@ -93,21 +93,28 @@ public class ApplicationRunner {
 
         List<TrainingSetValue> result = new ArrayList<>();
         int seed = 0;
-
-        // We start by creating one application
+        // We start by creating one application (for all types)
         List<Application<?>> apps = g.createApplications(0, 1, size);
         List<TrainingSetValue> values = runBenchmarks(apps);
-        seed += apps.size();
+        seed += 1;
 
         Map<String, Long> histogram = values.stream().collect(
                 Collectors.groupingBy(TrainingSetValue::getDataStructure, Collectors.counting())
         );
+        // Fill it with zeros for other applications
+        for (Application<?> app : apps) {
+            String ds = app.getDataStructure().getClass().getCanonicalName();
+            if (!histogram.containsKey(ds)) {
+                histogram.put(ds, 0l);
+            }
+        }
 
         // While we do not have at least THRESHOLD "worst" applications...
         while (histogram.values().stream().min(Long::compare).orElse(0l) < threshold) {
             // Generate new applications
             apps = g.createApplications(seed, 100, size);
-            seed += apps.size();
+            seed += 100;
+
             values = runBenchmarks(apps);
 
             for (TrainingSetValue v : values) {
@@ -118,6 +125,7 @@ public class ApplicationRunner {
                     result.add(v);
                 }
             }
+            System.out.println(histogram);
         }
 
         return result;
