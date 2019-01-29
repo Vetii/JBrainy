@@ -289,24 +289,21 @@ class PapiRunner() {
         val apps = trainingSet.map { it.application }
         val counters = runListApplications(numRuns, apps)
 
-
         // Map program_name -> { counters -> values }
         var results : MutableMap<String, SortedMap<String, Double>> = mutableMapOf()
         for (kvp in counters) {
             val progName = kvp.key.programName
-            if (results.containsKey(progName)) {
-                results[progName]!![kvp.key.counter] = medianLong(kvp.value)
-            } else {
+            if (!results.containsKey(progName)) {
                 results[progName] = sortedMapOf()
-                results[progName]!![kvp.key.counter] = medianLong(kvp.value)
             }
+            results[progName]!![kvp.key.counter] = medianLong(kvp.value)
         }
 
         val l = results.map {
             FeatureVector(
-                    it.key,
+                    it.key, // Program name
                     it.key.split(":")[1], // Data structure
-                    it.value
+                    it.value // Counters
             )
         }
         return l
