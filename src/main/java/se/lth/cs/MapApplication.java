@@ -8,37 +8,37 @@ public class MapApplication  extends Application<Map<Integer, Integer>> {
         super(seed, applicationSize, structure);
     }
 
-    void runClear() { dataStructure.clear(); }
+    public void runClear() { dataStructure.clear(); }
 
-    void runContainsKey() { dataStructure.containsKey(randomGenerator.nextInt()); }
+    public void runContainsKey() { dataStructure.containsKey(randomGenerator.nextInt()); }
 
-    void runContainsValue() { dataStructure.containsValue(randomGenerator.nextInt()); }
+    public void runContainsValue() { dataStructure.containsValue(randomGenerator.nextInt()); }
 
-    void runEntrySet() { dataStructure.entrySet(); }
+    public void runEntrySet() { dataStructure.entrySet(); }
 
-    void runEquals() { dataStructure.equals(argument); }
+    public void runEquals() { dataStructure.equals(argument); }
 
-    void runGet() { dataStructure.get(randomGenerator.nextInt()); }
+    public void runGet() { dataStructure.get(randomGenerator.nextInt()); }
 
-    void runHashCode() { dataStructure.hashCode(); }
+    public void runHashCode() { dataStructure.hashCode(); }
 
-    void runIsEmpty() { dataStructure.isEmpty(); }
+    public void runIsEmpty() { dataStructure.isEmpty(); }
 
-    void runKeySet() { dataStructure.keySet(); }
+    public void runKeySet() { dataStructure.keySet(); }
 
-    void runPut() {
+    public void runPut() {
         dataStructure.put(
                 randomGenerator.nextInt(),
                 randomGenerator.nextInt());
     }
 
-    void runPutAll() {
+    public void runPutAll() {
         dataStructure.putAll(argument);
     }
 
-    void runRemove() { dataStructure.remove(randomGenerator.nextInt()); }
+    public void runRemove() { dataStructure.remove(randomGenerator.nextInt()); }
 
-    void runSize() { dataStructure.size(); }
+    public void runSize() { dataStructure.size(); }
 
-    void runValues() { dataStructure.values(); }
+    public void runValues() { dataStructure.values(); }
 }
