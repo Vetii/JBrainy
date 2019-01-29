@@ -209,9 +209,9 @@ class PapiRunner() {
      * @Returns A map from couples (counter, program-name) -> values over all runs
      */
     inline fun runWithoutInterleaving2(numRuns : Int, functions : List<Pair<String,() -> Any>>):
-            SortedMap<CounterAndProgram, List<Long>> {
+            Map<CounterAndProgram, List<Long>> {
 
-        var data = TreeMap<CounterAndProgram, List<Long>>()
+        var data = HashMap<CounterAndProgram, List<Long>>()
 
         // For each counter that is available
         for (kvp in counterSpec) {
@@ -273,7 +273,7 @@ class PapiRunner() {
      * A class for feature vectors with the label of the app (seed), the fastest datastructure for that app,
      * and the performance counters for that app
      */
-    data class FeatureVector(val appLabel : String, val dataStructure : String, val counters : SortedMap<String, Double>)
+    data class FeatureVector(val appLabel : String, val dataStructure : String, val counters : Map<String, Double>)
 
     /**
      * Runs a couple of generated applications and returns their feature vectors
@@ -290,11 +290,11 @@ class PapiRunner() {
         val counters = runListApplications(numRuns, apps)
 
         // Map program_name -> { counters -> values }
-        var results : MutableMap<String, SortedMap<String, Double>> = mutableMapOf()
+        var results : MutableMap<String, MutableMap<String, Double>> = mutableMapOf()
         for (kvp in counters) {
             val progName = kvp.key.programName
             if (!results.containsKey(progName)) {
-                results[progName] = sortedMapOf()
+                results[progName] = mutableMapOf()
             }
             results[progName]!![kvp.key.counter] = medianLong(kvp.value)
         }
