@@ -275,31 +275,140 @@ public class ApplicationTest {
 
         List<PapiRunner.FeatureVector> data = new ArrayList();
         data.add(new PapiRunner.FeatureVector("app1", "java.util.ArrayList",
-                new TreeMap<String, Double>() {{ put("COUNTER_1", 123.4); put("COUNTER_2", 123.4); }}
-                ));
+                "java.util.ArrayList",
+                new TreeMap<String, Double>() {{
+                    put("COUNTER_1", 123.4);
+                    put("COUNTER_2", 123.4);
+                }}
+        ));
         data.add(new PapiRunner.FeatureVector("app2", "java.util.Vector",
-                new TreeMap<String, Double>() {{ put("COUNTER_1", 1234.5); put("COUNTER_3", 12345.0); }}
-                ));
-        String expectedHeader = "application,data_structure,COUNTER_1,COUNTER_2,COUNTER_3";
-        String expectedData1 = "app1,java.util.ArrayList,123.4,123.4,None";
-        String expectedData2 = "app2,java.util.Vector,1234.5,None,12345.0";
+                "java.util.ArrayList",
+                new TreeMap<String, Double>() {{
+                    put("COUNTER_1", 1234.5);
+                    put("COUNTER_3", 12345.0);
+                }}
+        ));
+        String expectedHeader = "application,data_structure,best_data_structure,COUNTER_1,COUNTER_2,COUNTER_3";
+        String expectedData1 = "app1,java.util.ArrayList,java.util.ArrayList,123.4,123.4,None";
+        String expectedData2 = "app2,java.util.Vector,java.util.ArrayList,1234.5,None,12345.0";
         Assert.assertEquals(
                 expectedHeader + "\n" + expectedData1 + "\n" + expectedData2,
                 r.featuresToCSV(data));
     }
 
     @Test
+    public void TestRunApplication() {
+        ApplicationRunner r = new ApplicationRunner();
+        List<Application<?>> apps =
+                new ListApplicationGenerator().createApplications(0, 100, 100);
+
+        for (Application a : apps) {
+            List<Double> times = new ArrayList<>();
+            for (int n = 0; n < 20; ++n) {
+                ApplicationRunner.AppRunData result = r.evaluateApplication(a);
+                times.add(result.getMedian());
+            }
+            Assert.assertEquals(0,
+                    variance(times) / average(times),
+                    0.01
+            );
+        }
+    }
+
+    @Test
+    public void TestRunBenchmarks() throws InvocationTargetException, IllegalAccessException {
+        ApplicationRunner r = new ApplicationRunner();
+
+        List<Application<?>> apps =
+                new ListApplicationGenerator().createApplications(
+                        0, 50, 100
+                );
+        List<TrainingSetValue> values =
+                r.runBenchmarks(apps).stream()
+                        .sorted(Comparator.comparing(x -> x.getApplication().getIdentifier()))
+                        .collect(Collectors.toList());
+
+        // We re-run the applications
+        List<TrainingSetValue> newValues =
+                r.runBenchmarks(apps)
+                .stream()
+                .sorted(Comparator.comparing(x -> x.getApplication().getIdentifier()))
+                .collect(Collectors.toList());
+
+        // If we re-run the benchmarks, we should get similar values
+        for (int i = 0; i < values.size(); ++i) {
+            TrainingSetValue expected = values.get(i);
+            TrainingSetValue newValue = newValues.get(i);
+            // We check we have indeed the same applications
+            Assert.assertEquals(
+                    expected.getApplication().getIdentifier(),
+                    newValue.getApplication().getIdentifier()
+            );
+            Assert.assertEquals(
+                    expected.getRunningTime(),
+                    newValue.getRunningTime(),
+                    1// 0.001 s difference max
+            );
+            Assert.assertEquals(
+                    expected.getDataStructure(),
+                    newValue.getDataStructure()
+            );
+            if (!expected.getBestDataStructure().equals(newValue.getBestDataStructure())) {
+                System.out.println(expected.getApplication().getIdentifier());
+                System.out.println(newValue.getApplication().getIdentifier());
+                System.out.println(expected.getRunningTime());
+                System.out.println(newValue.getRunningTime());
+                System.out.println(expected.getBestDataStructure());
+                System.out.println(newValue.getBestDataStructure());
+            }
+            Assert.assertEquals(
+                    expected.getBestDataStructure(),
+                    newValue.getBestDataStructure()
+            );
+        }
+    }
+
+    @Test
     public void TestApplicationGeneratorSpread() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner r = new ApplicationRunner();
 
-        Long threshold = 10l;
+        Long threshold = 3l;
         List<TrainingSetValue> values =
-                r.createListApplicationsSpread(threshold, 100, new MapApplicationGenerator());
+                r.createListApplicationsSpread(threshold, 100,new ListApplicationGenerator());
 
-        Assert.assertTrue(
-                // Number of applications generated for the least generated datastructure
-                values.stream().collect(
-                        Collectors.groupingBy(TrainingSetValue::getDataStructure, Collectors.counting())
-                ).values().stream().min(Long::compareTo).orElse(0l) >= threshold);
+        List<TrainingSetValue> newValues =
+                r.runBenchmarks(
+                        values.stream().map(TrainingSetValue::getApplication)
+                                .collect(Collectors.toList()));
+
+        // If we re-run the benchmarks, we should get similar values
+        for (int i = 0; i < values.size(); ++i) {
+            TrainingSetValue expected = values.get(i);
+            TrainingSetValue newValue = newValues.get(i);
+            Assert.assertEquals(
+                    expected.getApplication().getIdentifier(),
+                    newValue.getApplication().getIdentifier()
+            );
+            Assert.assertEquals(
+                    expected.getRunningTime(),
+                    newValue.getRunningTime(),
+                    1e6 // 0.001 s difference max
+            );
+            Assert.assertEquals(
+                    expected.getDataStructure(),
+                    newValue.getDataStructure()
+            );
+            Assert.assertEquals(
+                    expected.getBestDataStructure(),
+                    newValue.getBestDataStructure()
+            );
+        }
+
+        Map<String, Long> histogram = values.stream().collect(
+                Collectors.groupingBy(TrainingSetValue::getBestDataStructure, Collectors.counting())
+        );
+        Assert.assertEquals(3, histogram.keySet().size());
+        Assert.assertTrue( histogram.values().stream().min(Long::compareTo).orElse(0l) >= threshold);
     }
 }
+
