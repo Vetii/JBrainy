@@ -78,5 +78,11 @@ public abstract class Application<T> {
 
     public T getDataStructure() { return dataStructure; }
 
+    public String getDataStructureName() { return dataStructure.getClass().getCanonicalName(); }
+
     public int getSeed() { return seed; }
+
+    public String getIdentifier() {
+        return Integer.toString(seed) + ":" + getDataStructureName();
+    }
 }
