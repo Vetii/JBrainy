@@ -5,7 +5,6 @@ import papi.EventSet;
 import papi.Papi;
 import papi.PapiException;
 import se.lth.cs.*;
-import se.lth.cs.ApplicationGeneration.ApplicationGenerator;
 import se.lth.cs.ApplicationGeneration.ListApplicationGenerator;
 import se.lth.cs.ApplicationGeneration.MapApplicationGenerator;
 import se.lth.cs.ApplicationGeneration.SetApplicationGenerator;
@@ -16,7 +15,7 @@ import java.util.function.IntPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static se.lth.cs.UtilsKt.median;
+import static se.lth.cs.UtilsKt.*;
 
 public class ApplicationTest {
 
@@ -163,8 +162,8 @@ public class ApplicationTest {
                 evset.start();
 
                 // some weird code to measure
-                for (int k = 0; k <= i*10; k++) {
-                    results[i] += k*k;
+                for (int k = 0; k <= i * 10; k++) {
+                    results[i] += k * k;
                 }
                 // done with the code
 
@@ -182,13 +181,14 @@ public class ApplicationTest {
     /**
      * Tests that all performance counters can be put in an eventSet
      * (not at the same time!)
+     *
      * @throws PapiException
      */
     @Test
     public void TestPapiEventSet() throws PapiException {
         Papi.init();
 
-        int [] constants = se.lth.cs.PapiRunnerKt.getCounters();
+        int[] constants = se.lth.cs.PapiRunnerKt.getCounters();
 
         IntPredicate throwsExp =
                 (integer -> {
@@ -228,9 +228,9 @@ public class ApplicationTest {
                 100
         );
         PapiRunner papiRunner = new PapiRunner();
-        Map<PapiRunner.CounterAndProgram, List<Long>> data = papiRunner.runListApplications(10, applications);
+        Map<String, Map<String, List<Long>>> data = papiRunner.runListApplications(10, applications);
         Assert.assertFalse(data.isEmpty());
-        for (PapiRunner.CounterAndProgram key : data.keySet()) {
+        for (String key : data.keySet()) {
             Assert.assertFalse(data.get(key).isEmpty());
         }
     }
