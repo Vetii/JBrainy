@@ -233,4 +233,34 @@ public class ApplicationRunner {
 
         return result;
     }
+
+    public static void main(String[] args) throws IOException, InvocationTargetException, IllegalAccessException {
+        // Generate applications
+        List<Application<?>> apps = new MapApplicationGenerator().createApplications(0, 50, 200);
+
+        // 1 file for each data structure
+        // containing a Map<Seed, List<Double>>
+        Map<String, Map<String, List<Double>>> result = new HashMap<>();
+
+        ApplicationRunner r = new ApplicationRunner();
+        int n = 1;
+        for (Application a : apps) {
+            System.out.println("App:" + n + "/" + apps.size());
+            List<Double> runningTimes = new ArrayList<>(r.evaluateApplication(a).cleanSamples2());
+
+            if (!result.containsKey(a.getDataStructureName())) {
+                result.put(a.getDataStructureName(), new HashMap<>());
+            }
+            result.get(a.getDataStructureName()).put(Integer.toString(a.getSeed()), runningTimes);
+            ++n;
+        }
+
+        Gson gson = new Gson();
+        for (String dataStructure : result.keySet()) {
+            BufferedWriter output = new BufferedWriter(new FileWriter("runningTimes-" + dataStructure + ".json"));
+            String json = gson.toJson(result.get(dataStructure));
+            output.write(json);
+            output.close();
+        }
+    }
 }
