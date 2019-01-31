@@ -4,12 +4,11 @@ import papi.Constants
 import papi.EventSet
 import papi.Papi
 import papi.PapiException
-import se.lth.cs.ApplicationGeneration.MapApplicationGenerator
+import se.lth.cs.ApplicationGeneration.ListApplicationGenerator
 import java.io.File
-import java.util.*
 
 val counterSpec =
-            hashMapOf(
+            sortedMapOf(
                     "PAPI_L1_DCM" to Constants.PAPI_L1_DCM,
                     "PAPI_L1_ICM" to Constants.PAPI_L1_ICM,
                     "PAPI_L2_DCM" to Constants.PAPI_L2_DCM,
@@ -155,13 +154,16 @@ class PapiRunner() {
      * Known bug: Crashes if there are too many functions (creates even sets too many times)
      * @Returns A map from couples counter_program-name -> List<Long> over all runs
      */
-    fun runWithoutInterleaving(numRuns : Int, functions : List<Pair<String,() -> Any>>):
+    fun runWithoutInterleaving(numRuns : Int, functions : List<Pair<String,() -> Unit>>):
             MutableMap<CounterAndProgram, List<Long>> {
         var data : MutableMap<CounterAndProgram, List<Long>> = mutableMapOf()
         for (labelAndFunction in functions) {
             val function = labelAndFunction.second
             val label = labelAndFunction.first
-            val values = runFunction(numRuns, function)
+            val values : MutableMap<String, List<Long>> = mutableMapOf()
+            for (counter in counterSpec.keys) {
+                values.put(counter, runFunction(numRuns, counter, function))
+            }
             for (counterAndValues in values) {
                 data.put(CounterAndProgram(counterAndValues.key, label),
                         counterAndValues.value)
@@ -174,33 +176,29 @@ class PapiRunner() {
      * Runs a function several times
      * @return A map from PAPI counter names to list of values
      */
-    inline fun runFunction(numRuns : Int, function : () -> Any): SortedMap<String, List<Long>> {
-        var data : MutableMap<String, List<Long>> = mutableMapOf()
-
-        for (kvp in counterSpec) {
-            // We record only one counter
-            var evset = EventSet.create()
-            try {
-                evset = EventSet.create(kvp.value)
-            } catch (e : PapiException) {
-                error("Failed to sample counter: ${kvp.key}")
-            }
-
-            // We run the function n times
-            var values = mutableListOf<Long>()
-            for (run in 0..numRuns) {
-                // We do the measurements
-                evset.start()
-                val result = function()
-                evset.stop()
-
-                // We record the data
-                val data = evset.counters
-                values.addAll(data.toList())
-            }
-            data[kvp.key] = values
+    inline fun runFunction(numRuns : Int, counter : String, function : () -> Unit): MutableList<Long> {
+        val counterId = counterSpec[counter]!!
+        // We record only one counter
+        var evset = EventSet.create()
+        try {
+            evset = EventSet.create(counterId)
+        } catch (e : PapiException) {
+            error("Failed to sample counter: ${counter}")
         }
-        return data.toSortedMap()
+
+        // We run the function n times
+        var values = mutableListOf<Long>()
+        for (run in 0..numRuns) {
+            // We do the measurements
+            evset.start()
+            val result = function()
+            evset.stop()
+
+            // We record the data
+            val data = evset.counters
+            values.addAll(data.toList())
+        }
+        return values
     }
 
 
@@ -209,18 +207,27 @@ class PapiRunner() {
      * @Returns A map from couples (counter, program-name) -> values over all runs
      */
     inline fun runWithoutInterleaving2(numRuns : Int, functions : List<Pair<String,() -> Any>>):
-            Map<CounterAndProgram, List<Long>> {
+            MutableMap<String, MutableMap<String, List<Long>>> {
 
-        var data = HashMap<CounterAndProgram, List<Long>>()
+        // We store a map from program names to map with counters and list of values
+        var data = mutableMapOf<String, MutableMap<String, List<Long>>>()
+        // We initialize data with empty maps
+        for (f in functions) {
+            data.put(f.first, mutableMapOf())
+        }
 
         // For each counter that is available
         for (kvp in counterSpec) {
-            println("Streamlined mode: " + "'" + kvp.key + "'")
+            val counterName = kvp.key
+            println("Streamlined mode: '$counterName'")
+
             // We record only one counter
             val evset = EventSet.create(kvp.value)
             // For each program...
             for (function in functions) {
-                val current = Pair(kvp.key, function.first)
+                val appName = function.first
+
+                val current = Pair(counterName, appName)
                 // We run it n times
                 var values = mutableListOf<Long>()
                 for (run in 0 until numRuns) {
@@ -231,11 +238,9 @@ class PapiRunner() {
 
                     //println(result)
                     // We record the data
-                    val data = evset.counters
-                    values.addAll(data.toList())
+                    values.addAll(evset.counters.toList())
                 }
-                val key = CounterAndProgram(current.first, current.second)
-                data[key] = values
+                data[appName]!![counterName] = values
             }
         }
 
@@ -249,11 +254,9 @@ class PapiRunner() {
      * @param function The function to benchmark
      * @return A map from PAPI counter names to the median of their values over numRuns
      */
-    fun runFunctionMedian(numRuns : Int, function : () -> Any) : SortedMap<String, Double> {
-        val data = runFunction(numRuns, function)
-        return data.mapValues {
-            median(it.value.map { it.toDouble() })
-        }.toSortedMap()
+    fun runFunctionMedian(numRuns : Int, counter : String, function : () -> Unit) : Double {
+        val data = runFunction(numRuns, counter, function)
+        return medianLong(data)
     }
 
     /**
@@ -261,52 +264,50 @@ class PapiRunner() {
      * @Returns A map from couple counter_program-name -> values over all runs
      */
     fun runListApplications(numRuns: Int, applications: List<Application<*>>):
-            Map<CounterAndProgram, List<Long>> {
+            MutableMap<String, MutableMap<String, List<Long>>> {
         val apps = applications.map {
-            Pair("${it.seed}:${it.dataStructure.javaClass.canonicalName}", { it.benchmark() })
+            Pair(it.identifier, { it.benchmark() })
         }
 
-        return runWithoutInterleaving2(numRuns, apps).toMap()
+        return runWithoutInterleaving2(numRuns, apps)
     }
 
     /**
      * A class for feature vectors with the label of the app (seed), the fastest datastructure for that app,
      * and the performance counters for that app
      */
-    data class FeatureVector(val appLabel : String, val dataStructure : String, val counters : Map<String, Double>)
+    data class FeatureVector(val appLabel : String,
+                             val dataStructure : String,
+                             val bestDataStructure : String,
+                             val counters : Map<String, Double>)
 
     /**
      * Runs a couple of generated applications and returns their feature vectors
      */
     fun getFeatures(numRuns: Int, applications : List<Application<*>>):
             List<FeatureVector> {
+
         val trainingSet =
                 ApplicationRunner().runBenchmarks(applications)
 
-        val distribution = trainingSet.groupBy { it.dataStructure }.mapValues { it.value.size }
+        val distribution = trainingSet.groupBy { it.bestDataStructure }.mapValues { it.value.size }
         println("Benchmark distribution : $distribution")
 
         val apps = trainingSet.map { it.application }
-        val counters = runListApplications(numRuns, apps)
+        val appsTocounters =
+                runListApplications(numRuns, apps).mapValues {
+                    it.value.mapValues { medianLong(it.value) }
+                }
 
-        // Map program_name -> { counters -> values }
-        var results : MutableMap<String, MutableMap<String, Double>> = mutableMapOf()
-        for (kvp in counters) {
-            val progName = kvp.key.programName
-            if (!results.containsKey(progName)) {
-                results[progName] = mutableMapOf()
-            }
-            results[progName]!![kvp.key.counter] = medianLong(kvp.value)
-        }
-
-        val l = results.map {
+        val featureVectors = trainingSet.map {
             FeatureVector(
-                    it.key, // Program name
-                    it.key.split(":")[1], // Data structure
-                    it.value // Counters
+                    it.application.identifier,
+                    it.dataStructure,
+                    it.bestDataStructure,
+                    appsTocounters[it.application.identifier]!!
             )
         }
-        return l
+        return featureVectors
     }
 
     fun featuresToCSV(vectors : List<FeatureVector>) : String {
@@ -314,7 +315,8 @@ class PapiRunner() {
 
         var header = mutableListOf(
                 "application",
-                "data_structure")
+                "data_structure",
+                "best_data_structure")
 
         val counters = vectors.map { it.counters.keys }
                 .fold(setOf()) { s : Set<String>, v -> s.union(v)}
@@ -327,6 +329,7 @@ class PapiRunner() {
             var l = mutableListOf<String>()
             l.add(v.appLabel)
             l.add(v.dataStructure)
+            l.add(v.bestDataStructure)
             for (c in counters) {
                 l.add(v.counters[c]?.toString() ?: "None")
             }
@@ -380,8 +383,9 @@ class PapiRunner() {
 
 fun main(args : Array<String>) {
     val r = PapiRunner()
-    val apps = MapApplicationGenerator().createApplications(200, 100, 100)
-    val data = r.getFeatures(200, apps)
+    val apps = // ListApplicationGenerator().createApplications(0, 100, 100)
+        ApplicationRunner().createListApplicationsSpread(20, 100, ListApplicationGenerator())
+    val data = r.getFeatures(20, apps.map { it.application })
     val file = File("benchmarkoutput.csv")
     file.writeText(r.featuresToCSV(data))
 

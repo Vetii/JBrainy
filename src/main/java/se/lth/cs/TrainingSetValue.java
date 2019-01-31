@@ -8,10 +8,13 @@ public class TrainingSetValue {
 
     private final String dataStructure;
 
-    public TrainingSetValue(double runningTime, Application application) {
+    private final String bestDataStructure;
+
+    public TrainingSetValue(double runningTime, Application application, String bestDataStructure) {
         this.runningTime = runningTime;
         this.application = application;
         this.dataStructure = application.dataStructure.getClass().getName();
+        this.bestDataStructure = bestDataStructure;
     }
 
     public double getRunningTime() {
@@ -24,4 +27,8 @@ public class TrainingSetValue {
     }
 
     public String getDataStructure() { return dataStructure; }
+
+    public String getBestDataStructure() {
+        return bestDataStructure;
+    }
 }
