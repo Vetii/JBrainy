@@ -1,5 +1,6 @@
 package se.lth.cs;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 public class CollectionApplication<T extends Collection> extends Application<T> {
@@ -48,9 +49,7 @@ public class CollectionApplication<T extends Collection> extends Application<T> 
         }
     }
 
-    public void runRemoveAll() {
-        dataStructure.removeAll(argument);
-    }
+    public void runRemoveAll() { dataStructure.removeAll(argument); }
 
     public void retainAll() {
         dataStructure.retainAll(argument);
@@ -65,5 +64,11 @@ public class CollectionApplication<T extends Collection> extends Application<T> 
             Integer[] array = new Integer[3];
             dataStructure.toArray(array);
         }
+    }
+
+    @Override
+    public void benchmark() throws InvocationTargetException, IllegalAccessException {
+        super.benchmark();
+        dataStructure.clear();
     }
 }

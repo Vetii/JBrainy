@@ -1,5 +1,6 @@
 package se.lth.cs;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class MapApplication  extends Application<Map<Integer, Integer>> {
@@ -41,4 +42,10 @@ public class MapApplication  extends Application<Map<Integer, Integer>> {
     public void runSize() { dataStructure.size(); }
 
     public void runValues() { dataStructure.values(); }
+
+    @Override
+    public void benchmark() throws InvocationTargetException, IllegalAccessException {
+        super.benchmark();
+        dataStructure.clear();
+    }
 }
