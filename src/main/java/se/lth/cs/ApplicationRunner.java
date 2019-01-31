@@ -1,7 +1,12 @@
 package se.lth.cs;
 
+import com.google.gson.Gson;
 import se.lth.cs.ApplicationGeneration.ApplicationGenerator;
+import se.lth.cs.ApplicationGeneration.MapApplicationGenerator;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,20 +43,29 @@ public class ApplicationRunner {
 
             // We measure the running time of each application
             // in the list.
-            List<TrainingSetValue> runningTimes = new ArrayList<>();
+            List<AppRunData> runningTimes = new ArrayList<>();
             for (Application app : toCompare) {
-                runningTimes.add(runApplication(app));
+                runningTimes.add(evaluateApplication(app));
             }
 
             // We fetch the data corresponding to the fastest
             // application in the list.
-            Optional<TrainingSetValue> minimum =
+            Optional<AppRunData> minimum =
                     runningTimes.stream().min(
-                            Comparator.comparingDouble(TrainingSetValue::getRunningTime)
+                            Comparator.comparingDouble(AppRunData::getMedian)
                     );
 
-            if (minimum.isPresent()) {
-                trainingSet.add(minimum.get());
+            for (AppRunData rt : runningTimes) {
+                if (minimum.isPresent()) {
+                    AppRunData selected = minimum.get();
+                    String bestDataStructure = selected.application.getDataStructureName();
+
+                    trainingSet.add(
+                            new TrainingSetValue(
+                            rt.getMedian(),
+                            rt.getApplication(),
+                            bestDataStructure));
+                }
             }
         }
 
@@ -70,10 +84,90 @@ public class ApplicationRunner {
         }
     }
 
-    public TrainingSetValue runApplication(Application app) {
+    public class AppRunData {
+        private List<Double> samples;
+        private Double average;
+        private Double variance;
+        private Double median;
+        private Application<?> application;
+        private Integer numberSamples;
+
+        public AppRunData(Application<?> application, List<Double> samples) {
+            this.application = application;
+            this.samples = samples;
+            this.numberSamples = samples.size();
+            this.average = UtilsKt.average(samples);
+            this.variance = UtilsKt.variance(samples);
+            this.median = UtilsKt.median(samples);
+        }
+
+        public List<Double> getSamples() {
+            return samples;
+        }
+
+        public Double getAverage() {
+            return average;
+        }
+
+        public Double getVariance() {
+            return variance;
+        }
+
+        public Double getStandardDeviation() {
+            return Math.sqrt(variance);
+        }
+
+        public Application<?> getApplication() {
+            return application;
+        }
+
+        public Integer getNumberSamples() {
+            return numberSamples;
+        }
+
+        public Double getMedian() {
+            return median;
+        }
+
+        public List<Double> cleanSamples() {
+            List<Double> sorted = samples.stream().sorted().collect(Collectors.toList());
+            Boolean even = numberSamples % 2 == 0;
+            Double q1, q3, iqr, k;
+            int i, j, h, l;
+            i = numberSamples / 10;
+            h = 9 * numberSamples / 10;
+            if (even) {
+                j = i + 1;
+                l = h + 1;
+                q1 = 0.5 * sorted.get(i) + sorted.get(j);
+                q3 = 0.5 * sorted.get(h) + sorted.get(l);
+            } else {
+                q1 = sorted.get(i);
+                q3 = sorted.get(h);
+            }
+            iqr = q3 - q1;
+            k = 10.0;
+            return samples.stream().filter(
+                    x -> x >= (q1) && x <= (q3)
+            ).collect(Collectors.toList());
+        }
+
+        public List<Double> cleanSamples2() {
+            Double up = average + 2 * getStandardDeviation();
+            Double down = average - 2 * getStandardDeviation();
+
+            return samples.stream().filter(
+                    x -> x >= down && x <= up
+            ).collect(Collectors.toList());
+        }
+    }
+
+    public List<Double> runApplication(Application app) {
         ArrayList<Double> durations = new ArrayList();
+        int numberSamples = 1000;
+
         try {
-            for (int i = 0; i < 20; ++i) {
+            for (int i = 0; i < numberSamples; ++i) {
                 long startTime = System.nanoTime();
                 app.benchmark();
                 long endTime = System.nanoTime();
@@ -81,10 +175,19 @@ public class ApplicationRunner {
                 durations.add((double) duration);
             }
         } catch (Exception ignored) {
-           System.out.println("running Application failed");
+            System.out.println("running Application failed");
         }
 
-        return new TrainingSetValue(UtilsKt.average(durations), app);
+        return durations;
+    }
+
+    public AppRunData evaluateApplication(Application app) {
+        List<Double> durations = runApplication(app);
+
+        return new AppRunData(
+                app,
+                durations
+        );
     }
 
     public List<TrainingSetValue> createListApplicationsSpread(
@@ -99,7 +202,7 @@ public class ApplicationRunner {
         seed += 1;
 
         Map<String, Long> histogram = values.stream().collect(
-                Collectors.groupingBy(TrainingSetValue::getDataStructure, Collectors.counting())
+                Collectors.groupingBy(TrainingSetValue::getBestDataStructure, Collectors.counting())
         );
         // Fill it with zeros for other applications
         for (Application<?> app : apps) {
@@ -118,7 +221,7 @@ public class ApplicationRunner {
             values = runBenchmarks(apps);
 
             for (TrainingSetValue v : values) {
-                String dataStructure = v.getDataStructure();
+                String dataStructure = v.getBestDataStructure();
                 Long numberApps = histogram.get(dataStructure);
                 if (numberApps < threshold * 2) {
                     histogram.put(dataStructure, histogram.get(dataStructure) + 1);

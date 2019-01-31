@@ -58,3 +58,10 @@ fun medianLong(l : List<Long>) : Double {
 fun average(l : List<Double>) : Double {
    return l.average()
 }
+
+fun variance(l : List<Double>) : Double {
+    val avg = l.average()
+    val deviationsSquared = l.map { (it - avg) * (it - avg) }
+    val variance = 1 / l.size.toDouble() * deviationsSquared.sum()
+    return variance
+}
