@@ -30,8 +30,8 @@ plugins {
 
 apply plugin: 'kotlin'
 
-mainClassName = 'se.lth.cs.PapiRunnerKt'
 applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./lib/native"]
+mainClassName = 'se.lth.cs.ApplicationRunner'
 
 jmh {
      // 'perf' uses perf over the whole iteration
