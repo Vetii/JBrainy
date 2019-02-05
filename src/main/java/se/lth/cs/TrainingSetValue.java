@@ -2,7 +2,7 @@ package se.lth.cs;
 
 public class TrainingSetValue {
 
-    private Double runningTime;
+    private AppRunData runningData;
 
     private final Application application;
 
@@ -10,17 +10,12 @@ public class TrainingSetValue {
 
     private final String bestDataStructure;
 
-    public TrainingSetValue(double runningTime, Application application, String bestDataStructure) {
-        this.runningTime = runningTime;
+    public TrainingSetValue(AppRunData runningData, Application application, String bestDataStructure) {
+        this.runningData = runningData;
         this.application = application;
         this.dataStructure = application.dataStructure.getClass().getName();
         this.bestDataStructure = bestDataStructure;
     }
-
-    public double getRunningTime() {
-        return runningTime;
-    }
-    public void setRunningTime(double x) { runningTime = x; }
 
     public Application getApplication() {
         return application;
@@ -30,5 +25,9 @@ public class TrainingSetValue {
 
     public String getBestDataStructure() {
         return bestDataStructure;
+    }
+
+    public AppRunData getRunningData() {
+        return runningData;
     }
 }

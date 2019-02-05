@@ -58,13 +58,10 @@ public class ApplicationRunner {
             for (AppRunData rt : runningTimes) {
                 if (minimum.isPresent()) {
                     AppRunData selected = minimum.get();
-                    String bestDataStructure = selected.application.getDataStructureName();
+                    String bestDataStructure = selected.getApplication().getDataStructureName();
 
                     trainingSet.add(
-                            new TrainingSetValue(
-                            rt.getMedian(),
-                            rt.getApplication(),
-                            bestDataStructure));
+                            new TrainingSetValue(rt, rt.getApplication(), bestDataStructure));
                 }
             }
         }
