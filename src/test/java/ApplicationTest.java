@@ -305,7 +305,7 @@ public class ApplicationTest {
         for (Application a : apps) {
             List<Double> times = new ArrayList<>();
             for (int n = 0; n < 20; ++n) {
-                ApplicationRunner.AppRunData result = r.evaluateApplication(a);
+                AppRunData result = r.evaluateApplication(a);
                 times.add(result.getMedian());
             }
             Assert.assertEquals(0,
@@ -345,8 +345,8 @@ public class ApplicationTest {
                     newValue.getApplication().getIdentifier()
             );
             Assert.assertEquals(
-                    expected.getRunningTime(),
-                    newValue.getRunningTime(),
+                    expected.getRunningData().getMedian(),
+                    newValue.getRunningData().getMedian(),
                     1// 0.001 s difference max
             );
             Assert.assertEquals(
@@ -356,8 +356,8 @@ public class ApplicationTest {
             if (!expected.getBestDataStructure().equals(newValue.getBestDataStructure())) {
                 System.out.println(expected.getApplication().getIdentifier());
                 System.out.println(newValue.getApplication().getIdentifier());
-                System.out.println(expected.getRunningTime());
-                System.out.println(newValue.getRunningTime());
+                System.out.println(expected.getRunningData().getMedian());
+                System.out.println(newValue.getRunningData().getMedian());
                 System.out.println(expected.getBestDataStructure());
                 System.out.println(newValue.getBestDataStructure());
             }
@@ -390,8 +390,8 @@ public class ApplicationTest {
                     newValue.getApplication().getIdentifier()
             );
             Assert.assertEquals(
-                    expected.getRunningTime(),
-                    newValue.getRunningTime(),
+                    expected.getRunningData().getMedian(),
+                    newValue.getRunningData().getMedian(),
                     1e6 // 0.001 s difference max
             );
             Assert.assertEquals(
