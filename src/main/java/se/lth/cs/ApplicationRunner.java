@@ -2,6 +2,7 @@ package se.lth.cs;
 
 import com.google.gson.Gson;
 import se.lth.cs.ApplicationGeneration.ApplicationGenerator;
+import se.lth.cs.ApplicationGeneration.ListApplicationGenerator;
 import se.lth.cs.ApplicationGeneration.MapApplicationGenerator;
 
 import java.io.BufferedWriter;
@@ -233,13 +234,46 @@ public class ApplicationRunner {
 
     public static void main(String[] args) throws IOException, InvocationTargetException, IllegalAccessException {
         // Generate applications
-        List<Application<?>> apps = new MapApplicationGenerator().createApplications(0, 50, 200);
+        List<Application<?>> apps = new ListApplicationGenerator().createApplications(0, 50, 200);
+        ApplicationRunner r = new ApplicationRunner();
 
+        Gson gson = new Gson();
+        // seed, datastructure, best_datastructure, #run, samples, median?, average?, variance?
+        ArrayList<ArrayList<String>> CSVData = new ArrayList<>();
+        for (int i = 0; i < 20; ++i) {
+            List<TrainingSetValue> values = r.runBenchmarks(apps);
+            for (TrainingSetValue t : values) {
+                ArrayList<String> line = new ArrayList<>();
+                line.add(t.getApplication().getSeedString());
+                line.add(t.getApplication().getDataStructureName());
+                line.add(t.getBestDataStructure());
+                line.add(Integer.toString(i));
+                for (Double v : t.getRunningData().getSamples()) {
+                    line.add(String.format("%.3f", v));
+                }
+                line.add(String.format("%.3f", t.getRunningData().getAverage()));
+                line.add(String.format("%.3f", t.getRunningData().getMedian()));
+                line.add(String.format("%.3f", t.getRunningData().getVariance()));
+                CSVData.add(line);
+            }
+        }
+
+        BufferedWriter output = new BufferedWriter(
+                new FileWriter("running_times_xbatch.csv")
+        );
+        for (ArrayList l : CSVData) {
+            String s = gson.toJson(l);
+            output.write(s.replace("[", "").replace("]", ""));
+            output.write("\n");
+        }
+        output.close();
+
+        /*
         // 1 file for each data structure
         // containing a Map<Seed, List<Double>>
         Map<String, Map<String, List<Double>>> result = new HashMap<>();
 
-        ApplicationRunner r = new ApplicationRunner();
+
         int n = 1;
         for (Application a : apps) {
             System.out.println("App:" + n + "/" + apps.size());
@@ -252,12 +286,13 @@ public class ApplicationRunner {
             ++n;
         }
 
-        Gson gson = new Gson();
+
         for (String dataStructure : result.keySet()) {
             BufferedWriter output = new BufferedWriter(new FileWriter("runningTimes-" + dataStructure + ".json"));
             String json = gson.toJson(result.get(dataStructure));
             output.write(json);
             output.close();
         }
+        */
     }
 }
