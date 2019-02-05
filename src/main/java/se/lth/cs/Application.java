@@ -2,9 +2,10 @@ package se.lth.cs;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.Random;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 /**
  * An application, meaning "a generated application"
@@ -82,7 +83,12 @@ public abstract class Application<T> {
 
     public int getSeed() { return seed; }
 
-    public String getIdentifier() {
-        return Integer.toString(seed) + ":" + getDataStructureName();
+    public String getSeedString() { return Integer.toString(seed); }
+
+    public String getIdentifier() { return seed + ":" + getDataStructureName(); }
+
+    public Map<String, Long> methodHistogram() {
+        Stream<Method> l = Arrays.stream(methodsToCall);
+        return l.collect(Collectors.groupingBy(x -> x.getName(), Collectors.counting()));
     }
 }
