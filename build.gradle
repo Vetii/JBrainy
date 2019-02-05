@@ -30,8 +30,8 @@ plugins {
 
 apply plugin: 'kotlin'
 
-applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./lib/native"]
 mainClassName = 'se.lth.cs.ApplicationRunner'
+applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./lib/native", "-Xbatch"]
 
 jmh {
      // 'perf' uses perf over the whole iteration
