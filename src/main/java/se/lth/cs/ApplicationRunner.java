@@ -85,7 +85,7 @@ public class ApplicationRunner {
 
     public List<Double> runApplication(Application app) {
         ArrayList<Double> durations = new ArrayList();
-        int numberSamples = 1000;
+        int numberSamples = 20;
 
         try {
             for (int i = 0; i < numberSamples; ++i) {
