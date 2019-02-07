@@ -86,14 +86,17 @@ public class ApplicationRunner {
     public List<Double> runApplication(Application app) {
         ArrayList<Double> durations = new ArrayList();
         int numberSamples = 20;
+        int numberWarmups = 3;
 
         try {
-            for (int i = 0; i < numberSamples; ++i) {
+            for (int i = -numberWarmups; i < numberSamples; ++i) {
                 long startTime = System.nanoTime();
                 app.benchmark();
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);
-                durations.add((double) duration);
+                if (i >= 0) {
+                    durations.add((double) duration);
+                }
             }
         } catch (Exception ignored) {
             System.out.println("running Application failed");
