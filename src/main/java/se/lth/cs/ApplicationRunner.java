@@ -171,7 +171,7 @@ public class ApplicationRunner {
             System.out.println(String.format("Generating: '%s'", label));
 
             // Generate applications
-            List<Application<?>> apps = generators.get(label).createApplications(0, 50, 200);
+            List<Application<?>> apps = generators.get(label).createApplications(0, 50, 2000);
             // seed, datastructure, best_datastructure, #run, samples, median?, average?, variance?
             ArrayList<ArrayList<String>> CSVData = new ArrayList<>();
             for (int i = 0; i < 20; ++i) {
@@ -182,13 +182,20 @@ public class ApplicationRunner {
                     line.add(t.getApplication().getDataStructureName());
                     line.add(t.getBestDataStructure());
                     line.add(Integer.toString(i));
-                    for (Double v : t.getRunningData().getSamples()) {
-                        line.add(String.format("%.3f", v));
-                    }
                     line.add(String.format("%.3f", t.getRunningData().getAverage()));
                     line.add(String.format("%.3f", t.getRunningData().getMedian()));
                     line.add(String.format("%.3f", t.getRunningData().getVariance()));
-                    CSVData.add(line);
+                    // We want to add the index of the sample and the sample value for each sample
+                    // We will create a new line while copying most of the information for each sample value
+                    for (int sampleIndex = 0; sampleIndex < t.getRunningData().getSamples().size(); ++sampleIndex) {
+                        // We copy the existing line data (without sample info)
+                        ArrayList<String> newLine = new ArrayList<>(line);
+                        Double v = t.getRunningData().getSamples().get(sampleIndex);
+                        newLine.add(String.format("%d", sampleIndex));
+                        newLine.add(String.format("%.3f", v));
+                        // We add the new line
+                        CSVData.add(newLine);
+                    }
                 }
             }
 
