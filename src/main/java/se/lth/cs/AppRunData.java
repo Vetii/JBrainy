@@ -5,9 +5,6 @@ import java.util.stream.Collectors;
 
 public class AppRunData {
     private List<Double> samples;
-    private Double average;
-    private Double variance;
-    private Double median;
     private Application<?> application;
     private Integer numberSamples;
 
@@ -15,9 +12,6 @@ public class AppRunData {
         this.application = application;
         this.samples = samples;
         this.numberSamples = samples.size();
-        this.average = UtilsKt.average(samples);
-        this.variance = UtilsKt.variance(samples);
-        this.median = UtilsKt.median(samples);
     }
 
     public List<Double> getSamples() {
@@ -25,15 +19,15 @@ public class AppRunData {
     }
 
     public Double getAverage() {
-        return average;
+        return UtilsKt.average(samples);
     }
 
     public Double getVariance() {
-        return variance;
+        return UtilsKt.variance(samples);
     }
 
     public Double getStandardDeviation() {
-        return Math.sqrt(variance);
+        return Math.sqrt(getVariance());
     }
 
     public Application<?> getApplication() {
@@ -45,7 +39,7 @@ public class AppRunData {
     }
 
     public Double getMedian() {
-        return median;
+        return UtilsKt.median(samples);
     }
 
     public List<Double> cleanSamples() {
@@ -72,6 +66,7 @@ public class AppRunData {
     }
 
     public List<Double> cleanSamples2() {
+        Double average = getAverage();
         Double up = average + 2 * getStandardDeviation();
         Double down = average - 2 * getStandardDeviation();
 
