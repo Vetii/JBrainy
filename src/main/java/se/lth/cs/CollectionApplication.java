@@ -67,8 +67,8 @@ public class CollectionApplication<T extends Collection> extends Application<T> 
     }
 
     @Override
-    public void benchmark() throws InvocationTargetException, IllegalAccessException {
+    public void benchmark() throws InvocationTargetException, IllegalAccessException, InstantiationException {
         super.benchmark();
-        dataStructure.clear();
+        dataStructure = (T) dataStructure.getClass().newInstance();
     }
 }

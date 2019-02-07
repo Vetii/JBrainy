@@ -67,7 +67,7 @@ public abstract class Application<T> {
         return selected;
     }
 
-    public void benchmark() throws InvocationTargetException, IllegalAccessException {
+    public void benchmark() throws InvocationTargetException, IllegalAccessException, InstantiationException {
         for(int i = 0; i < applicationSize; ++i) {
             methodsToCall[i].invoke(this);
         }

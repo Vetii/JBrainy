@@ -43,7 +43,7 @@ public class ApplicationBenchmark {
     }
 
     @Benchmark
-    public void ListApplicationBenchmark(BenchmarkState state) throws InvocationTargetException, IllegalAccessException {
+    public void ListApplicationBenchmark(BenchmarkState state) throws InvocationTargetException, IllegalAccessException, InstantiationException {
         state.application.benchmark();
     }
 

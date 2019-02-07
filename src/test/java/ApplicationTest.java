@@ -20,7 +20,7 @@ import static se.lth.cs.UtilsKt.*;
 public class ApplicationTest {
 
     @Test
-    public void TestListApplication() {
+    public void TestListApplication() throws InstantiationException {
         try {
             for (int seed = 0; seed < 100; ++seed) {
                 ListApplication arrayListBench = new ListApplication(
@@ -62,7 +62,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void TestSetApplication() {
+    public void TestSetApplication() throws InstantiationException {
         try {
             for (int seed = 0; seed < 100; ++seed) {
                 SetApplication hashSetBench = new SetApplication(seed, 10, new HashSet<>());
@@ -88,7 +88,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void TestMapApplication() {
+    public void TestMapApplication() throws InstantiationException {
         try {
             for (int seed = 0; seed < 100; ++seed) {
                 MapApplication hashMapBench = new MapApplication(seed, 10, new HashMap<>());
@@ -124,7 +124,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void TestListApplicationTime() throws InvocationTargetException, IllegalAccessException {
+    public void TestListApplicationTime() throws InvocationTargetException, IllegalAccessException, InstantiationException {
         // Generate 20 applications, run them, get the best (running time, data structure)
         for (int n = 0; n < 20; ++n) {
             List<ListApplication> applications = new ArrayList<>();

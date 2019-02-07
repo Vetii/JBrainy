@@ -45,6 +45,4 @@ public class ListApplication extends CollectionApplication<List<Integer>> {
         int b = generateIndex();
         dataStructure.subList(Math.min(a, b), Math.max(a, b));
     }
-
-
 }
