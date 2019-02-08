@@ -1,7 +1,6 @@
 package se.lth.cs;
 
 import org.openjdk.jmh.annotations.*;
-import se.lth.cs.ApplicationGeneration.ApplicationGenerator;
 import se.lth.cs.ApplicationGeneration.ListApplicationGenerator;
 
 import java.lang.reflect.InvocationTargetException;
