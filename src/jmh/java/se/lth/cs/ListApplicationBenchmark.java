@@ -2,20 +2,17 @@ package se.lth.cs;
 
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
-import se.lth.cs.ApplicationGeneration.ListApplicationGenerator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-public class ApplicationBenchmark {
+public class ListApplicationBenchmark {
 
     @State(Scope.Thread)
-    public static class BenchmarkState {
+    public static class ListBenchmarkState {
         @Param({"0", "1", "2", "3"})
         public int seed;
 
@@ -41,7 +38,7 @@ public class ApplicationBenchmark {
     }
 
     @Benchmark
-    public void ListApplicationBenchmark(BenchmarkState state, Blackhole blackhole) throws InvocationTargetException, IllegalAccessException, InstantiationException {
+    public void ListApplicationBenchmark(ListBenchmarkState state, Blackhole blackhole) throws InvocationTargetException, IllegalAccessException, InstantiationException {
         blackhole.consume(state.currentApplication.benchmark());
     }
 
@@ -70,7 +67,7 @@ public class ApplicationBenchmark {
     //             .collect(Collectors.toList());
 
     //     Options opt = new OptionsBuilder()
-    //             .include(ApplicationBenchmark.class.getSimpleName())
+    //             .include(ListApplicationBenchmark.class.getSimpleName())
     //             .param("seed", seeds.toArray(new String[0]))
     //             .param("applicationSize", applicationSizes.toArray(new String[0]))
     //             .build();
