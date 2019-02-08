@@ -11,7 +11,7 @@ public class MapApplication  extends Application<Map<Integer, Integer>> {
 
     public void runClear() { dataStructure.clear(); }
 
-    public void runContainsKey() { dataStructure.containsKey(randomGenerator.nextInt()); }
+    public void runContainsKey() { dataStructure.containsKey(generateIndex()); }
 
     public void runContainsValue() { dataStructure.containsValue(randomGenerator.nextInt()); }
 
@@ -19,7 +19,7 @@ public class MapApplication  extends Application<Map<Integer, Integer>> {
 
     public void runEquals() { dataStructure.equals(argument); }
 
-    public void runGet() { dataStructure.get(randomGenerator.nextInt()); }
+    public void runGet() { dataStructure.get(generateIndex()); }
 
     public void runHashCode() { dataStructure.hashCode(); }
 
@@ -29,7 +29,7 @@ public class MapApplication  extends Application<Map<Integer, Integer>> {
 
     public void runPut() {
         dataStructure.put(
-                randomGenerator.nextInt(),
+                generateIndex(),
                 randomGenerator.nextInt());
     }
 
@@ -37,7 +37,7 @@ public class MapApplication  extends Application<Map<Integer, Integer>> {
         dataStructure.putAll(argument);
     }
 
-    public void runRemove() { dataStructure.remove(randomGenerator.nextInt()); }
+    public void runRemove() { dataStructure.remove(generateIndex()); }
 
     public void runSize() { dataStructure.size(); }
 
@@ -47,5 +47,10 @@ public class MapApplication  extends Application<Map<Integer, Integer>> {
     public void benchmark() throws InvocationTargetException, IllegalAccessException, InstantiationException {
         super.benchmark();
         dataStructure = dataStructure.getClass().newInstance();
+    }
+
+    @Override
+    public int generateIndex() {
+        return randomGenerator.nextInt(2 * dataStructure.size() + 1);
     }
 }

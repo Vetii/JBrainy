@@ -73,6 +73,8 @@ public abstract class Application<T> {
         }
     }
 
+    abstract public int generateIndex();
+
     public T getDataStructure() { return dataStructure; }
 
     public String getDataStructureName() { return dataStructure.getClass().getCanonicalName(); }

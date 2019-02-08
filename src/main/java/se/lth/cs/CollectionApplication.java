@@ -12,7 +12,7 @@ public class CollectionApplication<T extends Collection> extends Application<T> 
         randomGenerator.ints(100).forEach((i) -> argument.add(i));
     }
 
-    protected int generateIndex() {
+    public int generateIndex() {
         return randomGenerator.nextInt(dataStructure.size());
     }
 
