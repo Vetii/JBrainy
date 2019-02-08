@@ -162,8 +162,8 @@ public class ApplicationRunner {
         // We will generate a file for each data structure.
         Map<String, ApplicationGenerator> generators = new HashMap<>();
         generators.put("map", new MapApplicationGenerator());
-        generators.put("set", new SetApplicationGenerator());
-        generators.put("list", new ListApplicationGenerator());
+        // generators.put("set", new SetApplicationGenerator());
+        // generators.put("list", new ListApplicationGenerator());
 
         ApplicationRunner r = new ApplicationRunner();
         Gson gson = new Gson();

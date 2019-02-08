@@ -297,25 +297,6 @@ public class ApplicationTest {
     }
 
     @Test
-    public void TestRunApplication() {
-        ApplicationRunner r = new ApplicationRunner();
-        List<Application<?>> apps =
-                new ListApplicationGenerator().createApplications(0, 100, 100);
-
-        for (Application a : apps) {
-            List<Double> times = new ArrayList<>();
-            for (int n = 0; n < 20; ++n) {
-                AppRunData result = r.evaluateApplication(a);
-                times.add(result.getMedian());
-            }
-            Assert.assertEquals(0,
-                    variance(times) / average(times),
-                    0.01
-            );
-        }
-    }
-
-    @Test
     public void TestRunBenchmarks() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner r = new ApplicationRunner();
 
