@@ -52,7 +52,7 @@ fun median(l : List<Double>) : Double {
 }
 
 fun medianLong(l : List<Long>) : Double {
-    return median(l.map{ it.toDouble() })
+    return median(l.map { it.toDouble() })
 }
 
 fun average(l : List<Double>) : Double {

@@ -15,8 +15,6 @@ import java.util.function.IntPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static se.lth.cs.UtilsKt.*;
-
 public class ApplicationTest {
 
     @Test
@@ -188,7 +186,7 @@ public class ApplicationTest {
     public void TestPapiEventSet() throws PapiException {
         Papi.init();
 
-        int[] constants = se.lth.cs.PapiRunnerKt.getCounters();
+        int[] constants = PapiRunnerKt.getCounters();
 
         IntPredicate throwsExp =
                 (integer -> {
@@ -258,14 +256,14 @@ public class ApplicationTest {
             values.add(i.doubleValue());
         }
 
-        Assert.assertEquals(4.5, median(values), 0.001);
+        Assert.assertEquals(4.5, UtilsKt.median(values), 0.001);
 
         List<Double> values1 = new ArrayList<>();
         values1.add(1.0);
         values1.add(4.0);
         values1.add(5.0);
         values1.add(3.0);
-        Assert.assertEquals(3.5, median(values1), 0.0001);
+        Assert.assertEquals(3.5, UtilsKt.median(values1), 0.0001);
     }
 
     @Test
