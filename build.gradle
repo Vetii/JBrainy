@@ -42,7 +42,9 @@ jmh {
      // and averages the running time.
      // We take single shot time (just run the benchmark once)
      // Mode of the benchmark in ['avgt', 'sample', 'thrpt', 'ss', 'all']
-     // benchmarkMode = ['avgt']
+     // benchmarkMode = ['ss']
+     resultFormat = 'JSON'
+     resultsFile = project.file('jmh-results.json')
      warmupIterations = 3
      warmup = '1s'
      fork = 1
