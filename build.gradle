@@ -37,19 +37,20 @@ jmh {
      // 'perf' uses perf over the whole iteration
      // 'perfnorm' normalizes over each operation (call to benchmark)
      // profilers = ['perf:delay=0']
-     profilers = ['perf:delay=0']
+     // profilers = ['perf:delay=0']
      // avg mode: Loops through the benchmark during timeOnIteration 
      // and averages the running time.
      // We take single shot time (just run the benchmark once)
-     benchmarkMode = ['ss']
+     // Mode of the benchmark in ['avgt', 'sample', 'thrpt', 'ss', 'all']
+     // benchmarkMode = ['avgt']
      warmupIterations = 3
      warmup = '1s'
-     fork = 20
-     iterations = 1
+     fork = 1
+     iterations = 10
      // Minimum time to spend at each measurement iteration
      timeOnIteration = '1s'
-     benchmarkParameters = [seed: ['0', '1']]
-     humanOutputFile = project.file("output-perf.txt")
+     // benchmarkParameters = [seed: ['0', '1']]
+     // humanOutputFile = project.file("output-perf.txt")
 }
 
 // In this section you declare where to find the dependencies of your project
