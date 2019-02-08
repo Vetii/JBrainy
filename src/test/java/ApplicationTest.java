@@ -304,34 +304,6 @@ public class ApplicationTest {
         List<TrainingSetValue> values =
                 r.createListApplicationsSpread(threshold, 100,new ListApplicationGenerator());
 
-        List<TrainingSetValue> newValues =
-                r.runBenchmarks(
-                        values.stream().map(TrainingSetValue::getApplication)
-                                .collect(Collectors.toList()));
-
-        // If we re-run the benchmarks, we should get similar values
-        for (int i = 0; i < values.size(); ++i) {
-            TrainingSetValue expected = values.get(i);
-            TrainingSetValue newValue = newValues.get(i);
-            Assert.assertEquals(
-                    expected.getApplication().getIdentifier(),
-                    newValue.getApplication().getIdentifier()
-            );
-            Assert.assertEquals(
-                    expected.getRunningData().getMedian(),
-                    newValue.getRunningData().getMedian(),
-                    1e6 // 0.001 s difference max
-            );
-            Assert.assertEquals(
-                    expected.getDataStructure(),
-                    newValue.getDataStructure()
-            );
-            Assert.assertEquals(
-                    expected.getBestDataStructure(),
-                    newValue.getBestDataStructure()
-            );
-        }
-
         Map<String, Long> histogram = values.stream().collect(
                 Collectors.groupingBy(TrainingSetValue::getBestDataStructure, Collectors.counting())
         );
