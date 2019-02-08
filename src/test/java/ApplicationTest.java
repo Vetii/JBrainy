@@ -297,59 +297,6 @@ public class ApplicationTest {
     }
 
     @Test
-    public void TestRunBenchmarks() throws InvocationTargetException, IllegalAccessException {
-        ApplicationRunner r = new ApplicationRunner();
-
-        List<Application<?>> apps =
-                new ListApplicationGenerator().createApplications(
-                        0, 50, 100
-                );
-        List<TrainingSetValue> values =
-                r.runBenchmarks(apps).stream()
-                        .sorted(Comparator.comparing(x -> x.getApplication().getIdentifier()))
-                        .collect(Collectors.toList());
-
-        // We re-run the applications
-        List<TrainingSetValue> newValues =
-                r.runBenchmarks(apps)
-                .stream()
-                .sorted(Comparator.comparing(x -> x.getApplication().getIdentifier()))
-                .collect(Collectors.toList());
-
-        // If we re-run the benchmarks, we should get similar values
-        for (int i = 0; i < values.size(); ++i) {
-            TrainingSetValue expected = values.get(i);
-            TrainingSetValue newValue = newValues.get(i);
-            // We check we have indeed the same applications
-            Assert.assertEquals(
-                    expected.getApplication().getIdentifier(),
-                    newValue.getApplication().getIdentifier()
-            );
-            Assert.assertEquals(
-                    expected.getRunningData().getMedian(),
-                    newValue.getRunningData().getMedian(),
-                    1// 0.001 s difference max
-            );
-            Assert.assertEquals(
-                    expected.getDataStructure(),
-                    newValue.getDataStructure()
-            );
-            if (!expected.getBestDataStructure().equals(newValue.getBestDataStructure())) {
-                System.out.println(expected.getApplication().getIdentifier());
-                System.out.println(newValue.getApplication().getIdentifier());
-                System.out.println(expected.getRunningData().getMedian());
-                System.out.println(newValue.getRunningData().getMedian());
-                System.out.println(expected.getBestDataStructure());
-                System.out.println(newValue.getBestDataStructure());
-            }
-            Assert.assertEquals(
-                    expected.getBestDataStructure(),
-                    newValue.getBestDataStructure()
-            );
-        }
-    }
-
-    @Test
     public void TestApplicationGeneratorSpread() throws InvocationTargetException, IllegalAccessException {
         ApplicationRunner r = new ApplicationRunner();
 
