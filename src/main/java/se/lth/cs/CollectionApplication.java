@@ -65,10 +65,4 @@ public class CollectionApplication<T extends Collection> extends Application<T> 
             dataStructure.toArray(array);
         }
     }
-
-    @Override
-    public void benchmark() throws InvocationTargetException, IllegalAccessException, InstantiationException {
-        super.benchmark();
-        dataStructure = (T) dataStructure.getClass().newInstance();
-    }
 }

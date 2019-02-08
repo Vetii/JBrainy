@@ -1,49 +1,48 @@
 package se.lth.cs;
 
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.infra.Blackhole;
 import se.lth.cs.ApplicationGeneration.ListApplicationGenerator;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ApplicationBenchmark {
 
     @State(Scope.Thread)
     public static class BenchmarkState {
-        @Param({"0"})
+        @Param({"0", "1", "2", "3"})
         public int seed;
 
-        @Param({"1000"})
+        @Param({"100", "1000"})
         public int applicationSize;
 
-        private List<Application> applications;
-        {
-            ApplicationRunner runner = new ApplicationRunner();
-            try {
-                List<TrainingSetValue> phase1Set = runner.runBenchmarks(
-                        new ListApplicationGenerator().createApplications(0, 2, 10000)
-                );
-                applications = phase1Set.stream().map(TrainingSetValue::getApplication).collect(Collectors.toList());
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
+        @Param({"LinkedList", "ArrayList", "Vector"})
+        public String datastructureName;
 
-        public Application application;
+        public Application currentApplication;
 
         @Setup(Level.Trial)
         public void doSetup() {
-            application = applications.get(seed);
-            // application = new ListApplication(seed, applicationSize, new ArrayList<>());
+            List<Integer> datastructure;
+            switch (datastructureName) {
+                case "LinkedList": datastructure = new LinkedList<>(); break;
+                case "ArrayList": datastructure = new ArrayList<>(); break;
+                case "Vector": datastructure = new Vector<>(); break;
+                default: datastructure = new ArrayList<>(); break;
+            }
+            currentApplication = new ListApplication(seed, applicationSize, datastructure);
         }
     }
 
     @Benchmark
-    public void ListApplicationBenchmark(BenchmarkState state) throws InvocationTargetException, IllegalAccessException, InstantiationException {
-        state.application.benchmark();
+    public void ListApplicationBenchmark(BenchmarkState state, Blackhole blackhole) throws InvocationTargetException, IllegalAccessException, InstantiationException {
+        blackhole.consume(state.currentApplication.benchmark());
     }
 
     // public static void main(String[] args) throws RunnerException, IOException {

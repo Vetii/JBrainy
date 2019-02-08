@@ -44,12 +44,6 @@ public class MapApplication  extends Application<Map<Integer, Integer>> {
     public void runValues() { dataStructure.values(); }
 
     @Override
-    public void benchmark() throws InvocationTargetException, IllegalAccessException, InstantiationException {
-        super.benchmark();
-        dataStructure = dataStructure.getClass().newInstance();
-    }
-
-    @Override
     public int generateIndex() {
         return randomGenerator.nextInt(2 * dataStructure.size() + 1);
     }

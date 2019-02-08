@@ -67,10 +67,11 @@ public abstract class Application<T> {
         return selected;
     }
 
-    public void benchmark() throws InvocationTargetException, IllegalAccessException, InstantiationException {
+    public T benchmark() throws InvocationTargetException, IllegalAccessException, InstantiationException {
         for(int i = 0; i < applicationSize; ++i) {
             methodsToCall[i].invoke(this);
         }
+        return dataStructure;
     }
 
     abstract public int generateIndex();
