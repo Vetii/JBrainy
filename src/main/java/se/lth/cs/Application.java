@@ -74,6 +74,8 @@ public abstract class Application<T> {
         return dataStructure;
     }
 
+    abstract public void populate(int numberElements);
+
     abstract public int generateIndex();
 
     public T getDataStructure() { return dataStructure; }

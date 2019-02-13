@@ -19,12 +19,16 @@ public class SetApplicationBenchmark {
         @Param({"HashSet", "TreeSet", "LinkedHashSet"})
         public String datastructureName;
 
+        @Param({"0", "1000", "2000"})
+        public int baseStructureSize;
+
         public Application currentApplication;
 
         @Setup(Level.Trial)
         public void doSetup() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
             Set<Integer> datastructure = (Set<Integer>) Class.forName("java.util." + datastructureName).newInstance();
             currentApplication = new SetApplication(seed, applicationSize, datastructure);
+            currentApplication.populate(baseStructureSize);
         }
     }
 

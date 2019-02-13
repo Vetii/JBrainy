@@ -23,6 +23,9 @@ public class ListApplicationBenchmark {
         @Param({"LinkedList", "ArrayList", "Vector"})
         public String datastructureName;
 
+        @Param({"0", "1000", "2000"})
+        public int baseStructureSize;
+
         public Application currentApplication;
 
         @Setup(Level.Trial)
@@ -35,6 +38,7 @@ public class ListApplicationBenchmark {
                 default: datastructure = new ArrayList<>(); break;
             }
             currentApplication = new ListApplication(seed, applicationSize, datastructure);
+            currentApplication.populate(baseStructureSize);
         }
     }
 

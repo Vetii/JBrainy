@@ -9,6 +9,15 @@ public class MapApplication  extends Application<Map<Integer, Integer>> {
         super(seed, applicationSize, structure);
     }
 
+    @Override
+    public void populate(int numberElements) {
+        for (int i = 0; i < numberElements; ++i) {
+            int k = generateIndex();
+            int v = randomGenerator.nextInt();
+            dataStructure.put(k, v);
+        }
+    }
+
     public void runClear() { dataStructure.clear(); }
 
     public void runContainsKey() { dataStructure.containsKey(generateIndex()); }

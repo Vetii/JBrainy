@@ -12,6 +12,11 @@ public class CollectionApplication<T extends Collection> extends Application<T> 
         randomGenerator.ints(100).forEach((i) -> argument.add(i));
     }
 
+    @Override
+    public void populate(int numberElements) {
+        randomGenerator.ints(numberElements).forEach((i) -> dataStructure.add(i));
+    }
+
     public int generateIndex() {
         return randomGenerator.nextInt(dataStructure.size());
     }

@@ -19,12 +19,16 @@ public class MapApplicationBenchmark {
         @Param({"HashMap", "TreeMap", "IdentityHashMap", "LinkedHashMap", "WeakHashMap"})
         public String datastructureName;
 
+        @Param({"0", "1000", "2000"})
+        public int baseStructureSize;
+
         public Application currentApplication;
 
         @Setup(Level.Trial)
         public void doSetup() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
             Map<Integer, Integer> datastructure = (Map<Integer, Integer>) Class.forName("java.util." + datastructureName).newInstance();
             currentApplication = new MapApplication(seed, applicationSize, datastructure);
+            currentApplication.populate(baseStructureSize);
         }
     }
 
