@@ -52,7 +52,7 @@ public class CollectionApplication<T extends Collection> extends Application<T> 
 
     public void runRemoveAll() { dataStructure.removeAll(argument); }
 
-    public void retainAll() {
+    public void runRetainAll() {
         dataStructure.retainAll(argument);
     }
 
