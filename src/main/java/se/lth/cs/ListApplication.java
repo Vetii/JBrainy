@@ -10,6 +10,31 @@ public class ListApplication extends CollectionApplication<List<Integer>> {
         super(seed, applicationSize, init);
     }
 
+    public void runAdd2() {
+        if (dataStructure.isEmpty()) {
+            dataStructure.add(0, randomGenerator.nextInt());
+            return;
+        }
+        dataStructure.add(generateIndex(), randomGenerator.nextInt());
+    }
+
+    public void runAddAll2() {
+        if (dataStructure.isEmpty()) {
+            dataStructure.addAll(0, argument);
+            return;
+        }
+        dataStructure.addAll(generateIndex(), argument);
+    }
+
+    public void runRemove2() {
+        if (dataStructure.isEmpty()) { return; }
+        dataStructure.remove(generateIndex());
+    }
+
+    public void runSort() {
+        dataStructure.sort(Integer::compareTo);
+    }
+
     public void runGet() {
         if (dataStructure.isEmpty()) { return; }
         dataStructure.get(generateIndex());
