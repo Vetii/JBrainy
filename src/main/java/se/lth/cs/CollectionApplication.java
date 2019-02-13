@@ -47,11 +47,7 @@ public class CollectionApplication<T extends Collection> extends Application<T> 
 
     public void runRemove() {
         if (dataStructure.isEmpty()) { return; }
-        if (randomGenerator.nextBoolean()) {
-            dataStructure.remove(generateIndex());
-        } else {
-            dataStructure.remove((Object) randomGenerator.nextInt());
-        }
+        dataStructure.remove((Object) randomGenerator.nextInt());
     }
 
     public void runRemoveAll() { dataStructure.removeAll(argument); }
