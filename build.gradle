@@ -23,6 +23,10 @@ plugins {
     id 'application' // For running as an app.
     // If this doesn't work, update gradle using // $ ./gradlew wrapper
     // $ ./gradlew wrapper --gradle-version <version>
+
+    // TODO: Use file from
+    // https://gist.github.com/mrbald/7bbb5113c3164d5243314da8c28649a1 to handle
+    // JMH
     id "me.champeau.gradle.jmh" version "0.4.7"
 }
 
