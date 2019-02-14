@@ -53,6 +53,16 @@ jmh {
      timeOnIteration = '1s'
      // benchmarkParameters = [seed: ['0', '1']]
      // humanOutputFile = project.file("output-perf.txt")
+
+task benchmarkJar(type: Jar, dependsOn: jmhJar) {
+    manifest {
+        attributes 'Main-Class': 'org.openjdk.jmh.Main'
+    }
+    classifier = 'benchmark'
+    from {
+        (jmhJar.outputs.files + configurations.jmh + configurations.jmhRuntime)
+                .collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 // In this section you declare where to find the dependencies of your project
