@@ -24,10 +24,6 @@ plugins {
     // If this doesn't work, update gradle using // $ ./gradlew wrapper
     // $ ./gradlew wrapper --gradle-version <version>
 
-    // TODO: Use file from
-    // https://gist.github.com/mrbald/7bbb5113c3164d5243314da8c28649a1 to handle
-    // JMH
-    id "me.champeau.gradle.jmh" version "0.4.7"
 }
 
 apply plugin: 'kotlin'
@@ -35,41 +31,13 @@ apply plugin: 'kotlin'
 mainClassName = 'se.lth.cs.ApplicationRunner'
 applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./lib/native", "-Xbatch"]
 
-jmh {
-    // 'perf' uses perf over the whole iteration
-    // 'perfnorm' normalizes over each operation (call to benchmark)
-    // profilers = ['perf:delay=0']
-    // profilers = ['perf:delay=0']
-    // avg mode: Loops through the benchmark during timeOnIteration 
-    // and averages the running time.
-    // We take single shot time (just run the benchmark once)
-    // Mode of the benchmark in ['avgt', 'sample', 'thrpt', 'ss', 'all']
-    // benchmarkMode = ['ss']
-    include = ["List"]
-    resultFormat = 'CSV'
-    resultsFile = project.file('jmh-results.csv')
-    warmupIterations = 3
-    warmup = '500ms'
-    fork = 1
-    iterations = 5
-    // Minimum time to spend at each measurement iteration
-    timeOnIteration = '250ms'
-    benchmarkParameters = [seed: (0..10)*.toString(),
-    applicationSize: [10, 100, 1000]*.toString(),
-    baseStructureSize: [0, 1000, 10000]*.toString()]
-    // humanOutputFile = project.file("output-perf.txt")
+sourceSets {
+    jmh {
+        java.srcDirs = ['src/jmh/java']
+        compileClasspath += sourceSets.main.runtimeClasspath
+    }
 }
 
-task benchmarkJar(type: Jar, dependsOn: jmhJar) {
-    manifest {
-        attributes 'Main-Class': 'org.openjdk.jmh.Main'
-    }
-    classifier = 'benchmark'
-    from {
-        (jmhJar.outputs.files + configurations.jmh + configurations.jmhRuntime)
-                .collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -95,7 +63,18 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    jmhImplementation 'org.openjdk.jmh:jmh-core:1.21'
+    jmhImplementation 'org.openjdk.jmh:jmh-generator-annprocess:1.21'
 }
+
+task jmh(type: JavaExec, dependsOn: jmhClasses) {
+    main = 'org.openjdk.jmh.Main'
+    classpath = sourceSets.jmh.compileClasspath + sourceSets.jmh.runtimeClasspath
+}
+
+classes.finalizedBy(jmhClasses)
+
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
