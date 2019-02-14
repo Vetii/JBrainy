@@ -7,8 +7,6 @@
  * user guide available at https://docs.gradle.org/2.10/userguide/tutorial_java_projects.html
  */
 
-
-
 // Apply the java plugin to add support for Java
 buildscript {
     ext.kotlin_version = '1.3.11'
@@ -34,25 +32,29 @@ mainClassName = 'se.lth.cs.ApplicationRunner'
 applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./lib/native", "-Xbatch"]
 
 jmh {
-     // 'perf' uses perf over the whole iteration
-     // 'perfnorm' normalizes over each operation (call to benchmark)
-     // profilers = ['perf:delay=0']
-     // profilers = ['perf:delay=0']
-     // avg mode: Loops through the benchmark during timeOnIteration 
-     // and averages the running time.
-     // We take single shot time (just run the benchmark once)
-     // Mode of the benchmark in ['avgt', 'sample', 'thrpt', 'ss', 'all']
-     // benchmarkMode = ['ss']
-     resultFormat = 'JSON'
-     resultsFile = project.file('jmh-results.json')
-     warmupIterations = 3
-     warmup = '1s'
-     fork = 1
-     iterations = 10
-     // Minimum time to spend at each measurement iteration
-     timeOnIteration = '1s'
-     // benchmarkParameters = [seed: ['0', '1']]
-     // humanOutputFile = project.file("output-perf.txt")
+    // 'perf' uses perf over the whole iteration
+    // 'perfnorm' normalizes over each operation (call to benchmark)
+    // profilers = ['perf:delay=0']
+    // profilers = ['perf:delay=0']
+    // avg mode: Loops through the benchmark during timeOnIteration 
+    // and averages the running time.
+    // We take single shot time (just run the benchmark once)
+    // Mode of the benchmark in ['avgt', 'sample', 'thrpt', 'ss', 'all']
+    // benchmarkMode = ['ss']
+    include = ["List"]
+    resultFormat = 'CSV'
+    resultsFile = project.file('jmh-results.csv')
+    warmupIterations = 3
+    warmup = '500ms'
+    fork = 1
+    iterations = 5
+    // Minimum time to spend at each measurement iteration
+    timeOnIteration = '250ms'
+    benchmarkParameters = [seed: (0..10)*.toString(),
+    applicationSize: [10, 100, 1000]*.toString(),
+    baseStructureSize: [0, 1000, 10000]*.toString()]
+    // humanOutputFile = project.file("output-perf.txt")
+}
 
 task benchmarkJar(type: Jar, dependsOn: jmhJar) {
     manifest {
