@@ -20,9 +20,9 @@ public class ApplicationGeneratorTest {
             Assert.assertEquals(10, app.getSize());
         }
         // Tests every type of lists is represented in the list of applications
-        Assert.assertEquals(apps.get(0).getDataStructureName(), "java.util.ArrayList");
-        Assert.assertEquals(apps.get(1).getDataStructureName(), "java.util.LinkedList");
-        Assert.assertEquals(apps.get(2).getDataStructureName(), "java.util.Vector");
+        Assert.assertEquals("java.util.ArrayList", apps.get(0).getDataStructureName());
+        Assert.assertEquals("java.util.LinkedList", apps.get(1).getDataStructureName());
+        Assert.assertEquals("java.util.Vector", apps.get(2).getDataStructureName());
     }
 
     @Test
@@ -34,11 +34,11 @@ public class ApplicationGeneratorTest {
             Assert.assertEquals(0, app.getSeed());
             Assert.assertEquals(10, app.getSize());
         }
-        Assert.assertEquals(apps.get(0).getDataStructureName(), "java.util.HashMap");
-        Assert.assertEquals(apps.get(1).getDataStructureName(), "java.util.TreeMap");
-        Assert.assertEquals(apps.get(2).getDataStructureName(), "java.util.IdentityHashMap");
-        Assert.assertEquals(apps.get(3).getDataStructureName(), "java.util.LinkedHashMap");
-        Assert.assertEquals(apps.get(4).getDataStructureName(), "java.util.WeakHashMap");
+        Assert.assertEquals("java.util.HashMap", apps.get(0).getDataStructureName());
+        Assert.assertEquals("java.util.TreeMap", apps.get(1).getDataStructureName());
+        Assert.assertEquals("java.util.IdentityHashMap", apps.get(2).getDataStructureName());
+        Assert.assertEquals("java.util.LinkedHashMap", apps.get(3).getDataStructureName());
+        Assert.assertEquals("java.util.WeakHashMap", apps.get(4).getDataStructureName());
     }
 
     @Test
@@ -50,10 +50,10 @@ public class ApplicationGeneratorTest {
             Assert.assertEquals(0, app.getSeed());
             Assert.assertEquals(10, app.getSize());
         }
-        Assert.assertEquals(apps.get(0).getDataStructureName(), "java.util.HashSet");
-        Assert.assertEquals(apps.get(1).getDataStructureName(), "java.util.TreeSet");
-        Assert.assertEquals(apps.get(2).getDataStructureName(), "java.util.LinkedHashSet");
-        Assert.assertEquals(apps.get(3).getDataStructureName(), "java.util.concurrent.ConcurrentSkipListSet");
-        Assert.assertEquals(apps.get(4).getDataStructureName(), "java.util.concurrent.CopyOnWriteArraySet");
+        Assert.assertEquals("java.util.HashSet", apps.get(0).getDataStructureName());
+        Assert.assertEquals("java.util.TreeSet", apps.get(1).getDataStructureName());
+        Assert.assertEquals("java.util.LinkedHashSet", apps.get(2).getDataStructureName());
+        Assert.assertEquals("java.util.concurrent.ConcurrentSkipListSet", apps.get(3).getDataStructureName());
+        Assert.assertEquals("java.util.concurrent.CopyOnWriteArraySet", apps.get(4).getDataStructureName());
     }
 }
