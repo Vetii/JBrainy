@@ -61,6 +61,9 @@ public class PapiRunnerTest {
 
         Assert.assertFalse(data.isEmpty());
         for (String key : data.keySet()) {
+            Assert.assertEquals(
+                    PapiRunnerKt.getCounterSpec().keySet(),
+                    data.get(key).keySet());
             Assert.assertFalse(data.get(key).isEmpty());
         }
     }
