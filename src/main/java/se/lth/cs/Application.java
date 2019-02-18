@@ -92,4 +92,6 @@ public abstract class Application<T> {
         Stream<Method> l = Arrays.stream(methodsToCall);
         return l.collect(Collectors.groupingBy(x -> x.getName(), Collectors.counting()));
     }
+
+    public int getSize() { return methodsToCall.length; }
 }
