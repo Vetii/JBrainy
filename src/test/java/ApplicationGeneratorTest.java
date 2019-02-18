@@ -9,7 +9,7 @@ import java.util.List;
 public class ApplicationGeneratorTest {
 
     @Test
-    public void testListGenerator() {
+    public void testListApplicationGenerator() {
         ApplicationGenerator g = new ListApplicationGenerator();
         List<Application<?>> apps = g.createApplications(0, 1, 10);
         // Test all generated applications have the same seed
