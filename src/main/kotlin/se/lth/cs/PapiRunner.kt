@@ -113,35 +113,6 @@ class PapiRunner() {
         return data
     }
 
-    fun benchmark() {
-        // Throws exception
-        val evset = EventSet.create(*counters)
-
-        val results = IntArray(10)
-
-        // 9 warmup runs before measuring
-        for (warmup in 10 downTo 0) {
-            for (i in 0..9) {
-                evset.start()
-
-                // some weird code to measure
-                for (k in 0..i * 10) {
-                    results[i] += k * k
-                }
-                // done with the code
-
-                evset.stop()
-                val data = evset.counters
-
-                // only print the 10th run
-                if (warmup == 0) {
-                    println("#" + i + ":\t" + data[0] + "\t" + data[1])
-                }
-            }
-        }
-    }
-
-
     class CounterAndProgram(val counter : String, val programName : String) : Comparable<CounterAndProgram> {
         override fun toString(): String { return "${counter}_$programName"}
         override fun compareTo(other: CounterAndProgram): Int {

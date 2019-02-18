@@ -176,12 +176,6 @@ public class ApplicationTest {
         }
     }
 
-    @Test(expected = PapiException.class)
-    public void TestBenchmark() throws PapiException {
-        PapiRunner r = new PapiRunner();
-        r.benchmark();
-    }
-
     @Test
     public void TestEmptyBenchmark() throws PapiException {
         PapiRunner r = new PapiRunner();
