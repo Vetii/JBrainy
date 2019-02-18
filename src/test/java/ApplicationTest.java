@@ -176,36 +176,6 @@ public class ApplicationTest {
         }
     }
 
-    /**
-     * Tests that all performance counters can be put in an eventSet
-     * (not at the same time!)
-     *
-     * @throws PapiException
-     */
-    @Test
-    public void TestPapiEventSet() throws PapiException {
-        Papi.init();
-
-        int[] constants = PapiRunnerKt.getCounters();
-
-        IntPredicate throwsExp =
-                (integer -> {
-                    try {
-                        System.out.println(integer);
-                        EventSet evset = EventSet.create(constants[integer],
-                                constants[Math.min(integer + 1, 58)]);
-                        return false;
-                    } catch (PapiException e) {
-                        return true;
-                    }
-                });
-
-
-        IntStream range = IntStream.range(0, constants.length);
-        // IntStream vals = range.filter(throwsExp);
-        Assert.assertTrue(range.anyMatch(throwsExp));
-    }
-
     @Test(expected = PapiException.class)
     public void TestBenchmark() throws PapiException {
         PapiRunner r = new PapiRunner();
