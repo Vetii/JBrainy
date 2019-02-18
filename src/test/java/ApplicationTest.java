@@ -182,20 +182,7 @@ public class ApplicationTest {
         r.emptyBenchmark();
     }
 
-    @Test
-    public void TestPapiRunGenerated() throws PapiException {
-        List<Application<?>> applications = new ListApplicationGenerator().createApplications(
-                0,
-                3,
-                100
-        );
-        PapiRunner papiRunner = new PapiRunner();
-        Map<String, Map<String, List<Long>>> data = papiRunner.runListApplications(10, applications);
-        Assert.assertFalse(data.isEmpty());
-        for (String key : data.keySet()) {
-            Assert.assertFalse(data.get(key).isEmpty());
-        }
-    }
+
 
     @Test
     public void TestPapiFeatureGathering() throws PapiException, InvocationTargetException, IllegalAccessException {
