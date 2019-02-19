@@ -1,0 +1,3 @@
+[submodule "papi-java"]
+	path = papi-java
+	url = https://github.com/creichen/papi-java.git
