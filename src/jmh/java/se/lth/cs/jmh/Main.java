@@ -55,7 +55,7 @@ public class Main {
     public static void main(String[] args) throws RunnerException {
         System.out.println("Running the custom jmh runner.");
         // Preparing seeds
-        int number_seeds = 2;
+        int number_seeds = 10;
         String[] seedsText = new String[number_seeds];
         for (int i = 0; i < number_seeds; ++i)
             seedsText[i] = String.format("%d", i);
@@ -65,13 +65,13 @@ public class Main {
                 .forks(1)
                 .warmupIterations(3)
                 .warmupTime(TimeValue.milliseconds(500))
-                .measurementTime(TimeValue.milliseconds(500))
+                .measurementTime(TimeValue.milliseconds(250))
                 .measurementIterations(5)
                 .resultFormat(ResultFormatType.CSV)
-                //.result("jmh-results-runner.csv")
+                .result("jmh-results-runner.csv")
                 .param("seed", seedsText)
-                .param("baseStructureSize", "0")
-                .param("applicationSize", "400")
+                .param("baseStructureSize", "0", "1000", "10000")
+                .param("applicationSize", "10", "100", "1000")
                 .build();
 
         Runner r = new Runner(opts);
