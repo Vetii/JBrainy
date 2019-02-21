@@ -1,7 +1,6 @@
 package se.lth.cs.jmh;
 
 import com.google.gson.Gson;
-import org.openjdk.jmh.results.BenchmarkResult;
 import org.openjdk.jmh.results.RunResult;
 import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
@@ -55,27 +54,36 @@ public class Main {
     public static void main(String[] args) throws RunnerException {
         System.out.println("Running the custom jmh runner.");
         // Preparing seeds
-        int number_seeds = 10;
+        int number_seeds = 20;
         String[] seedsText = new String[number_seeds];
         for (int i = 0; i < number_seeds; ++i)
             seedsText[i] = String.format("%d", i);
 
-        Options opts = new OptionsBuilder()
-                .include("List")
-                .forks(1)
-                .warmupIterations(3)
-                .warmupTime(TimeValue.milliseconds(500))
-                .measurementTime(TimeValue.milliseconds(250))
-                .measurementIterations(5)
-                .resultFormat(ResultFormatType.CSV)
-                .result("jmh-results-runner.csv")
-                .param("seed", seedsText)
-                .param("baseStructureSize", "0", "1000", "10000")
-                .param("applicationSize", "10", "100", "1000")
-                .build();
 
-        Runner r = new Runner(opts);
-        Collection<RunResult> results = r.run();
-        process(results);
+        IntStream measurementTimes = IntStream.iterate(250, x -> x <= 1000, x -> x + 250);
+        measurementTimes.forEach(
+                mt -> {
+                    Options opts = new OptionsBuilder()
+                            // .include("List")
+                            .forks(2)
+                            .warmupIterations(3)
+                            .warmupTime(TimeValue.milliseconds(250))
+                            .measurementTime(TimeValue.milliseconds(mt))
+                            .measurementIterations(5)
+                            .resultFormat(ResultFormatType.CSV)
+                            .result(String.format("jmh-results-runner-mt=%d.csv", mt))
+                            .param("seed", seedsText)
+                            .param("baseStructureSize", "0", "1000", "10000")
+                            .param("applicationSize", "10", "100", "1000")
+                            .build();
+
+                    Runner r = new Runner(opts);
+                    try {
+                        Collection<RunResult> results = r.run();
+                    } catch (RunnerException e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
     }
 }
