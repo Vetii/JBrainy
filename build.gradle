@@ -17,6 +17,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
+
 plugins {
     id 'java'
     id 'idea'
@@ -24,6 +25,11 @@ plugins {
     // If this doesn't work, update gradle using // $ ./gradlew wrapper
     // $ ./gradlew wrapper --gradle-version <version>
 
+}
+
+compileJava {
+    sourceCompatibility = 9
+    targetCompatibility = 9
 }
 
 apply plugin: 'kotlin'
