@@ -76,7 +76,7 @@ public class Main {
             seedsText[i] = String.format("%d", i);
 
 
-        IntStream measurementTimes = IntStream.iterate(250, x -> x <= 1000, x -> x + 250);
+        IntStream measurementTimes = IntStream.iterate(4, x -> x <= 1024, x -> x * 4);
         measurementTimes.forEach(
                 mt -> {
                     Options opts = new OptionsBuilder()
