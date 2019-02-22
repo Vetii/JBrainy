@@ -57,14 +57,14 @@ public class Main {
     }
 
     public static String getCommit() {
-		try {
-				FileRepository localRepo = new FileRepository(".git");
-				ObjectId o = localRepo.findRef("HEAD").getTarget().getObjectId();
-				return ObjectId.toString(o).substring(0, 8);
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
-		}
-		return "Unable to fetch commit";
+        try {
+            FileRepository localRepo = new FileRepository(".git");
+            ObjectId o = localRepo.findRef("HEAD").getTarget().getObjectId();
+            return ObjectId.toString(o).substring(0, 8);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return "Unable to fetch commit";
     }
 
     public static void main(String[] args) throws RunnerException, IOException {
