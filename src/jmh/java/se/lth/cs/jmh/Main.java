@@ -9,6 +9,11 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
 
+import java.io.IOException;
+import org.eclipse.jgit.internal.storage.file.FileRepository;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.api.Git;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -51,7 +56,18 @@ public class Main {
         System.out.println(new Gson().toJson(seedsToDatastructure));
     }
 
-    public static void main(String[] args) throws RunnerException {
+    public static String getCommit() {
+		try {
+				FileRepository localRepo = new FileRepository(".git");
+				ObjectId o = localRepo.findRef("HEAD").getTarget().getObjectId();
+				return ObjectId.toString(o).substring(0, 8);
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+		return "Unable to fetch commit";
+    }
+
+    public static void main(String[] args) throws RunnerException, IOException {
         System.out.println("Running the custom jmh runner.");
         // Preparing seeds
         int number_seeds = 20;
@@ -71,7 +87,7 @@ public class Main {
                             .measurementTime(TimeValue.milliseconds(mt))
                             .measurementIterations(5)
                             .resultFormat(ResultFormatType.CSV)
-                            .result(String.format("jmh-results-runner-mt=%d.csv", mt))
+                            .result(String.format("jmh-results-%s-runner-mt=%d.csv", getCommit(), mt))
                             .param("seed", seedsText)
                             .param("baseStructureSize", "0", "1000", "10000")
                             .param("applicationSize", "10", "100", "1000")
