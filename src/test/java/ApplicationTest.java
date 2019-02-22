@@ -300,7 +300,7 @@ public class ApplicationTest {
 
         Long threshold = 3l;
         List<TrainingSetValue> values =
-                r.createListApplicationsSpread(threshold, 100,new ListApplicationGenerator());
+                r.createListApplicationsSpread(threshold, 10,new ListApplicationGenerator());
 
         Map<String, Long> histogram = values.stream().collect(
                 Collectors.groupingBy(TrainingSetValue::getBestDataStructure, Collectors.counting())

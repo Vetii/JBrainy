@@ -1,7 +1,9 @@
-package se.lth.cs;
+package se.lth.cs.jmh;
 
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
+import se.lth.cs.Application;
+import se.lth.cs.ListApplication;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

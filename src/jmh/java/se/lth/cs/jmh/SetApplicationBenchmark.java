@@ -1,22 +1,24 @@
-package se.lth.cs;
+package se.lth.cs.jmh;
 
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
+import se.lth.cs.Application;
+import se.lth.cs.SetApplication;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
+import java.util.*;
 
-public class MapApplicationBenchmark {
+public class SetApplicationBenchmark {
 
     @State(Scope.Thread)
-    public static class MapBenchmarkState {
+    public static class SetBenchmarkState {
         @Param({"0", "1", "2", "3"})
         public int seed;
 
         @Param({"100", "1000"})
         public int applicationSize;
 
-        @Param({"HashMap", "TreeMap", "IdentityHashMap", "LinkedHashMap", "WeakHashMap"})
+        @Param({"HashSet", "TreeSet", "LinkedHashSet"})
         public String datastructureName;
 
         @Param({"0", "1000", "2000"})
@@ -26,14 +28,14 @@ public class MapApplicationBenchmark {
 
         @Setup(Level.Trial)
         public void doSetup() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-            Map<Integer, Integer> datastructure = (Map<Integer, Integer>) Class.forName("java.util." + datastructureName).newInstance();
-            currentApplication = new MapApplication(seed, applicationSize, datastructure);
+            Set<Integer> datastructure = (Set<Integer>) Class.forName("java.util." + datastructureName).newInstance();
+            currentApplication = new SetApplication(seed, applicationSize, datastructure);
             currentApplication.populate(baseStructureSize);
         }
     }
 
     @Benchmark
-    public void MapApplicationBenchmark(MapBenchmarkState state, Blackhole blackhole) throws InvocationTargetException, IllegalAccessException, InstantiationException {
+    public void SetApplicationBenchmark(SetBenchmarkState state, Blackhole blackhole) throws InvocationTargetException, IllegalAccessException, InstantiationException {
         blackhole.consume(state.currentApplication.benchmark());
     }
 }
