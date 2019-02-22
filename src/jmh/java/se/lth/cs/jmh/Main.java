@@ -87,7 +87,7 @@ public class Main {
                             .measurementTime(TimeValue.milliseconds(mt))
                             .measurementIterations(5)
                             .resultFormat(ResultFormatType.CSV)
-                            .result(String.format("jmh-results-%s-runner-mt=%d.csv", getCommit(), mt))
+                            .result(String.format("jmh-results-%s-mt=%d.csv", getCommit(), mt))
                             .param("seed", seedsText)
                             .param("baseStructureSize", "0", "1000", "10000")
                             .param("applicationSize", "10", "100", "1000")
