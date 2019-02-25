@@ -16,12 +16,11 @@ class JMHProcessor {
         var parser = CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())
         // We are grouping the parameters by any parameter except the data structure name (which we want)
 
-        val columns = parser.headerMap.keys
-        // These are the columns we want to use for group by
-        val selectedColumns = columns
-                .filter { it -> it.contains("Param") }
-                .minus("Param: datastructureName")
-                .plus("Benchmark")
+        val selectedColumns = listOf(
+                "Benchmark",
+                "Param: seed",
+                "Param: applicationSize"
+        )
 
         val seedsToRecords = parser.records.groupBy { record ->
             selectedColumns.map { column -> record.get(column) }
