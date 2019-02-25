@@ -151,4 +151,29 @@ class JMHProcessorTest {
                 result
         )
     }
+
+    @Test(expected=JMHProcessor.JMHProcessorException::class)
+    fun testBenchmarkProcessingEmpty() {
+        Assert.assertEquals("", processor!!.processBenchmarkName(""))
+    }
+    @Test
+    fun testBenchmarkProcessingMap() {
+        val bench =
+                "\"se.lth.cs.jmh.MapApplicationBenchmark.MapApplicationBenchmark\""
+        Assert.assertEquals("Map", processor!!.processBenchmarkName(bench))
+    }
+
+    @Test
+    fun testBenchmarkProcessingList() {
+        val bench =
+                "\"se.lth.cs.jmh.ListApplicationBenchmark.ListApplicationBenchmark\""
+        Assert.assertEquals("List", processor!!.processBenchmarkName(bench))
+    }
+
+    @Test
+    fun testBenchmarkProcessingSet() {
+        val bench =
+                "\"se.lth.cs.jmh.SetApplicationBenchmark.SetApplicationBenchmark\""
+        Assert.assertEquals("Set", processor!!.processBenchmarkName(bench))
+    }
 }

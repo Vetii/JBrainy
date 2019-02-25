@@ -5,6 +5,7 @@ import org.apache.commons.csv.CSVParser
 import java.io.File
 import java.io.FileReader
 import java.io.Reader
+import java.lang.Exception
 
 class JMHProcessor {
     fun processFile(filename: String): List<List<String?>> {
@@ -32,5 +33,16 @@ class JMHProcessor {
             val bestScore = records.maxBy { it.get("Score") }
             listOf(seed, size, bestScore?.get("Param: datastructureName"))
         }
+    }
+
+    class JMHProcessorException(override val message: String?) : Exception(message) { }
+
+    fun processBenchmarkName(benchmark : String) : String {
+        val options = listOf("List", "Map", "Set")
+        val name = benchmark.findAnyOf(options)?.second
+        if (name.isNullOrBlank()) {
+            throw JMHProcessorException("Benchmark name does not contain any of $options")
+        }
+        return name
     }
 }
