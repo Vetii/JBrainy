@@ -64,6 +64,9 @@ dependencies {
     compile 'org.slf4j:slf4j-simple:1.7.13'
     compile 'org.eclipse.jgit:org.eclipse.jgit:5.2.1.201812262042-r'
 
+    // Reading CSV files
+    compile 'org.apache.commons:commons-csv:1.6'
+
     implementation 'com.google.code.gson:gson:2.8.5'
     // Declare the dependency for your favourite test framework you want to use in your tests.
     // TestNG is also supported by the Gradle Test task. Just change the
