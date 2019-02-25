@@ -14,6 +14,10 @@ class JMHProcessorTest {
     }
 
     @Test
+    fun TestEmpty() {
+        val reader = StringReader("")
+        Assert.assertEquals(listOf<String>(), processor!!.processReader(reader))
+    }
 
     @Test
     fun Test() {
