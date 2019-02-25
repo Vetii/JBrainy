@@ -102,4 +102,49 @@ class JMHProcessorTest {
                 result
         )
     }
+
+    @Test
+    fun testDifferentInterface() {
+        var data = mutableListOf<String>()
+        var row1 =
+                listOf(
+                        "\"se.lth.cs.jmh.ListApplicationBenchmark.ListApplicationBenchmark\"",
+                        "\"thrpt\"",
+                        1,
+                        10,
+                        185.524701,
+                        29.416447,
+                        "ops/s",
+                        10,
+                        0,
+                        "LinkedList",
+                        0
+                ).joinToString(",")
+        var row2 =
+                listOf(
+                        "\"se.lth.cs.jmh.MapApplicationBenchmark.MapApplicationBenchmark\"",
+                        "\"thrpt\"",
+                        1,
+                        10,
+                        414.886418,
+                        200.555845,
+                        "ops/s",
+                        10,
+                        0,
+                        "HashMap",
+                        0
+                ).joinToString(",")
+        data.add(row1)
+        data.add(row2)
+        val text = "$header\n${data.joinToString("\n")}"
+        val reader = StringReader(text)
+        val result = processor!!.processReader(reader)
+        Assert.assertEquals(
+                listOf(
+                        listOf("0", "10", "LinkedList"),
+                        listOf("0", "10", "HashMap")
+                ),
+                result
+        )
+    }
 }
