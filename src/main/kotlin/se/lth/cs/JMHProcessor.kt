@@ -7,18 +7,20 @@ import java.io.FileReader
 import java.io.Reader
 
 class JMHProcessor {
-    fun processFile(filename: String): List<String?> {
+    fun processFile(filename: String): List<List<String?>> {
         return processReader(FileReader(File(filename)))
     }
 
-    fun processReader(reader: Reader): List<String?> {
+    fun processReader(reader: Reader): List<List<String?>> {
         var parser = CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())
         // We are grouping the parameters by any parameter excep the data structure name (which we want)
 
         val columns = parser.headerMap.keys
+        // These are the columns we want to use for group by
         val selectedColumns = columns
                 .filter { it -> it.contains("Param") }
                 .minus("Param: datastructureName")
+                .plus("Benchmark")
 
         val seedsToRecords = parser.records.groupBy { record ->
             selectedColumns.map { column -> record.get(column) }
@@ -28,7 +30,7 @@ class JMHProcessor {
             val seed = records[0].get("Param: seed")
             val size = records[0].get("Param: applicationSize")
             val bestScore = records.maxBy { it.get("Score") }
-            return listOf(seed, size, bestScore?.get("Param: datastructureName"))
+            listOf(seed, size, bestScore?.get("Param: datastructureName"))
         }
     }
 }

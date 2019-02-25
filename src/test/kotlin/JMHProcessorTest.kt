@@ -56,7 +56,9 @@ class JMHProcessorTest {
         val reader = StringReader(text)
         val result = processor!!.processReader(reader)
         Assert.assertEquals(
-                listOf("0","10","LinkedList")
+                listOf(
+                        listOf("0","10","LinkedList")
+                )
                 , result
         )
     }
@@ -98,7 +100,9 @@ class JMHProcessorTest {
         val reader = StringReader(text)
         val result = processor!!.processReader(reader)
         Assert.assertEquals(
-                listOf("0", "10", "ArrayList"),
+                listOf(
+                        listOf("0", "10", "ArrayList")
+                ),
                 result
         )
     }
