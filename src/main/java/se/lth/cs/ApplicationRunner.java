@@ -17,7 +17,6 @@ public class ApplicationRunner {
 
     /**
      * Runs a list of applications.
-     * @// TODO: 2019-02-08 Running the benchmarks many times gives different results (which stabilize after a few runs.) 
      * @param applications
      * @return The list of fastest applications
      * @throws InvocationTargetException
