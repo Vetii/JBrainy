@@ -1,13 +1,22 @@
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import se.lth.cs.JMHProcessor
 import java.io.StringReader
 
 class JMHProcessorTest {
+
+    var processor : JMHProcessor? = null
+
+    @Before
+    fun setup() {
+        processor = JMHProcessor()
+    }
+
+    @Test
+
     @Test
     fun Test() {
-        val processor = JMHProcessor()
-
         val header =
                 listOf(
                         "Benchmark",
@@ -38,7 +47,7 @@ class JMHProcessorTest {
                 ).joinToString(",")
         val text = "$header\n$data"
         val reader = StringReader(text)
-        val result = processor.processReader(reader)
+        val result = processor!!.processReader(reader)
         Assert.assertEquals(
                 listOf("0","10","LinkedList")
                 , result
