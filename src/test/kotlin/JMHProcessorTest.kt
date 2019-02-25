@@ -2,6 +2,8 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import se.lth.cs.JMHProcessor
+import java.io.File
+import java.io.FileReader
 import java.io.StringReader
 
 class JMHProcessorTest {
@@ -150,6 +152,21 @@ class JMHProcessorTest {
                 ),
                 result
         )
+    }
+
+    @Test
+    fun testProcessingFile() {
+        val file = File("data/jmh-results-runner-mt=1000.csv")
+        Assert.assertTrue(file.exists())
+        val fileReader = FileReader(file)
+        val result = processor!!.processReader(fileReader)
+        Assert.assertFalse(result.isEmpty())
+        for (row in result) {
+            Assert.assertFalse(row.isEmpty())
+            Assert.assertEquals(4, row.size)
+        }
+        // Assert there are no duplicates
+        Assert.assertTrue(result.toSet().size == result.size)
     }
 
     @Test(expected=JMHProcessor.JMHProcessorException::class)
