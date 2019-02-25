@@ -60,4 +60,46 @@ class JMHProcessorTest {
                 , result
         )
     }
+
+    @Test
+    fun TestTwoRows() {
+        var data = mutableListOf<String>()
+        var row1 =
+                listOf(
+                        "\"se.lth.cs.jmh.ListApplicationBenchmark.ListApplicationBenchmark\"",
+                        "\"thrpt\"",
+                        1,
+                        10,
+                        185.524701,
+                        29.416447,
+                        "ops/s",
+                        10,
+                        0,
+                        "LinkedList",
+                        0
+                ).joinToString(",")
+        var row2 =
+                listOf(
+                        "\"se.lth.cs.jmh.ListApplicationBenchmark.ListApplicationBenchmark\"",
+                        "\"thrpt\"",
+                        1,
+                        10,
+                        414.886418,
+                        200.555845,
+                        "ops/s",
+                        10,
+                        0,
+                        "ArrayList",
+                        0
+                ).joinToString(",")
+        data.add(row1)
+        data.add(row2)
+        val text = "$header\n${data.joinToString("\n")}"
+        val reader = StringReader(text)
+        val result = processor!!.processReader(reader)
+        Assert.assertEquals(
+                listOf("0", "10", "ArrayList"),
+                result
+        )
+    }
 }
