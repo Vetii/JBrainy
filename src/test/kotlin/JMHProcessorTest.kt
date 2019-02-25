@@ -57,7 +57,7 @@ class JMHProcessorTest {
         val result = processor!!.processReader(reader)
         Assert.assertEquals(
                 listOf(
-                        listOf("0","10","LinkedList")
+                        listOf("List","0","10","LinkedList")
                 )
                 , result
         )
@@ -101,7 +101,7 @@ class JMHProcessorTest {
         val result = processor!!.processReader(reader)
         Assert.assertEquals(
                 listOf(
-                        listOf("0", "10", "ArrayList")
+                        listOf("List", "0", "10", "ArrayList")
                 ),
                 result
         )
@@ -145,8 +145,8 @@ class JMHProcessorTest {
         val result = processor!!.processReader(reader)
         Assert.assertEquals(
                 listOf(
-                        listOf("0", "10", "LinkedList"),
-                        listOf("0", "10", "HashMap")
+                        listOf("List", "0", "10", "LinkedList"),
+                        listOf("Map", "0", "10", "HashMap")
                 ),
                 result
         )

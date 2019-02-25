@@ -28,10 +28,11 @@ class JMHProcessor {
         }
 
         return seedsToRecords.values.map { records ->
+            val benchmark = records[0].get("Benchmark").let { processBenchmarkName(it) }
             val seed = records[0].get("Param: seed")
             val size = records[0].get("Param: applicationSize")
             val bestScore = records.maxBy { it.get("Score") }
-            listOf(seed, size, bestScore?.get("Param: datastructureName"))
+            listOf(benchmark, seed, size, bestScore?.get("Param: datastructureName"))
         }
     }
 
