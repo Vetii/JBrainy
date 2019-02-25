@@ -30,8 +30,18 @@ class JMHProcessor {
             val interfaceName = records[0].get("Benchmark").let { processBenchmarkName(it) }
             val seed = records[0].get("Param: seed")
             val size = records[0].get("Param: applicationSize")
-            val bestScore = records.maxBy { it.get("Score") }
-            listOf(interfaceName, seed, size, bestScore?.get("Param: datastructureName"))
+            // We need to group the runs by data structure size too.
+            // We match the size with the higest score found
+            val recordsByBaseSize =
+                    records.groupBy { it.get("Param: baseStructureSize") }
+                            .mapValues { (k, v) -> v.maxBy { it.get("Score") }}
+            // We count the number of times the data structure has won
+            // (Computing a histogram of the data structure names)
+            val bestScoreHist =
+                    recordsByBaseSize.values.groupBy { it!!.get("Param: datastructureName") }
+                            .mapValues { (k, v) -> v.size}
+            val bestScore = bestScoreHist.maxBy { (k, v) -> v }!!.key
+            listOf(interfaceName, seed, size, bestScore)
         }
     }
 
