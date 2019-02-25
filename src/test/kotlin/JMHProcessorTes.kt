@@ -20,7 +20,7 @@ class JMHProcessorTest {
     }
 
     @Test
-    fun Test() {
+    fun TestOneRow() {
         val header =
                 listOf(
                         "Benchmark",
