@@ -14,7 +14,7 @@ class JMHProcessor {
 
     fun processReader(reader: Reader): List<List<String?>> {
         var parser = CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())
-        // We are grouping the parameters by any parameter excep the data structure name (which we want)
+        // We are grouping the parameters by any parameter except the data structure name (which we want)
 
         val columns = parser.headerMap.keys
         // These are the columns we want to use for group by
