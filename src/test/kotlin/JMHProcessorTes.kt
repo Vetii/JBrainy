@@ -8,20 +8,13 @@ class JMHProcessorTest {
 
     var processor : JMHProcessor? = null
 
+    var header : String = ""
+
     @Before
     fun setup() {
         processor = JMHProcessor()
-    }
 
-    @Test
-    fun TestEmpty() {
-        val reader = StringReader("")
-        Assert.assertEquals(listOf<String>(), processor!!.processReader(reader))
-    }
-
-    @Test
-    fun TestOneRow() {
-        val header =
+         header =
                 listOf(
                         "Benchmark",
                         "Mode",
@@ -35,6 +28,16 @@ class JMHProcessorTest {
                         "Param: datastructureName",
                         "Param: seed"
                 ).map { "\"$it\""}.joinToString(",")
+    }
+
+    @Test
+    fun TestEmpty() {
+        val reader = StringReader("")
+        Assert.assertEquals(listOf<String>(), processor!!.processReader(reader))
+    }
+
+    @Test
+    fun TestOneRow() {
         val data =
                 listOf(
                         "\"se.lth.cs.jmh.ListApplicationBenchmark.ListApplicationBenchmark\"",
