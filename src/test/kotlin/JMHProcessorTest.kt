@@ -1,3 +1,5 @@
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVParser
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -5,6 +7,7 @@ import se.lth.cs.JMHProcessor
 import java.io.File
 import java.io.FileReader
 import java.io.StringReader
+import java.io.StringWriter
 
 class JMHProcessorTest {
 
@@ -192,5 +195,25 @@ class JMHProcessorTest {
         val bench =
                 "\"se.lth.cs.jmh.SetApplicationBenchmark.SetApplicationBenchmark\""
         Assert.assertEquals("Set", processor!!.processBenchmarkName(bench))
+    }
+
+    @Test
+    fun testFileWriting() {
+        val file = File("data/jmh-results-runner-mt=1000.csv")
+        Assert.assertTrue(file.exists())
+        val result = processor!!.processReader(FileReader(file))
+        val writer = StringWriter()
+        processor!!.print(writer, result)
+        val parser = CSVParser(StringReader(writer.toString()), CSVFormat.DEFAULT.withFirstRecordAsHeader())
+
+        val numberRegex = Regex("[0-9]+")
+
+        for (record in parser.records) {
+            val interfaces = listOf("List", "Map", "Set")
+            Assert.assertTrue(interfaces.contains(record.get("Interface")))
+            Assert.assertTrue(numberRegex.matches(record.get("Seed")))
+            Assert.assertTrue(numberRegex.matches(record.get("Size")))
+            Assert.assertTrue(interfaces.any { record.get("Best").contains(it) })
+        }
     }
 }

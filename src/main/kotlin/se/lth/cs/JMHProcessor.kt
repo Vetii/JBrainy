@@ -2,9 +2,8 @@ package se.lth.cs
 
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
-import java.io.File
-import java.io.FileReader
-import java.io.Reader
+import org.apache.commons.csv.CSVPrinter
+import java.io.*
 import java.lang.Exception
 
 class JMHProcessor {
@@ -55,5 +54,17 @@ class JMHProcessor {
             throw JMHProcessorException("Benchmark name does not contain any of $options")
         }
         return name
+    }
+
+    /**
+     * Prints the given records to a file
+     */
+    fun print(writer : Writer, records : List<List<String>>) {
+        val printer = CSVPrinter(writer, CSVFormat.DEFAULT.withFirstRecordAsHeader())
+        printer.printRecord("Interface", "Seed", "Size", "Best")
+        for (record in records) {
+            printer.printRecord(record)
+        }
+        writer.close()
     }
 }
