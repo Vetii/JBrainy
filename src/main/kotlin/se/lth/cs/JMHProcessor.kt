@@ -8,11 +8,11 @@ import java.lang.Exception
 
 class JMHProcessor {
 
-    fun processFile(filename: String): List<List<String?>> {
-        return processReader(FileReader(File(filename)))
+    fun process(file: File): List<List<String>> {
+        return process(FileReader(file))
     }
 
-    fun processReader(reader: Reader): List<List<String>> {
+    fun process(reader : Reader): List<List<String>> {
         var parser = CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())
         // We are grouping the parameters by any parameter except the data structure name (which we want)
 

@@ -38,7 +38,7 @@ class JMHProcessorTest {
     @Test
     fun TestEmpty() {
         val reader = StringReader("")
-        Assert.assertEquals(listOf<String>(), processor!!.processReader(reader))
+        Assert.assertEquals(listOf<String>(), processor!!.process(reader))
     }
 
     @Test
@@ -59,7 +59,7 @@ class JMHProcessorTest {
                 ).joinToString(",")
         val text = "$header\n$data"
         val reader = StringReader(text)
-        val result = processor!!.processReader(reader)
+        val result = processor!!.process(reader)
         Assert.assertEquals(
                 listOf(
                         listOf("List","0","10","LinkedList")
@@ -103,7 +103,7 @@ class JMHProcessorTest {
         data.add(row2)
         val text = "$header\n${data.joinToString("\n")}"
         val reader = StringReader(text)
-        val result = processor!!.processReader(reader)
+        val result = processor!!.process(reader)
         Assert.assertEquals(
                 listOf(
                         listOf("List", "0", "10", "ArrayList")
@@ -147,7 +147,7 @@ class JMHProcessorTest {
         data.add(row2)
         val text = "$header\n${data.joinToString("\n")}"
         val reader = StringReader(text)
-        val result = processor!!.processReader(reader)
+        val result = processor!!.process(reader)
         Assert.assertEquals(
                 listOf(
                         listOf("List", "0", "10", "LinkedList"),
@@ -162,7 +162,7 @@ class JMHProcessorTest {
         val file = File("data/jmh-results-runner-mt=1000.csv")
         Assert.assertTrue(file.exists())
         val fileReader = FileReader(file)
-        val result = processor!!.processReader(fileReader)
+        val result = processor!!.process(fileReader)
         Assert.assertFalse(result.isEmpty())
         for (row in result) {
             Assert.assertFalse(row.isEmpty())
@@ -201,7 +201,7 @@ class JMHProcessorTest {
     fun testFileWriting() {
         val file = File("data/jmh-results-runner-mt=1000.csv")
         Assert.assertTrue(file.exists())
-        val result = processor!!.processReader(FileReader(file))
+        val result = processor!!.process(file)
         val writer = StringWriter()
         processor!!.print(writer, result)
         val parser = CSVParser(StringReader(writer.toString()), CSVFormat.DEFAULT.withFirstRecordAsHeader())
