@@ -1,31 +1,19 @@
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import papi.Constants;
 import papi.EventSet;
 import papi.Papi;
 import papi.PapiException;
-import se.lth.cs.*;
 import se.lth.cs.ApplicationGeneration.ListApplicationGenerator;
 import se.lth.cs.ApplicationGeneration.MapApplicationGenerator;
 import se.lth.cs.ApplicationGeneration.SetApplicationGenerator;
+import se.lth.cs.*;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.function.IntPredicate;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class ApplicationTest {
-
-    PapiRunner runner = null;
-
-    @Before
-    public void setup() {
-        CounterSpecification spec = CounterSpecification.Companion.fromFile(new File("PAPI_FLAGS"));
-        runner = new PapiRunner(spec);
-    }
 
     @Test
     public void TestListApplication() throws InstantiationException {
