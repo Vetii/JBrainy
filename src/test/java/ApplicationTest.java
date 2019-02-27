@@ -1,4 +1,5 @@
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import papi.Constants;
 import papi.EventSet;
@@ -9,6 +10,7 @@ import se.lth.cs.ApplicationGeneration.ListApplicationGenerator;
 import se.lth.cs.ApplicationGeneration.MapApplicationGenerator;
 import se.lth.cs.ApplicationGeneration.SetApplicationGenerator;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.IntPredicate;
@@ -16,6 +18,14 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ApplicationTest {
+
+    PapiRunner runner = null;
+
+    @Before
+    public void setup() {
+        CounterSpecification spec = CounterSpecification.Companion.fromFile(new File("PAPI_FLAGS"));
+        runner = new PapiRunner(spec);
+    }
 
     @Test
     public void TestListApplication() throws InstantiationException {
@@ -178,8 +188,7 @@ public class ApplicationTest {
 
     @Test
     public void TestEmptyBenchmark() throws PapiException {
-        PapiRunner r = new PapiRunner();
-        r.emptyBenchmark();
+        runner.emptyBenchmark();
     }
 
 
@@ -192,8 +201,7 @@ public class ApplicationTest {
                 100
         );
 
-        PapiRunner papiRunner = new PapiRunner();
-        List<PapiRunner.FeatureVector> data = papiRunner.getFeatures(10, applications);
+        List<PapiRunner.FeatureVector> data = runner.getFeatures(10, applications);
         Assert.assertFalse(data.isEmpty());
         for (PapiRunner.FeatureVector v : data) {
             Assert.assertFalse(v.getCounters().isEmpty());
@@ -219,8 +227,7 @@ public class ApplicationTest {
 
     @Test
     public void TestCSVExport() {
-        PapiRunner r = new PapiRunner();
-        Assert.assertEquals("", r.featuresToCSV(new ArrayList<>()));
+        Assert.assertEquals("", runner.featuresToCSV(new ArrayList<>()));
 
         List<PapiRunner.FeatureVector> data = new ArrayList();
         data.add(new PapiRunner.FeatureVector("app1", "java.util.ArrayList",
@@ -242,7 +249,7 @@ public class ApplicationTest {
         String expectedData2 = "app2,java.util.Vector,java.util.ArrayList,1234.5,None,12345.0";
         Assert.assertEquals(
                 expectedHeader + "\n" + expectedData1 + "\n" + expectedData2,
-                r.featuresToCSV(data));
+                runner.featuresToCSV(data));
     }
 
     @Test
