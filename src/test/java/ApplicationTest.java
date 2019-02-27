@@ -186,22 +186,6 @@ public class ApplicationTest {
         }
     }
 
-
-    @Test
-    public void TestPapiFeatureGathering() throws PapiException, InvocationTargetException, IllegalAccessException {
-        List<Application<?>> applications = new ListApplicationGenerator().createApplications(
-                0,
-                3,
-                100
-        );
-
-        List<PapiRunner.FeatureVector> data = runner.getFeatures(10, applications);
-        Assert.assertFalse(data.isEmpty());
-        for (PapiRunner.FeatureVector v : data) {
-            Assert.assertFalse(v.getCounters().isEmpty());
-        }
-    }
-
     @Test
     public void TestMedian() {
         List<Double> values = new ArrayList<>();
