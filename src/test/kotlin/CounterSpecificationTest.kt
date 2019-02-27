@@ -25,4 +25,14 @@ class CounterSpecificationTest {
         val result = CounterSpecification.fromReader(StringReader(s))
         Assert.assertEquals(mapOf(Pair("PAPI_L1_DCM", Constants.PAPI_L1_DCM)), result.currentSpec)
     }
+
+    /**
+     * Test getCounter() returns the counter we expect
+     */
+    @Test
+    fun testGetCounter() {
+        val s = "PAPI_L1_DCM"
+        val result = CounterSpecification.fromReader(StringReader(s))
+        Assert.assertEquals(Constants.PAPI_L1_DCM, result.getCounter(s))
+    }
 }
