@@ -45,7 +45,7 @@ class JMHProcessor {
         }
     }
 
-    class JMHProcessorException(override val message: String?) : Exception(message) { }
+    class JMHProcessorException(override val message: String?) : Exception(message)
 
     fun processBenchmarkName(benchmark : String) : String {
         val options = listOf("List", "Map", "Set")
