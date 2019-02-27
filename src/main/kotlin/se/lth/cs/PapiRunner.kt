@@ -83,6 +83,7 @@ open class PapiRunner(counters : CounterSpecification) {
     /** Runs a set of programs (functions) without interleaving
      * (Performance should get better if there is JIT compilation)
      * @Returns A map from couples (counter, program-name) -> values over all runs
+     * TODO: Implement this using cartesianProduct from Guava instead
      */
     open fun runApplications(numRuns : Int, functions : List<Pair<String,() -> Any>>):
             Map<String, MutableMap<String, List<Long>>> {
