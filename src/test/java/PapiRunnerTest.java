@@ -106,4 +106,31 @@ public class PapiRunnerTest {
         }
     }
 
+    @Test
+    public void TestCSVExport() {
+        Assert.assertEquals("", runner.featuresToCSV(new ArrayList<>()));
+
+        List<PapiRunner.FeatureVector> data = new ArrayList();
+        data.add(new PapiRunner.FeatureVector("app1", "java.util.ArrayList",
+                "java.util.ArrayList",
+                new TreeMap<String, Double>() {{
+                    put("COUNTER_1", 123.4);
+                    put("COUNTER_2", 123.4);
+                }}
+        ));
+        data.add(new PapiRunner.FeatureVector("app2", "java.util.Vector",
+                "java.util.ArrayList",
+                new TreeMap<String, Double>() {{
+                    put("COUNTER_1", 1234.5);
+                    put("COUNTER_3", 12345.0);
+                }}
+        ));
+        String expectedHeader = "application,data_structure,best_data_structure,COUNTER_1,COUNTER_2,COUNTER_3";
+        String expectedData1 = "app1,java.util.ArrayList,java.util.ArrayList,123.4,123.4,None";
+        String expectedData2 = "app2,java.util.Vector,java.util.ArrayList,1234.5,None,12345.0";
+        Assert.assertEquals(
+                expectedHeader + "\n" + expectedData1 + "\n" + expectedData2,
+                runner.featuresToCSV(data));
+    }
+
 }
