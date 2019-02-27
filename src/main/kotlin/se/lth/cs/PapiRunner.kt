@@ -251,8 +251,6 @@ open class PapiRunner(counters : CounterSpecification) {
         val valuesText = valuesTexts.joinToString("\n")
         return "$headerText\n$valuesText"
     }
-
-    data class BenchmarkId(val counter : String, val program : String)
 }
 
 fun main(args : Array<String>) {
