@@ -14,7 +14,7 @@ public class ListApplicationGenerator implements ApplicationGenerator {
         List<Application<?>> listApplications = new ArrayList<>();
         for (int i = 0; i < number; ++i) {
             listApplications.add(new ListApplication(seed + i, size, new ArrayList<>()));
-            listApplications.add(new ListApplication(seed + i, size, new LinkedList()));
+            listApplications.add(new ListApplication(seed + i, size, new LinkedList<>()));
             listApplications.add(new ListApplication(seed + i, size, new Vector<>()));
         }
 
