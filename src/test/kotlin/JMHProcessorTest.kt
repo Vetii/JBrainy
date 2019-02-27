@@ -209,7 +209,7 @@ class JMHProcessorTest {
         val numberRegex = Regex("[0-9]+")
 
         for (record in parser.records) {
-            val interfaces = listOf("List", "Map", "Set")
+            val interfaces = listOf("List", "Map", "Set", "Vector")
             Assert.assertTrue(interfaces.contains(record.get("Interface")))
             Assert.assertTrue(numberRegex.matches(record.get("Seed")))
             Assert.assertTrue(numberRegex.matches(record.get("Size")))
