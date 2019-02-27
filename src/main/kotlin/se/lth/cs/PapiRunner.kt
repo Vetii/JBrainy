@@ -50,36 +50,6 @@ open class PapiRunner(counters : CounterSpecification) {
         return data
     }
 
-    class CounterAndProgram(val counter : String, val programName : String) : Comparable<CounterAndProgram> {
-        override fun toString(): String { return "${counter}_$programName"}
-        override fun compareTo(other: CounterAndProgram): Int {
-            return toString().compareTo(other.toString())
-        }
-    }
-
-    /** Runs a set of programs (functions) without interleaving
-     * (Performance should get better if there is JIT compilation)
-     * TODO: Crashes if there are too many functions (creates even sets too many times)
-     * @Returns A map from couples counter_program-name -> List<Long> over all runs
-     */
-    fun runWithoutInterleaving(numRuns : Int, functions : List<Pair<String,() -> Unit>>):
-            MutableMap<CounterAndProgram, List<Long>> {
-        var data : MutableMap<CounterAndProgram, List<Long>> = mutableMapOf()
-        for (labelAndFunction in functions) {
-            val function = labelAndFunction.second
-            val label = labelAndFunction.first
-            val values : MutableMap<String, List<Long>> = mutableMapOf()
-            for (counter in counterSpec.currentSpec.keys) {
-                values.put(counter, runFunction(numRuns, counter, function))
-            }
-            for (counterAndValues in values) {
-                data.put(CounterAndProgram(counterAndValues.key, label),
-                        counterAndValues.value)
-            }
-        }
-        return data
-    }
-
     /**
      * Runs a function several times
      * @return A map from PAPI counter names to list of values
