@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class AppRunData {
     private List<Double> samples;
-    private Application<?> application;
+    protected Application<?> application;
     private Integer numberSamples;
 
     public AppRunData(Application<?> application, List<Double> samples) {

@@ -63,7 +63,7 @@ public class ApplicationRunner {
                     String bestDataStructure = selected.getApplication().getDataStructureName();
 
                     trainingSet.add(
-                            new TrainingSetValue(rt, rt.getApplication(), bestDataStructure));
+                            new TrainingSetValue(rt.application, rt.getSamples(), bestDataStructure));
                 }
             }
         }
@@ -182,15 +182,15 @@ public class ApplicationRunner {
                     line.add(t.getApplication().getDataStructureName());
                     line.add(t.getBestDataStructure());
                     line.add(Integer.toString(i));
-                    line.add(String.format("%.3f", t.getRunningData().getAverage()));
-                    line.add(String.format("%.3f", t.getRunningData().getMedian()));
-                    line.add(String.format("%.3f", t.getRunningData().getVariance()));
+                    line.add(String.format("%.3f", t.getAverage()));
+                    line.add(String.format("%.3f", t.getMedian()));
+                    line.add(String.format("%.3f", t.getVariance()));
                     // We want to add the index of the sample and the sample value for each sample
                     // We will create a new line while copying most of the information for each sample value
-                    for (int sampleIndex = 0; sampleIndex < t.getRunningData().getSamples().size(); ++sampleIndex) {
+                    for (int sampleIndex = 0; sampleIndex < t.getSamples().size(); ++sampleIndex) {
                         // We copy the existing line data (without sample info)
                         ArrayList<String> newLine = new ArrayList<>(line);
-                        Double v = t.getRunningData().getSamples().get(sampleIndex);
+                        Double v = t.getSamples().get(sampleIndex);
                         newLine.add(String.format("%d", sampleIndex));
                         newLine.add(String.format("%.3f", v));
                         // We add the new line

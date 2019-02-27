@@ -1,33 +1,17 @@
 package se.lth.cs;
 
-public class TrainingSetValue {
+import java.util.List;
 
-    private AppRunData runningData;
-
-    private final Application application;
-
-    private final String dataStructure;
+public class TrainingSetValue extends AppRunData {
 
     private final String bestDataStructure;
 
-    public TrainingSetValue(AppRunData runningData, Application application, String bestDataStructure) {
-        this.runningData = runningData;
-        this.application = application;
-        this.dataStructure = application.dataStructure.getClass().getName();
+    public TrainingSetValue(Application<?> app, List<Double> samples, String bestDataStructure) {
+        super(app, samples);
         this.bestDataStructure = bestDataStructure;
     }
 
-    public Application getApplication() {
-        return application;
-    }
+    public String getDataStructure() { return application.getDataStructureName(); }
 
-    public String getDataStructure() { return dataStructure; }
-
-    public String getBestDataStructure() {
-        return bestDataStructure;
-    }
-
-    public AppRunData getRunningData() {
-        return runningData;
-    }
+    public String getBestDataStructure() { return bestDataStructure; }
 }
