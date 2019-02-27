@@ -13,6 +13,10 @@ class CounterSpecification(strings : List<String>) {
         return currentSpec[name]
     }
 
+    fun getCounterValues() : List<Int> {
+        return currentSpec.values.toList()
+    }
+
     companion object {
         /**
          * All the hardware performance counters
