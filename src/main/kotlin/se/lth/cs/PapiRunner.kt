@@ -6,7 +6,7 @@ import papi.PapiException
 import se.lth.cs.ApplicationGeneration.ListApplicationGenerator
 import java.io.File
 
-class PapiRunner(counters : CounterSpecification) {
+open class PapiRunner(counters : CounterSpecification) {
     init {
         Papi.init()
     }
@@ -59,7 +59,7 @@ class PapiRunner(counters : CounterSpecification) {
 
     /** Runs a set of programs (functions) without interleaving
      * (Performance should get better if there is JIT compilation)
-     * Known bug: Crashes if there are too many functions (creates even sets too many times)
+     * TODO: Crashes if there are too many functions (creates even sets too many times)
      * @Returns A map from couples counter_program-name -> List<Long> over all runs
      */
     fun runWithoutInterleaving(numRuns : Int, functions : List<Pair<String,() -> Unit>>):
@@ -114,8 +114,8 @@ class PapiRunner(counters : CounterSpecification) {
      * (Performance should get better if there is JIT compilation)
      * @Returns A map from couples (counter, program-name) -> values over all runs
      */
-    inline fun runWithoutInterleaving2(numRuns : Int, functions : List<Pair<String,() -> Any>>):
-            MutableMap<String, MutableMap<String, List<Long>>> {
+    open fun runApplications(numRuns : Int, functions : List<Pair<String,() -> Any>>):
+            Map<String, MutableMap<String, List<Long>>> {
 
         // We store a map from program names to map with counters and list of values
         var data = mutableMapOf<String, MutableMap<String, List<Long>>>()
@@ -172,12 +172,12 @@ class PapiRunner(counters : CounterSpecification) {
      * @Returns A map from couple counter_program-name -> values over all runs
      */
     fun runListApplications(numRuns: Int, applications: List<Application<*>>):
-            MutableMap<String, MutableMap<String, List<Long>>> {
+            Map<String, MutableMap<String, List<Long>>> {
         val apps = applications.map {
             Pair(it.identifier, { it.benchmark() })
         }
 
-        return runWithoutInterleaving2(numRuns, apps)
+        return runApplications(numRuns, apps)
     }
 
     /**
@@ -253,40 +253,6 @@ class PapiRunner(counters : CounterSpecification) {
     }
 
     data class BenchmarkId(val counter : String, val program : String)
-
-    inline fun runWithInterleaving(numRuns : Int, functions : List<Pair<String, () -> Any>>):
-            Map<String, List<Long>> {
-        var data : MutableMap<BenchmarkId, MutableList<Long>> = mutableMapOf()
-
-        for (kvp in counterSpec.currentSpec) {
-            val evset = EventSet.create(kvp.value)
-
-            println("Interleaved mode: " + "'" + kvp.key + "'")
-            // For each run-number
-            for (run in 0..numRuns) {
-                // We run each program
-                for (function in functions) {
-                    val current = BenchmarkId(kvp.key, function.first)
-                    if (!data.containsKey(current)) {
-                        data[current] = mutableListOf()
-                    }
-                    // We do the measurements
-                    evset.start()
-                    val result = function.second()
-                    evset.stop()
-
-                    //println(result)
-                    // We record the data
-                    val counterdata = evset.counters
-                    data[current]?.addAll(counterdata.toList())
-                }
-            }
-        }
-
-        return data.mapKeys { current ->
-            current.key.counter + "_" + current.key.program }
-                .mapValues { l -> l.value.toList() }
-    }
 }
 
 fun main(args : Array<String>) {
