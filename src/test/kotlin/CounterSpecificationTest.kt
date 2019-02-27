@@ -6,6 +6,9 @@ import java.io.StringReader
 
 class CounterSpecificationTest {
 
+    /**
+     * Test that an empty spec is created with an empty string
+     */
     @Test
     fun testEmptySpec() {
         val s = ""
