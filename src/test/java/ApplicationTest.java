@@ -186,12 +186,6 @@ public class ApplicationTest {
         }
     }
 
-    @Test
-    public void TestEmptyBenchmark() throws PapiException {
-        runner.emptyBenchmark();
-    }
-
-
 
     @Test
     public void TestPapiFeatureGathering() throws PapiException, InvocationTargetException, IllegalAccessException {

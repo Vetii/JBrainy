@@ -11,10 +11,8 @@ import se.lth.cs.PapiRunner;
 import se.lth.cs.PapiRunnerKt;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
@@ -86,4 +84,10 @@ public class PapiRunnerTest {
             Assert.assertFalse(data.get(key).isEmpty());
         }
     }
+
+    @Test
+    public void TestEmptyBenchmark() throws PapiException {
+        runner.emptyBenchmark();
+    }
+
 }
