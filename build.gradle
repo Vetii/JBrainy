@@ -35,7 +35,7 @@ compileJava {
 apply plugin: 'kotlin'
 
 mainClassName = 'se.lth.cs.PapiRunnerKt'
-applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./papi-java", "-Xbatch"]
+applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./papi-java"]
 
 sourceSets {
     jmh {
