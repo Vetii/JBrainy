@@ -21,7 +21,7 @@ public class PapiRunnerTest {
 
     @Before
     public void setup() {
-        File papiAvailableCounters = new File("PAPI_FLAGS");
+        File papiAvailableCounters = new File("papi_avail");
         Assert.assertTrue(papiAvailableCounters.exists());
         specification = CounterSpecification.Companion.fromFile(papiAvailableCounters);
         runner = new PapiRunner(specification);
@@ -69,7 +69,7 @@ public class PapiRunnerTest {
                 100
         );
         PapiRunner runner = new PapiRunner(
-                CounterSpecification.Companion.fromFile(new File("PAPI_FLAGS"))
+                CounterSpecification.Companion.fromFile(new File("papi_avail"))
         );
         Map<Application<?>, Map<String, List<Long>>> data = runner.runApplications(10, applications);
         // We check all known Papi counters are in the map

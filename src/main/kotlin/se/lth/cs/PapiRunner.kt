@@ -244,7 +244,7 @@ open class PapiRunner(counters: CounterSpecification) {
 }
 
 fun main(args: Array<String>) {
-    val r = PapiRunner(CounterSpecification.fromFile(File("PAPI_FLAGS")))
+    val r = PapiRunner(CounterSpecification.fromFile(File("papi_avail")))
     val apps = // ListApplicationGenerator().createApplications(0, 100, 100)
             ApplicationRunner().createListApplicationsSpread(20, 100, ListApplicationGenerator())
     val data = r.getFeatures(20, apps.map { it.application })
