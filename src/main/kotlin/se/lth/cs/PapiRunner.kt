@@ -207,8 +207,39 @@ open class PapiRunner(counters: CounterSpecification) {
         return "$headerText\n$valuesText"
     }
 
-    fun processJMHData(jmhData : MutableList<MutableList<String>>): MutableList<PapiRunner.FeatureVector> {
-        return listOf<FeatureVector>().toMutableList()
+    fun processJMHData(numRuns: Int, jmhData : MutableList<JMHProcessor.JMHRecord>): List<FeatureVector> {
+        val applications = jmhData.map { processJMHRecord(it)!! }
+        val results = runApplications(numRuns, applications)
+        return results.map {
+            val aggregates = it.value.mapValues { medianLong(it.value) }
+            val app = it.key
+            FeatureVector(app.seedString, app.dataStructureName, app.dataStructureName, aggregates)
+        }
+    }
+
+    fun getClassFromSimpleName(name : String) : Any {
+        val className = "java.util.$name"
+        return Class.forName(className).getConstructor().newInstance()
+    }
+
+    fun processJMHRecord(record : JMHProcessor.JMHRecord) : Application<*>? {
+        var application : Application<*>? = null
+        val dataStructure = getClassFromSimpleName(record.best)
+        if (record.collection == "List") {
+            application = ListApplication(record.seed, record.size, dataStructure as MutableList<Int>?)
+            return application
+        }
+
+        if (record.collection == "Map") {
+            application = MapApplication(record.seed, record.size, dataStructure as MutableMap<Int, Int>?)
+            return application
+        }
+
+        if (record.collection == "Set") {
+            application = SetApplication(record.seed, record.size, dataStructure as MutableSet<Int>?)
+            return application
+        }
+        return null
     }
 }
 

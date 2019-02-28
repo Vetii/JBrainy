@@ -140,9 +140,10 @@ public class PapiRunnerTest {
         String data = JMHProcessorTest.Companion.generateData();
         List<JMHProcessor.JMHRecord> processed = processor.process(new StringReader(data));
 
-        List<PapiRunner.FeatureVector> result = runner.processJMHData(processed);
+        List<PapiRunner.FeatureVector> result = runner.processJMHData(10, processed);
 
         Assert.assertFalse(result.isEmpty());
+        Assert.assertFalse(result.stream().allMatch(it -> it.getCounters().isEmpty()));
     }
 
 }
