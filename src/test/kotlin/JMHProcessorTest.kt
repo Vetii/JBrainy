@@ -150,8 +150,8 @@ class JMHProcessorTest {
         val result = processor!!.process(reader)
         Assert.assertEquals(
                 listOf(
-                        listOf("List", "0", "10", "LinkedList"),
-                        listOf("Map", "0", "10", "HashMap")
+                        JMHProcessor.JMHRecord(0, 10, "List",  "LinkedList"),
+                        JMHProcessor.JMHRecord(0, 10, "Map", "HashMap")
                 ),
                 result
         )

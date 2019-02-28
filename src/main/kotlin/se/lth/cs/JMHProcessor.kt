@@ -12,7 +12,11 @@ class JMHProcessor {
         return process(FileReader(file))
     }
 
-    data class JMHRecord(val seed : Int, val size : Int, val collection : String, val best : String)
+    data class JMHRecord(val seed : Int, val size : Int, val collection : String, val best : String) {
+        fun toList() : List<String> {
+            return listOf(collection, seed.toString(), size.toString(), best)
+        }
+    }
 
     fun process(reader : Reader): List<JMHRecord> {
         var parser = CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())
@@ -68,7 +72,7 @@ class JMHProcessor {
         val printer = CSVPrinter(writer, CSVFormat.DEFAULT.withFirstRecordAsHeader())
         printer.printRecord("Interface", "Seed", "Size", "Best")
         for (record in records) {
-            printer.printRecord(record)
+            printer.printRecord(record.toList())
         }
         writer.close()
     }
