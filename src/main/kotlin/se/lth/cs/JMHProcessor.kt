@@ -8,11 +8,13 @@ import java.lang.Exception
 
 class JMHProcessor {
 
-    fun process(file: File): List<List<String>> {
+    fun process(file: File): List<JMHRecord> {
         return process(FileReader(file))
     }
 
-    fun process(reader : Reader): List<List<String>> {
+    data class JMHRecord(val seed : Int, val size : Int, val collection : String, val best : String)
+
+    fun process(reader : Reader): List<JMHRecord> {
         var parser = CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())
         // We are grouping the parameters by any parameter except the data structure name (which we want)
 
@@ -29,7 +31,9 @@ class JMHProcessor {
         return seedsToRecords.values.map { records ->
             val interfaceName = records[0].get("Benchmark").let { processBenchmarkName(it) }
             val seed = records[0].get("Param: seed")
+                    .let { Integer.parseInt(it)}
             val size = records[0].get("Param: applicationSize")
+                    .let { Integer.parseInt(it)}
             // We need to group the runs by data structure size too.
             // We match the size with the higest score found
             val recordsByBaseSize =
@@ -41,7 +45,8 @@ class JMHProcessor {
                     recordsByBaseSize.values.groupBy { it!!.get("Param: datastructureName") }
                             .mapValues { (k, v) -> v.size}
             val bestScore = bestScoreHist.maxBy { (k, v) -> v }!!.key
-            listOf(interfaceName, seed, size, bestScore)
+            // listOf(interfaceName, seed, size, bestScore)
+            JMHRecord(seed, size, interfaceName, bestScore)
         }
     }
 
@@ -59,7 +64,7 @@ class JMHProcessor {
     /**
      * Prints the given records to a file
      */
-    fun print(writer : Writer, records : List<List<String>>) {
+    fun print(writer : Writer, records : List<JMHRecord>) {
         val printer = CSVPrinter(writer, CSVFormat.DEFAULT.withFirstRecordAsHeader())
         printer.printRecord("Interface", "Seed", "Size", "Best")
         for (record in records) {
