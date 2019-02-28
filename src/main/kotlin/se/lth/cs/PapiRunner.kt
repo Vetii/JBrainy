@@ -207,7 +207,7 @@ open class PapiRunner(counters: CounterSpecification) {
         return "$headerText\n$valuesText"
     }
 
-    fun processJMHData(numRuns: Int, jmhData : MutableList<JMHProcessor.JMHRecord>): List<FeatureVector> {
+    fun processJMHData(numRuns: Int, jmhData: List<JMHProcessor.JMHRecord>): List<FeatureVector> {
         val applications = jmhData.map { processJMHRecord(it)!! }
         val results = runApplications(numRuns, applications)
         return results.map {
