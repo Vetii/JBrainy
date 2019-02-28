@@ -5,6 +5,7 @@ import papi.Papi
 import papi.PapiException
 import se.lth.cs.ApplicationGeneration.ListApplicationGenerator
 import java.io.File
+import kotlin.system.exitProcess
 
 open class PapiRunner(counters: CounterSpecification) {
     init {
@@ -245,11 +246,15 @@ open class PapiRunner(counters: CounterSpecification) {
 
 fun main(args: Array<String>) {
     val r = PapiRunner(CounterSpecification.fromFile(File("papi_avail")))
-    val apps = // ListApplicationGenerator().createApplications(0, 100, 100)
-            ApplicationRunner().createListApplicationsSpread(20, 100, ListApplicationGenerator())
-    val data = r.getFeatures(20, apps.map { it.application })
-    val file = File("benchmarkoutput.csv")
-    file.writeText(r.featuresToCSV(data))
+    val jmh_file = File("jmh-results-runner-benchmark-complete.csv")
+    if (!jmh_file.exists()) {
+        print("'$jmh_file' not found")
+        exitProcess(1)
+    }
+    val jmhData = JMHProcessor().process(jmh_file)
+    val features = r.processJMHData(1, jmhData)
+    val file = File("jmh-data-papi-output.csv")
+    file.writeText(r.featuresToCSV(features))
 
     /*
     val gson = Gson()
