@@ -15,14 +15,14 @@ based on benchmarks of randomly generated applications.
     - `src/main/java/`: Application generation
     - `src/main/kotlin/`: Data gathering with PAPI library.
 - `src/test`: Unit tests
-- `lib`: Local libraries (java bindings to the PAPI library).
+- `papi-java`: Submodule with Java bindings to the PAPI library.
 
 ## Tasks
 
 The build tool is gradle, the main tasks are: 
 
 - `gradle jmh`: Generates applications and runs a `jmh`-based benchmark to
-  generate a file `jmh-results.csv`.
-- `gradle run`: Generates applications and gathers their performance counters
+  generate a file `jmh-results-<commit-id>.csv`.
+- `gradle run`: Generates applications and gathers performance counters
 - `gradle test`: Runs the unit tests.
 
