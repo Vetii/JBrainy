@@ -85,14 +85,14 @@ open class PapiRunner(counters: CounterSpecification) {
      * @Returns A map from couples (counter, program-name) -> values over all runs
      * TODO: Implement this using cartesianProduct from Guava instead
      */
-    open fun runApplications(numRuns: Int, functions: List<Pair<String, () -> Any>>):
-            Map<String, MutableMap<String, List<Long>>> {
+    open fun runApplications(numRuns: Int, applications: List<Application<*>>):
+            Map<Application<*>, MutableMap<String, List<Long>>> {
 
         // We store a map from program names to map with counters and list of values
-        var data = mutableMapOf<String, MutableMap<String, List<Long>>>()
+        var data = mutableMapOf<Application<*>, MutableMap<String, List<Long>>>()
         // We initialize data with empty maps
-        for (f in functions) {
-            data.put(f.first, mutableMapOf())
+        for (app in applications) {
+            data.put(app, mutableMapOf())
         }
 
         // For each counter that is available
@@ -103,23 +103,20 @@ open class PapiRunner(counters: CounterSpecification) {
             // We record only one counter
             val evset = EventSet.create(kvp.value)
             // For each program...
-            for (function in functions) {
-                val appName = function.first
-
-                val current = Pair(counterName, appName)
+            for (app in applications) {
                 // We run it n times
                 var values = mutableListOf<Long>()
                 for (run in 0 until numRuns) {
                     // We do the measurements
                     evset.start()
-                    val result = function.second()
+                    val result = app.benchmark()
                     evset.stop()
 
                     //println(result)
                     // We record the data
                     values.addAll(evset.counters.toList())
                 }
-                data[appName]!![counterName] = values
+                data[app]!![counterName] = values
             }
         }
 
@@ -136,19 +133,6 @@ open class PapiRunner(counters: CounterSpecification) {
     fun runFunctionMedian(numRuns: Int, counter: String, function: () -> Unit): Double {
         val data = runFunction(numRuns, counter, function)
         return medianLong(data)
-    }
-
-    /**
-     * Runs a list of generated applications without interleaving
-     * @Returns A map from couple counter_program-name -> values over all runs
-     */
-    fun runListApplications(numRuns: Int, applications: List<Application<*>>):
-            Map<String, MutableMap<String, List<Long>>> {
-        val apps = applications.map {
-            Pair(it.identifier, { it.benchmark() })
-        }
-
-        return runApplications(numRuns, apps)
     }
 
     /**
@@ -174,7 +158,7 @@ open class PapiRunner(counters: CounterSpecification) {
 
         val apps = trainingSet.map { it.application }
         val appsTocounters =
-                runListApplications(numRuns, apps).mapValues {
+                runApplications(numRuns, apps).mapValues {
                     it.value.mapValues { medianLong(it.value) }
                 }
 
@@ -183,7 +167,7 @@ open class PapiRunner(counters: CounterSpecification) {
                     it.application.identifier,
                     it.dataStructure,
                     it.bestDataStructure,
-                    appsTocounters[it.application.identifier]!!
+                    appsTocounters.getValue(it.application)
             )
         }
         return featureVectors

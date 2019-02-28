@@ -14,9 +14,9 @@ class PapiInterleavedRunner(counterSpecification: CounterSpecification) : PapiRu
      * (that is, choose the counter first and run all application with this counter,
      * then pick another counter)
      */
-    override fun runApplications(numRuns : Int, functions : List<Pair<String, () -> Any>>)
-            : Map<String, MutableMap<String, List<Long>>> {
-        var data : MutableMap<String, MutableMap<String, List<Long>>> = mutableMapOf()
+    override fun runApplications(numRuns: Int, applications: List<Application<*>>)
+            : Map<Application<*>, MutableMap<String, List<Long>>> {
+        var data : MutableMap<Application<*>, MutableMap<String, List<Long>>> = mutableMapOf()
 
         for (kvp in counterSpec.currentSpec) {
             val evset = EventSet.create(kvp.value)
@@ -25,20 +25,19 @@ class PapiInterleavedRunner(counterSpecification: CounterSpecification) : PapiRu
             // For each run-number
             for (run in 0..numRuns) {
                 // We run each program
-                for (function in functions) {
-                    val appName = function.first
-                    if (!data.containsKey(appName)) {
-                        data[appName] = mutableMapOf()
+                for (app in applications) {
+                    if (!data.containsKey(app)) {
+                        data[app] = mutableMapOf()
                     }
                     // We do the measurements
                     evset.start()
-                    val result = function.second()
+                    val result = app.benchmark()
                     evset.stop()
 
                     //println(result)
                     // We record the data
                     val counterdata = evset.counters
-                    data[appName]?.put(kvp.key, counterdata.toList())
+                    data[app]?.put(kvp.key, counterdata.toList())
                 }
             }
         }
