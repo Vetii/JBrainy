@@ -4,13 +4,11 @@ import org.junit.Test;
 import papi.EventSet;
 import papi.Papi;
 import papi.PapiException;
-import se.lth.cs.Application;
+import se.lth.cs.*;
 import se.lth.cs.ApplicationGeneration.ListApplicationGenerator;
-import se.lth.cs.CounterSpecification;
-import se.lth.cs.PapiRunner;
-import se.lth.cs.PapiRunnerKt;
 
 import java.io.File;
+import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.IntPredicate;
@@ -131,6 +129,20 @@ public class PapiRunnerTest {
         Assert.assertEquals(
                 expectedHeader + "\n" + expectedData1 + "\n" + expectedData2,
                 runner.featuresToCSV(data));
+    }
+
+    /**
+     * Runs a test from JMH-processed data
+     */
+    @Test
+    public void TestJMHRunner() {
+        JMHProcessor processor = new JMHProcessor();
+        String data = JMHProcessorTest.Companion.generateData();
+        List<List<String>> processed = processor.process(new StringReader(data));
+
+        List<PapiRunner.FeatureVector> result = runner.processJMHData(processed);
+
+        Assert.assertFalse(result.isEmpty());
     }
 
 }

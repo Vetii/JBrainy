@@ -222,6 +222,10 @@ open class PapiRunner(counters: CounterSpecification) {
         val valuesText = valuesTexts.joinToString("\n")
         return "$headerText\n$valuesText"
     }
+
+    fun processJMHData(jmhData : MutableList<MutableList<String>>): MutableList<PapiRunner.FeatureVector> {
+        return listOf<FeatureVector>().toMutableList()
+    }
 }
 
 fun main(args: Array<String>) {

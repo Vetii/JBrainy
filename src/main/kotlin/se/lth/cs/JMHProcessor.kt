@@ -67,4 +67,28 @@ class JMHProcessor {
         }
         writer.close()
     }
+
+    companion object {
+        /**
+         * Static method giving the expected CSV header
+         * @return A string for the expected CSV header
+         */
+        fun getExpectedHeader() : String {
+            val header =
+                    listOf(
+                            "Benchmark",
+                            "Mode",
+                            "Threads",
+                            "Samples",
+                            "Score",
+                            "Score Error (99.9%)",
+                            "Unit",
+                            "Param: applicationSize",
+                            "Param: baseStructureSize",
+                            "Param: datastructureName",
+                            "Param: seed"
+                    ).map { "\"$it\""}.joinToString(",")
+            return header
+        }
+    }
 }
