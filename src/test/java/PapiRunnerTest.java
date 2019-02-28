@@ -44,7 +44,7 @@ public class PapiRunnerTest {
                         System.out.println(integer);
                         EventSet evset = EventSet.create(
                                 constants.get(integer),
-                                constants.get(Math.min(integer + 1, 58)));
+                                constants.get(Math.min(integer + 1, constants.size() - 1)));
                         return false;
                     } catch (PapiException e) {
                         return true;
