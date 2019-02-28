@@ -19,7 +19,7 @@ class JMHProcessorTest {
     fun setup() {
         processor = JMHProcessor()
 
-         header =
+        header =
                 listOf(
                         "Benchmark",
                         "Mode",
