@@ -34,7 +34,7 @@ compileJava {
 
 apply plugin: 'kotlin'
 
-mainClassName = 'se.lth.cs.ApplicationRunner'
+mainClassName = 'se.lth.cs.PapiRunnerKt'
 applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./lib/native", "-Xbatch"]
 
 sourceSets {
