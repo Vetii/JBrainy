@@ -32,7 +32,7 @@ class PapiCommandLine : CliktCommand() {
         val outputFile = File(outputFileName)
         val counterSpecFile = File(papiCountersFileName)
 
-        listOf(inputFile, outputFile, counterSpecFile).forEach { checkFileExists(it) }
+        listOf(inputFile, counterSpecFile).forEach { checkFileExists(it) }
 
         val counterSpec = CounterSpecification.fromFile(File("papi_avail"))
         val r = PapiRunner(counterSpec)
