@@ -218,12 +218,12 @@ open class PapiRunner(counters: CounterSpecification) {
         }
     }
 
-    fun getClassFromSimpleName(name : String) : Any {
+    private fun getClassFromSimpleName(name : String) : Any {
         val className = "java.util.$name"
         return Class.forName(className).getConstructor().newInstance()
     }
 
-    fun processJMHRecord(record : JMHProcessor.JMHRecord) : Application<*>? {
+    private fun processJMHRecord(record : JMHProcessor.JMHRecord) : Application<*>? {
         var application : Application<*>? = null
         val dataStructure = getClassFromSimpleName(record.best)
         if (record.collection == "List") {
