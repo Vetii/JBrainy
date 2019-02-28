@@ -164,10 +164,6 @@ class JMHProcessorTest {
         val fileReader = FileReader(file)
         val result = processor!!.process(fileReader)
         Assert.assertFalse(result.isEmpty())
-        for (row in result) {
-            Assert.assertFalse(row.isEmpty())
-            Assert.assertEquals(4, row.size)
-        }
         // Assert there are no duplicates
         Assert.assertTrue(result.toSet().size == result.size)
     }

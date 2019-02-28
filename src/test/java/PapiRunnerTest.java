@@ -71,15 +71,15 @@ public class PapiRunnerTest {
         PapiRunner runner = new PapiRunner(
                 CounterSpecification.Companion.fromFile(new File("PAPI_FLAGS"))
         );
-        Map<String, Map<String, List<Long>>> data = runner.runListApplications(10, applications);
+        Map<Application<?>, Map<String, List<Long>>> data = runner.runApplications(10, applications);
         // We check all known Papi counters are in the map
 
         Assert.assertFalse(data.isEmpty());
-        for (String key : data.keySet()) {
+        for (Application app : data.keySet()) {
             Assert.assertEquals(
                     specification.getCurrentSpec().keySet(),
-                    data.get(key).keySet());
-            Assert.assertFalse(data.get(key).isEmpty());
+                    data.get(app).keySet());
+            Assert.assertFalse(data.get(app).isEmpty());
         }
     }
 
@@ -138,7 +138,7 @@ public class PapiRunnerTest {
     public void TestJMHRunner() {
         JMHProcessor processor = new JMHProcessor();
         String data = JMHProcessorTest.Companion.generateData();
-        List<List<String>> processed = processor.process(new StringReader(data));
+        List<JMHProcessor.JMHRecord> processed = processor.process(new StringReader(data));
 
         List<PapiRunner.FeatureVector> result = runner.processJMHData(processed);
 
