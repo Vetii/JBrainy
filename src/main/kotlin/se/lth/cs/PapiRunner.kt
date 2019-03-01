@@ -5,6 +5,8 @@ import papi.Papi
 import papi.PapiException
 import se.lth.cs.ApplicationGeneration.ListApplicationGenerator
 import java.io.File
+import java.time.Duration
+import java.time.Instant
 import kotlin.system.exitProcess
 
 open class PapiRunner(counters: CounterSpecification) {
@@ -101,12 +103,18 @@ open class PapiRunner(counters: CounterSpecification) {
             val counterName = kvp.key
             println("Streamlined mode: '$counterName'")
 
+            val before = Instant.now()
+
             // We record only one counter
             val evset = EventSet.create(kvp.value)
             // For each program...
             for (app in applications) {
                 data[app]!![counterName] = runApplication(numRuns, evset, app)
             }
+
+            val after = Instant.now()
+            val totalDuration = Duration.between(before, after)
+            println("Done: ${totalDuration}")
         }
 
         return data
