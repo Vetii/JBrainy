@@ -105,23 +105,27 @@ open class PapiRunner(counters: CounterSpecification) {
             val evset = EventSet.create(kvp.value)
             // For each program...
             for (app in applications) {
-                // We run it n times
-                var values = mutableListOf<Long>()
-                for (run in 0 until numRuns) {
-                    // We do the measurements
-                    evset.start()
-                    val result = app.benchmark()
-                    evset.stop()
-
-                    //println(result)
-                    // We record the data
-                    values.addAll(evset.counters.toList())
-                }
-                data[app]!![counterName] = values
+                data[app]!![counterName] = runApplication(numRuns, evset, app)
             }
         }
 
         return data
+    }
+
+    private fun runApplication(numRuns: Int, evset: EventSet, app: Application<*>) : MutableList<Long> {
+        // We run it n times
+        var values = mutableListOf<Long>()
+        for (run in 0 until numRuns) {
+            // We do the measurements
+            evset.start()
+            val result = app.benchmark()
+            evset.stop()
+
+            //println(result)
+            // We record the data
+            values.addAll(evset.counters.toList())
+        }
+        return values
     }
 
     /**
