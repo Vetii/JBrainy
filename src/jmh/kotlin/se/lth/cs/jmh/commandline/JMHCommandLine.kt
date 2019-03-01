@@ -27,12 +27,12 @@ class JMHCommandLine : CliktCommand() {
             .long()
             .default(500)
 
-    val warmupIterations : Int by option("--warmup-iterations", "-mi",
+    val warmupIterations : Int by option("--warmup-iterations", "-wi",
             help="Number of iterations to warm up the JVM")
             .int()
             .default(3)
 
-    val warmupTime : Long by option("--warmup-time", "-mt",
+    val warmupTime : Long by option("--warmup-time", "-wt",
             help="Duration (in milliseconds) per warm up iteration")
             .long()
             .default(500)
