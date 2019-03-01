@@ -35,7 +35,7 @@ compileJava {
 apply plugin: 'kotlin'
 
 mainClassName = 'se.lth.cs.Main'
-applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./lib/native"]
+applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./papi-java"]
 
 sourceSets {
     jmh {
