@@ -243,4 +243,3 @@ open class PapiRunner(counters: CounterSpecification) {
         return null
     }
 }
-
