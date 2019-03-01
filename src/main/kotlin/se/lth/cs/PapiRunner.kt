@@ -252,7 +252,7 @@ fun main(args: Array<String>) {
         exitProcess(1)
     }
     val jmhData = JMHProcessor().process(jmh_file)
-    val features = r.processJMHData(1, jmhData)
+    val features = r.processJMHData(500, jmhData)
     val file = File("jmh-data-papi-output.csv")
     file.writeText(r.featuresToCSV(features))
 
