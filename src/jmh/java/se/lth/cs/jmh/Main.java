@@ -12,6 +12,7 @@ import org.openjdk.jmh.runner.options.TimeValue;
 import java.io.IOException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.ObjectId;
+import se.lth.cs.jmh.commandline.JMHCommandLine;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -68,28 +69,8 @@ public class Main {
 
     public static void main(String[] args) throws RunnerException, IOException {
         System.out.println("Running the custom jmh runner.");
-        // Preparing seeds
-        int number_seeds = 20;
-        String[] seedsText = new String[number_seeds];
-        for (int i = 0; i < number_seeds; ++i)
-            seedsText[i] = String.format("%d", i);
-
-
-        IntStream measurementTimes = IntStream.iterate(4, x -> x <= 1024, x -> x * 4);
-        measurementTimes.forEach(
-                mt -> {
-                    try {
-                        runJMHRunner(seedsText,
-                                3,
-                                5,
-                                TimeValue.milliseconds(250),
-                                TimeValue.milliseconds(mt)
-                                );
-                    } catch (RunnerException e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
+        JMHCommandLine commandLine = new JMHCommandLine();
+        commandLine.main(args);
     }
 
     public static Collection<RunResult> runJMHRunner(String[] seedsText,
