@@ -34,8 +34,8 @@ compileJava {
 
 apply plugin: 'kotlin'
 
-mainClassName = 'se.lth.cs.PapiRunnerKt'
-applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./papi-java"]
+mainClassName = 'se.lth.cs.Main'
+applicationDefaultJvmArgs = ["-Djava.library.path=/usr/lib/x86_64-linux-gnu:./lib/native"]
 
 sourceSets {
     jmh {
@@ -63,6 +63,9 @@ dependencies {
     compile files('papi-java/papi.jar')
     compile 'org.slf4j:slf4j-simple:1.7.13'
     compile 'org.eclipse.jgit:org.eclipse.jgit:5.2.1.201812262042-r'
+
+    // Command line argument parsing
+    implementation 'com.github.ajalt:clikt:1.6.0'
 
     // Reading CSV files
     compile 'org.apache.commons:commons-csv:1.6'

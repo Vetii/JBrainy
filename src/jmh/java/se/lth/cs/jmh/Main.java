@@ -12,7 +12,7 @@ import org.openjdk.jmh.runner.options.TimeValue;
 import java.io.IOException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.api.Git;
+import se.lth.cs.jmh.commandline.JMHCommandLine;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -69,37 +69,30 @@ public class Main {
 
     public static void main(String[] args) throws RunnerException, IOException {
         System.out.println("Running the custom jmh runner.");
-        // Preparing seeds
-        int number_seeds = 20;
-        String[] seedsText = new String[number_seeds];
-        for (int i = 0; i < number_seeds; ++i)
-            seedsText[i] = String.format("%d", i);
+        JMHCommandLine commandLine = new JMHCommandLine();
+        commandLine.main(args);
+    }
 
-
-        IntStream measurementTimes = IntStream.iterate(4, x -> x <= 1024, x -> x * 4);
-        measurementTimes.forEach(
-                mt -> {
+    public static Collection<RunResult> runJMHRunner(String[] seedsText,
+                                                     int warmupIterations,
+                                                     int measurementIterations,
+                                                     TimeValue warmupTime,
+                                                     TimeValue measurementTime) throws RunnerException {
                     Options opts = new OptionsBuilder()
                             // .include("List")
                             .forks(2)
-                            .warmupIterations(3)
-                            .warmupTime(TimeValue.milliseconds(250))
-                            .measurementTime(TimeValue.milliseconds(mt))
-                            .measurementIterations(5)
+                            .warmupIterations(warmupIterations)
+                            .warmupTime(warmupTime)
+                            .measurementTime(measurementTime)
+                            .measurementIterations(measurementIterations)
                             .resultFormat(ResultFormatType.CSV)
-                            .result(String.format("jmh-results-%s-mt=%d.csv", getCommit(), mt))
+                            .result(String.format("jmh-results-%s.csv", getCommit()))
                             .param("seed", seedsText)
                             .param("baseStructureSize", "0", "1000", "10000")
                             .param("applicationSize", "10", "100", "1000")
                             .build();
 
                     Runner r = new Runner(opts);
-                    try {
-                        Collection<RunResult> results = r.run();
-                    } catch (RunnerException e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
+                    return r.run();
     }
 }

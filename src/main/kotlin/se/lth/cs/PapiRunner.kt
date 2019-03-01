@@ -218,12 +218,12 @@ open class PapiRunner(counters: CounterSpecification) {
         }
     }
 
-    fun getClassFromSimpleName(name : String) : Any {
+    private fun getClassFromSimpleName(name : String) : Any {
         val className = "java.util.$name"
         return Class.forName(className).getConstructor().newInstance()
     }
 
-    fun processJMHRecord(record : JMHProcessor.JMHRecord) : Application<*>? {
+    private fun processJMHRecord(record : JMHProcessor.JMHRecord) : Application<*>? {
         var application : Application<*>? = null
         val dataStructure = getClassFromSimpleName(record.best)
         if (record.collection == "List") {
@@ -242,52 +242,4 @@ open class PapiRunner(counters: CounterSpecification) {
         }
         return null
     }
-}
-
-fun main(args: Array<String>) {
-    val r = PapiRunner(CounterSpecification.fromFile(File("papi_avail")))
-    val jmh_file = File("jmh-results-runner-benchmark-complete.csv")
-    if (!jmh_file.exists()) {
-        print("'$jmh_file' not found")
-        exitProcess(1)
-    }
-    val jmhData = JMHProcessor().process(jmh_file)
-    val features = r.processJMHData(500, jmhData)
-    val file = File("jmh-data-papi-output.csv")
-    file.writeText(r.featuresToCSV(features))
-
-    /*
-    val gson = Gson()
-    val data1 = r.runListApplications(100, apps)
-    val splitted = data1.toList().groupBy {
-        it.first.programName.split(":")[1] // Name of data structure
-    }.mapValues { it.value.toMap() }
-
-    for (kvp in splitted) {
-        val data = kvp.value.mapKeys {
-            it.key.toString().split(":")[0] // We only save before the separator
-        }
-        // val suffix = kvp.value.hashCode()
-        val file = File("benchmarkoutput-${kvp.key}.json")
-        file.writeText(gson.toJson(data))
-    }
-    */
-
-    /* GENERATING A BENCHMARK
-    val functions = listOf(
-            Pair("1", { test1() }),
-            Pair("2", { test2() }),
-            Pair("3", { test3() }))
-
-    val data = r.runWithoutInterleaving(1000, functions)
-
-    val suffix = data.hashCode()
-    val file = File("benchmarkoutput-warmup-$suffix.json")
-    file.writeText(gson.toJson(data))
-
-    val data1 = r.runWithInterleaving(1000, functions)
-    val suffix1 = data1.hashCode()
-    val file1 = File("benchmarkoutput-interleaved-warmup-$suffix1.json")
-    file1.writeText(gson.toJson(data1))
-    */
 }
