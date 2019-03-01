@@ -28,7 +28,7 @@ class PapiCommandLine : CliktCommand() {
     }
 
     override fun run() {
-        val inputFile = File(jmhDataFileName)
+        val inputFile = File(jmhDataFileName.trim())
         val outputFile = File(outputFileName)
         val counterSpecFile = File(papiCountersFileName)
 
