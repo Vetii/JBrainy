@@ -95,4 +95,12 @@ public class Main {
                     Runner r = new Runner(opts);
                     return r.run();
     }
+
+    public static double getAverageError(Collection<RunResult> original) {
+        List<Double> errors =
+        original.stream().map(
+                (it) -> it.getPrimaryResult().getScoreError()
+        ).collect(Collectors.toList());
+        return UtilsKt.average(errors);
+    }
 }
