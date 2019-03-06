@@ -28,7 +28,7 @@ def run_jmh():
     jmh_output_file = "jmh_results.csv"
 
     jmh_options = {
-            # '-o' : jmh_output_file,
+            '-o' : jmh_output_file,
             '-s' : seeds,
             '-mi': 5,
             '-wi': 3,
