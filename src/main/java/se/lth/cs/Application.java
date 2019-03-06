@@ -30,7 +30,9 @@ public abstract class Application<T> {
     Application(int seed, int applicationSize, T structure) {
         this.seed = seed;
         this.applicationSize = applicationSize;
-        randomGenerator = new Random(seed);
+        this.randomGenerator = new Random(seed);
+        this.dataStructure = structure;
+        clearDataStructure(); // TODO: This is a bit odd
 
         // We get the list of methods to run.
         Method[] ms = this.getClass().getMethods();
@@ -40,8 +42,6 @@ public abstract class Application<T> {
                 allCallableMethods.add(m);
             }
         }
-
-        dataStructure = structure;
 
         // Argument becomes a new data structure of same class as
         // the data structure to test
@@ -74,7 +74,19 @@ public abstract class Application<T> {
         return dataStructure;
     }
 
-    abstract public void populate(int numberElements);
+    public abstract void populate(int numberElements);
+
+    /**
+     * Resets the datastructure to its state before running the benchmark
+     * @param baseNumberElements: The number of elements the data structure should contain
+     */
+    public void reset(int baseNumberElements) {
+        randomGenerator = new Random(seed);
+        clearDataStructure();
+        populate(baseNumberElements);
+    }
+
+    protected abstract void clearDataStructure();
 
     abstract public int generateIndex();
 

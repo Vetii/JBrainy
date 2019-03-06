@@ -2,6 +2,7 @@ package se.lth.cs;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.Random;
 
 public class MapApplication  extends Application<Map<Integer, Integer>> {
 
@@ -11,11 +12,17 @@ public class MapApplication  extends Application<Map<Integer, Integer>> {
 
     @Override
     public void populate(int numberElements) {
+        randomGenerator = new Random(seed);
         for (int i = 0; i < numberElements; ++i) {
             int k = generateIndex();
             int v = randomGenerator.nextInt();
             dataStructure.put(k, v);
         }
+    }
+
+    @Override
+    protected void clearDataStructure() {
+        dataStructure.clear();
     }
 
     public void runClear() { dataStructure.clear(); }

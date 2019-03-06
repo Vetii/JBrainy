@@ -2,6 +2,7 @@ package se.lth.cs;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Random;
 
 public class CollectionApplication<T extends Collection> extends Application<T> {
 
@@ -14,7 +15,13 @@ public class CollectionApplication<T extends Collection> extends Application<T> 
 
     @Override
     public void populate(int numberElements) {
+        randomGenerator = new Random(seed);
         randomGenerator.ints(numberElements).forEach((i) -> dataStructure.add(i));
+    }
+
+    @Override
+    protected void clearDataStructure() {
+        dataStructure.clear();
     }
 
     public int generateIndex() {
