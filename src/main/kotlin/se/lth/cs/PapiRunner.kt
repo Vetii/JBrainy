@@ -128,6 +128,7 @@ open class PapiRunner(counters: CounterSpecification) {
             evset.start()
             val result = app.benchmark()
             evset.stop()
+            app.reset(0)
 
             //println(result)
             // We record the data
