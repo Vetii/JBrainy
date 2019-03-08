@@ -9,7 +9,11 @@ import org.openjdk.jmh.results.format.ResultFormatType
 import org.openjdk.jmh.runner.Runner
 import org.openjdk.jmh.runner.options.OptionsBuilder
 import org.openjdk.jmh.runner.options.TimeValue
+import se.lth.cs.jmh.JMHTimedRunner
+import se.lth.cs.jmh.Main.getAverageError
 import se.lth.cs.jmh.Main.getCommit
+import java.io.File
+import kotlin.system.exitProcess
 
 class JMHCommandLine : CliktCommand() {
     val numberSeeds : Int by option("--seeds", "-s",
@@ -41,6 +45,9 @@ class JMHCommandLine : CliktCommand() {
             help="File name to store result data")
             .default("jmh-results.csv")
 
+    val infoFileName : String? by option("--info-file", "-p",
+            help="File name to write data about JMH run")
+
     override fun run() {
         val seedsText = IntRange(0, numberSeeds)
                 .map { it.toString() }
@@ -60,7 +67,18 @@ class JMHCommandLine : CliktCommand() {
                 .param("applicationSize", "10", "100", "1000")
                 .build()
 
-        val r = Runner(opts)
-        r.run()
+        val r = JMHTimedRunner(opts)
+        val results = r.runWithTime()
+
+        if (!infoFileName.isNullOrBlank()) {
+            val infofile = File(infoFileName)
+            if (infofile.exists()) {
+                println("Infofile already exists")
+                exitProcess(1)
+            }
+            infofile.appendText("Running time (s): ${r.duration.seconds}")
+            infofile.appendText("\n")
+            infofile.appendText("Average error: ${getAverageError(results)}")
+        }
     }
 }
