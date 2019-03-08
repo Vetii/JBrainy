@@ -223,11 +223,18 @@ open class PapiRunner(counters: CounterSpecification) {
 
     fun processJMHData(numRuns: Int, jmhData: List<JMHProcessor.JMHRecord>): List<FeatureVector> {
         val applications = jmhData.map { processJMHRecord(it)!! }
+        val bests = jmhData.map { it.best }
+
+        val appsBest = applications.zip(bests)
+                .toMap()
+
+        // Map from application to list of counters
         val results = runApplications(numRuns, applications)
         return results.map {
             val aggregates = it.value.mapValues { medianLong(it.value) }
             val app = it.key
-            FeatureVector(app.seedString, app.dataStructureName, app.dataStructureName, aggregates)
+            val best = appsBest[app]!!
+            FeatureVector(app.seedString, app.dataStructureName, best, aggregates)
         }
     }
 
@@ -238,7 +245,7 @@ open class PapiRunner(counters: CounterSpecification) {
 
     private fun processJMHRecord(record : JMHProcessor.JMHRecord) : Application<*>? {
         var application : Application<*>? = null
-        val dataStructure = getClassFromSimpleName(record.best)
+        val dataStructure = getClassFromSimpleName(record.datastructure)
         if (record.collection == "List") {
             application = ListApplication(record.seed, record.size, dataStructure as MutableList<Int>?)
             return application
