@@ -13,35 +13,41 @@ class JMHProcessor {
         return process(FileReader(file))
     }
 
-    data class JMHRecord(val seed : Int, val size : Int, val collection : String, val best : String) {
+    data class JMHRecord(val seed : Int, val size : Int, val baseStructureSize : Int, val collection : String, val datastructure : String, val best : String) {
         fun toList() : List<String> {
-            return listOf(collection, seed.toString(), size.toString(), best)
+            return listOf(collection, seed.toString(), size.toString() , baseStructureSize.toString(), datastructure, best)
         }
     }
+
+    private val selectedColumns = listOf(
+            "Benchmark",
+            "Param: seed",
+            "Param: applicationSize",
+            "Param: baseStructureSize"
+    )
 
     fun process(reader : Reader): List<JMHRecord> {
         var parser = CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())
         // We are grouping the parameters by any parameter except the data structure name (which we want)
-
-        val selectedColumns = listOf(
-                "Benchmark",
-                "Param: seed",
-                "Param: applicationSize"
-        )
 
         // We group the records by our selected columns
         val seedsToRecords = parser.records.groupBy { record ->
             selectedColumns.map { column -> record.get(column) }
         }
 
-        return seedsToRecords.values.map { records ->
+        return seedsToRecords.values.flatMap { records ->
             val interfaceName = records[0].get("Benchmark").let { processBenchmarkName(it) }
             val seed = records[0].get("Param: seed")
                     .let { Integer.parseInt(it)}
             val size = records[0].get("Param: applicationSize")
                     .let { Integer.parseInt(it)}
+            val baseStructureSize = records[0].get("Param: baseStructureSize")
+                    .let { Integer.parseInt(it)}
             val best = getBestDataStructure(records)
-            JMHRecord(seed, size, interfaceName, best!!)
+            records.map{
+
+                JMHRecord(seed, size, baseStructureSize, interfaceName, it.get("Param: datastructureName"), best!!)
+            }
         }
     }
 
@@ -51,11 +57,7 @@ class JMHProcessor {
         // - same seed
         // - same benchmark (List, Map, etc)
         // - same application size
-        val selectedColumns = listOf<String>(
-                "Benchmark",
-                "Param: seed",
-                "Param: applicationSize"
-        )
+        // - same base structure size
         assert(records.all { record ->
             selectedColumns.map{ record.get(it)} ==
             selectedColumns.map{ records[0].get(it)}})
@@ -91,7 +93,7 @@ class JMHProcessor {
      */
     fun print(writer : Writer, records : List<JMHRecord>) {
         val printer = CSVPrinter(writer, CSVFormat.DEFAULT.withFirstRecordAsHeader())
-        printer.printRecord("Interface", "Seed", "Size", "Best")
+        printer.printRecord("Interface", "Seed", "Size", "BaseStructureSize", "Best")
         for (record in records) {
             printer.printRecord(record.toList())
         }

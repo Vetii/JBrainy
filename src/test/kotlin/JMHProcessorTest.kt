@@ -62,7 +62,7 @@ class JMHProcessorTest {
         val result = processor!!.process(reader)
     Assert.assertEquals(
                 listOf(
-                        JMHProcessor.JMHRecord(0, 10, "List", "LinkedList")
+                        JMHProcessor.JMHRecord(0, 10, 0, "List", "LinkedList", "LinkedList")
                 )
                 , result
         )
@@ -106,7 +106,8 @@ class JMHProcessorTest {
         val result = processor!!.process(reader)
         Assert.assertEquals(
                 listOf(
-                    JMHProcessor.JMHRecord(0, 10, "List", "ArrayList")
+                    JMHProcessor.JMHRecord(0, 10, 0, "List", "LinkedList", "ArrayList"),
+                    JMHProcessor.JMHRecord(0, 10, 0, "List", "ArrayList", "ArrayList")
                 ),
                 result
         )
@@ -150,8 +151,23 @@ class JMHProcessorTest {
         val result = processor!!.process(reader)
         Assert.assertEquals(
                 listOf(
-                        JMHProcessor.JMHRecord(0, 10, "List",  "LinkedList"),
-                        JMHProcessor.JMHRecord(0, 10, "Map", "HashMap")
+                        JMHProcessor.JMHRecord(0, 10, 0, "List",  "LinkedList", "LinkedList"),
+                        JMHProcessor.JMHRecord(0, 10, 0, "Map", "HashMap", "HashMap")
+                ),
+                result
+        )
+    }
+
+    @Test
+    fun testDifferentBaseSize() {
+        val data = generateData()
+        val reader = StringReader(data)
+        val result = processor!!.process(reader)
+        Assert.assertEquals(
+                listOf(
+                        JMHProcessor.JMHRecord(0, 10,0, "List", "LinkedList", "ArrayList"),
+                        JMHProcessor.JMHRecord(0, 10, 0, "List", "ArrayList", "ArrayList"),
+                        JMHProcessor.JMHRecord(0, 10, 10, "List", "ArrayList", "ArrayList")
                 ),
                 result
         )
@@ -209,6 +225,7 @@ class JMHProcessorTest {
             Assert.assertTrue(interfaces.contains(record.get("Interface")))
             Assert.assertTrue(numberRegex.matches(record.get("Seed")))
             Assert.assertTrue(numberRegex.matches(record.get("Size")))
+            Assert.assertTrue(numberRegex.matches(record.get("BaseStructureSize")))
             Assert.assertTrue(interfaces.any { record.get("Best").contains(it) })
         }
     }
@@ -247,8 +264,23 @@ class JMHProcessorTest {
                             "ArrayList",
                             0
                     ).joinToString(",")
+            var row3 =
+                    listOf(
+                            "\"se.lth.cs.jmh.ListApplicationBenchmark.ListApplicationBenchmark\"",
+                            "\"thrpt\"",
+                            1,
+                            10,
+                            414.886418,
+                            200.555845,
+                            "ops/s",
+                            10,
+                            10,
+                            "ArrayList",
+                            0
+                    ).joinToString(",")
             data.add(row1)
             data.add(row2)
+            data.add(row3)
             val text = "${JMHProcessor.getExpectedHeader()}\n${data.joinToString("\n")}"
             return text
         }
