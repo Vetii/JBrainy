@@ -3,6 +3,7 @@ package se.lth.cs
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVPrinter
+import org.apache.commons.csv.CSVRecord
 import java.io.*
 import java.lang.Exception
 
@@ -28,6 +29,7 @@ class JMHProcessor {
                 "Param: applicationSize"
         )
 
+        // We group the records by our selected columns
         val seedsToRecords = parser.records.groupBy { record ->
             selectedColumns.map { column -> record.get(column) }
         }
@@ -38,20 +40,39 @@ class JMHProcessor {
                     .let { Integer.parseInt(it)}
             val size = records[0].get("Param: applicationSize")
                     .let { Integer.parseInt(it)}
-            // We need to group the runs by data structure size too.
-            // We match the size with the higest score found
-            val recordsByBaseSize =
-                    records.groupBy { it.get("Param: baseStructureSize") }
-                            .mapValues { (k, v) -> v.maxBy { it.get("Score") }}
-            // We count the number of times the data structure has won
-            // (Computing a histogram of the data structure names)
-            val bestScoreHist =
-                    recordsByBaseSize.values.groupBy { it!!.get("Param: datastructureName") }
-                            .mapValues { (k, v) -> v.size}
-            val bestScore = bestScoreHist.maxBy { (k, v) -> v }!!.key
-            // listOf(interfaceName, seed, size, bestScore)
-            JMHRecord(seed, size, interfaceName, bestScore)
+            val best = getBestDataStructure(records)
+            JMHRecord(seed, size, interfaceName, best!!)
         }
+    }
+
+    private fun getBestDataStructure(records : List<CSVRecord>): String? {
+        // Precondition
+        // All records must have
+        // - same seed
+        // - same benchmark (List, Map, etc)
+        // - same application size
+        val selectedColumns = listOf<String>(
+                "Benchmark",
+                "Param: seed",
+                "Param: applicationSize"
+        )
+        assert(records.all { record ->
+            selectedColumns.map{ record.get(it)} ==
+            selectedColumns.map{ records[0].get(it)}})
+
+        val recordsByBaseSize = records.groupBy { it.get("Param: baseStructureSize") }
+
+        // Map from benchmark base structure size to record with maximum score
+        val bestRecords = recordsByBaseSize
+                        .mapValues { (k, v) -> v.maxBy { it.get("Score") }}
+
+        // We count the number of times the data structure has won
+        // (Computing a histogram of the data structure names)
+        val bestScoreHist =
+                bestRecords.values.groupBy { it!!.get("Param: datastructureName") }
+                        .mapValues { (k, v) -> v.size}
+
+        return bestScoreHist.maxBy { (k, v) -> v }!!.key
     }
 
     class JMHProcessorException(override val message: String?) : Exception(message)
