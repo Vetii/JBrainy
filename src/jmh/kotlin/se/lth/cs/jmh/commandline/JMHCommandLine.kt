@@ -41,7 +41,7 @@ class JMHCommandLine : CliktCommand() {
             .long()
             .default(500)
 
-    val outputFileName : String by option("-output-file", "-o",
+    val outputFileName : String by option("--output-file", "-o",
             help="File name to store result data")
             .default("jmh-results.csv")
 
@@ -49,12 +49,11 @@ class JMHCommandLine : CliktCommand() {
             help="File name to write data about JMH run")
 
     override fun run() {
-        val seedsText = IntRange(0, numberSeeds)
+        val seedsText = IntRange(0, numberSeeds - 1)
                 .map { it.toString() }
                 .toTypedArray()
 
         val opts = OptionsBuilder()
-                // .include("List")
                 .forks(2)
                 .warmupIterations(warmupIterations)
                 .warmupTime(TimeValue.milliseconds(warmupTime))
